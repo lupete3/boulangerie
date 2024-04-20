@@ -75,8 +75,8 @@
                                                 <td> {{ $entree->created_at }} </td>
                                                 <td> {{ $entree->stockMaison->designation }} </td>
                                                 <td> {{ $entree->quantite }} </td>
-                                                <td> {{ $entree->prix_achat }}fc </td>
-                                                <td> {{ $entree->quantite * $entree->prix_achat }}fc </td>
+                                                <td> {{ $entree->prix_achat }} Fc </td>
+                                                <td> {{ $entree->quantite * $entree->prix_achat }} Fc </td>
                                                 <td> {{ $entree->fournisseur->nom }} </td>
                                                 
                                                 <td>
@@ -97,11 +97,14 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        <tr>
-                                            <td colspan="5"><b>Total</b></td>
-                                            <td><b>{{ $tot }}fc</b></td>
-                                        </tr>
+                                        
                                     </tbody>
+                                    <tr>
+                                        <td colspan="5"><b>Total</b></td>
+                                        <td><b>{{ $tot }} Fc</b></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                 </table>
                                 </div>
                             </div>

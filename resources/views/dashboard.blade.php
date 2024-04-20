@@ -22,7 +22,7 @@
                 </div>
                 <div class="card-wrap">
                   <div class="card-header">
-                    <h4>Val. Stock MP Maison</h4>
+                    <h4>Val. Stock MP Dépôt</h4>
                   </div>
                   <div class="card-body">
 
@@ -207,6 +207,7 @@
                 </div>
               </div>
             </div>
+          </div>
 
           <div class="row">
             <div class="col-md-6">
@@ -220,7 +221,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                    <table class="table table-striped" id="table-1" style="font-size: 12px">
+                    <table class="table table-striped" id="table-" style="font-size: 12px">
                         <thead>                                 
                             <tr>
                                 <th>Date Achat</th>

@@ -72,9 +72,9 @@
 
                                                 <td> {{ $produit->id }} </td>
                                                 <td> {{ $produit->designation }} </td>
-                                                <td> {{ $produit->prix }} </td>
+                                                <td> {{ $produit->prix }} Fc</td>
                                                 <td> {{ $produit->solde }} </td>
-                                                <td> {{ $produit->prix * $produit->solde }} </td>
+                                                <td> {{ $produit->prix * $produit->solde }} Fc</td>
                                                 <td>
                                                     <div class="dropdown">
                                                         <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
@@ -97,7 +97,8 @@
                                     </tbody>
                                     <tr>
                                         <td colspan="4"><b>Total Valeur en stock</b></td>
-                                        <td colspan=""><b>{{ $tot }} fc</b></td>
+                                        <td colspan=""><b>{{ $tot }} Fc</b></td>
+                                        <td></td>
                                     </tr>
                                 </table>
                                 </div>

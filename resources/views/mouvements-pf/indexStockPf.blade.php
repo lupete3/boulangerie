@@ -12,7 +12,7 @@
                 <h1>{{ $viewData['title'] }}</h1>
                 <div class="section-header-breadcrumb">
                   <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de Bord</a></div>
-                  <div class="breadcrumb-item"><a href="{{ route('mouvement-stock-mp.index')}}">Sorties produits finis</a></div>
+                  <div class="breadcrumb-item"><a href="{{ route('mouvement-stock-pf-entree.index')}}">Entrées produits finis</a></div>
                   <div class="breadcrumb-item">{{ $viewData['title'] }}</div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                                                 <td> {{ $entree->quantite }} </td>
                                                 <td> 
                                                     @foreach ($entree->compositions as $item)
-                                                        <li>({{ number_format($item->quantite,0) }}) {{ $item->designation }}</li>
+                                                        <span>({{ number_format($item->quantite,0) }}) {{ $item->designation }}</span><br>
                                                     @endforeach    
                                                 </td>
                                                 

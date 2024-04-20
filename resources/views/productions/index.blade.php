@@ -68,6 +68,7 @@
                                             @php
                                                 $total = 0;
                                                 $totProd = 0;
+                                                $totBenefice = 0;
                                             @endphp
 
                                             @foreach ($viewData['productions'] as $production) 
@@ -109,7 +110,14 @@
                                             @endforeach
                                             
                                         </tbody>
-                                        <h3>Total production : {{ $total }} Fc</h3> 
+                                        <tr>
+                                            <td colspan="5"><b>Total </b></td>
+                                            <td><b>{{ $total }} Fc</b></td>
+                                            <td></td>
+                                            <td><b>{{ $totProd }} Fc</b></td>
+                                            <td><b>{{ $total - $totProd }} Fc</b></td>
+                                            <td></td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>

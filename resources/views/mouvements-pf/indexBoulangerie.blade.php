@@ -12,7 +12,7 @@
                 <h1>{{ $viewData['title'] }}</h1>
                 <div class="section-header-breadcrumb">
                   <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de Bord</a></div>
-                  <div class="breadcrumb-item"><a href="{{ route('mouvement-stock-mp.index')}}">Entrée produits finis</a></div>
+                  <div class="breadcrumb-item"><a href="{{ route('mouvement-stock-pf-boulangerie.index')}}">Entrée produits </a></div>
                   <div class="breadcrumb-item">{{ $viewData['title'] }}</div>
                 </div>
             </div>

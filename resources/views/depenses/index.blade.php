@@ -62,15 +62,18 @@
                                     <tbody>
                                         @php
                                             $id = 1;
+                                            $tot = 0;
                                         @endphp
-                                        @foreach ($viewData['depenses'] as $fournisseur) 
+                                        @foreach ($viewData['depenses'] as $depense) 
                                             <tr>
-
+                                                @php
+                                                    $tot =+ $depense->montant;
+                                                @endphp
                                                 <td> {{ $id++ }} </td>
-                                                <td> {{ $fournisseur->created_at }} </td>
-                                                <td> {{ $fournisseur->motif }} </td>
-                                                <td> {{ $fournisseur->montant }} </td>
-                                                <td> {{ $fournisseur->personne }} </td>
+                                                <td> {{ $depense->created_at }} </td>
+                                                <td> {{ $depense->motif }} </td>
+                                                <td> {{ $depense->montant }} Fc</td>
+                                                <td> {{ $depense->personne }} </td>
                                                 
                                                 <td>
                                                     <div class="dropdown">
@@ -78,9 +81,9 @@
                                                         
                                                         <div class="dropdown-menu dropdown-menu-right">
                                                           
-                                                            <a href="{{ route('depenses.edit', $fournisseur->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Modifier</a>
+                                                            <a href="{{ route('depenses.edit', $depense->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Modifier</a>
                                                           
-                                                          <form action="{{ route('depenses.destroy', $fournisseur->id)}}" method="post">
+                                                          <form action="{{ route('depenses.destroy', $depense->id)}}" method="post">
                                                             @csrf
                                                             <button  type="submit" class="dropdown-item has-icon"><i class="fas fa-trash text-danger"></i> Supprimer</button>
                                                           </form>
@@ -91,6 +94,11 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tr>
+                                        <td colspan="3"><b>Total</b></td>
+                                        <td><b>{{ $tot }} Fc</b></td>
+                                        <td colspan="2"></td>
+                                    </tr>
                                 </table>
                                 </div>
                             </div>

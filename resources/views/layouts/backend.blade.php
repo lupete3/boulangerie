@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title></title>
- 
+  <title>{{ $viewData['title'] }}</title>
+
   <!-- Bootstrap Select -->
   <link rel="stylesheet" href="{{asset('assets/backend/bootstrap-select/dist/css/bootstrap.min.css ')}}">
   <link rel="stylesheet" href="{{asset('assets/backend/bootstrap-select/dist/css/bootstrap-select.min.css ')}}">
@@ -19,9 +19,9 @@
   <link rel="stylesheet" href="{{asset('assets/backend/modules/weather-icon/css/weather-icons-wind.min.css ')}}">
   <link rel="stylesheet" href="{{asset('assets/backend/modules/summernote/summernote-bs4.css ')}}">
 
-  <link rel="stylesheet" href="{{asset('assets/backend/modules/dataemplacements/dataemplacements.min.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/backend/modules/dataemplacements/Dataemplacements-1.10.16/css/dataemplacements.bootstrap4.min.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/backend/modules/dataemplacements/Select-1.2.4/css/select.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/backend/modules/datatables/datatables.min.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/backend/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/backend/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css')}}">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{asset('assets/backend/css/style.css ')}}">
@@ -42,6 +42,7 @@
   gtag('config', 'UA-94034622-3');
 </script>
 <!-- /END GA --></head>
+
 
 <body>
   <div id="app">
@@ -97,7 +98,7 @@
               
               <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
-                <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+                <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a>
               
               </li>
               
@@ -114,7 +115,7 @@
                 'achat-mp.index', 'achat-mp.create', 'achat-mp.edit',
                 'mouvement-stock-mp.index', 'mouvement-stock-mp.create', 'mouvement-stock-mp.edit',
                 )) active @endif " >
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-android-cloud"></i> <span>Stock MP Maison</span></a>
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-android-cloud"></i> <span>Stock MP Dépôt</span></a>
                 <ul class="dropdown-menu">
                   <li><a class="nav-link" href="{{route('stock-maison.index')}}">- Liste matières premières</a></li>
                   <li><a class="nav-link" href="{{ route('achat-mp.index')}}">- Achats matière première</a></li>
@@ -125,19 +126,17 @@
               <li class="dropdown @if (request()->routeIs(
                 'stock-usine.index', 'stock-usine.create', 'stock-usine.edit',
                 'mouvement-stock-mp-usine.index',
-                'mouvement-stock-mp.index','mouvement-stock-mp.create','mouvement-stock-mp.edit',
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-android-cloud-circle"></i> <span>Stock MP Usine</span></a>
                 <ul class="dropdown-menu">
                   <li><a class="nav-link" href="{{route('stock-usine.index')}}">- Liste matières premières</a></li>
                   <li><a class="nav-link" href="{{ route('mouvement-stock-mp-usine.index')}}">- Entrées matière première</a></li>
-                  <li><a class="nav-link" href="{{ route('mouvement-stock-mp.index')}}">- Sorties matières premières</a></li>
                 </ul>
               </li>
               
               <li class="dropdown @if (request()->routeIs(
                 'stock-pf.index', 'stock-pf.create', 'stock-pf.edit',
-                'mouvement-stock-pf-entree.index','mouvement-stock-pf-boulangerie.index',
+                'mouvement-stock-pf-entree.index',
                 'mouvement-stock-pf.index','mouvement-stock-pf.create','mouvement-stock-pf.edit',
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-android-cloud-done"></i> <span>Stock Produits Finis</span></a>
@@ -159,13 +158,13 @@
               
               <li class="dropdown @if (request()->routeIs(
                 'stock-boulangerie.index', 'stock-boulangerie.create', 'stock-boulangerie.edit',
-                'mouvement-stock-pf-entree.index', 
+                'mouvement-stock-pf-boulangerie.index', 
                 'ventes.index', 'ventes.create', 'ventes.edit',
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-home"></i> <span>Boulangerie</span></a>
                 <ul class="dropdown-menu">
                   <li><a class="nav-link" href="{{route('stock-boulangerie.index')}}">- Liste des produits</a></li>
-                  <li><a class="nav-link" href="{{ route('mouvement-stock-pf-entree.index')}}">- Entrées produits </a></li>
+                  <li><a class="nav-link" href="{{ route('mouvement-stock-pf-boulangerie.index')}}">- Entrées produits </a></li>
                   <li><a class="nav-link" href="{{ route('ventes.index')}}">- Ventes produits</a></li>
                 </ul>
               </li>
@@ -181,12 +180,34 @@
 
 
               <li class="dropdown @if (request()->routeIs(
-                'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf', 
-                'rapports.stockBoulangerie', 'rapports.entreeStockMpAll', 'rapports.productionAll'
+                'rapports.stockMpMaison',
+                'rapports.entreeStockMpAll',
+                'rapports.entreeStockMpJour',
+                'rapports.entreeStockMpHebdo',
+                'rapports.entreeStockMpAnnuel',
+                'rapports.entreeStockMpDate',
+                'rapports.productionAll',
+                'rapports.productionJour',
+                'rapports.productionHebdo',
+                'rapports.productionAnnuel',
+                'rapports.productionDate',
+                'rapports.venteAll',
+                'rapports.venteJour',
+                'rapports.venteHebdo',
+                'rapports.venteAnnuel',
+                'rapports.venteDate',
+                'rapports.depenseAll',
+                'rapports.depenseJour',
+                'rapports.depenseHebdo',
+                'rapports.depenseAnnuel',
+                'rapports.depenseDate',
+                'rapports.stockMpUsine',
+                'rapports.stockPf',
+                'rapports.stockBoulangerie',
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-pie-graph"></i> <span>Rapports</span></a>
                 <ul class="dropdown-menu">
-                  <li><a class="nav-link" href="{{ route('rapports.stockMpMaison')}}">- Stock MP Maison</a></li>
+                  <li><a class="nav-link" href="{{ route('rapports.stockMpMaison')}}">- Stock MP Dépôt</a></li>
                   <li><a class="nav-link" href="{{ route('rapports.stockMpUsine')}}">- Stock MP Usine</a></li>
                   <li><a class="nav-link" href="{{ route('rapports.stockPf')}}">- Stock Produits Finis</a></li>
                   <li><a class="nav-link" href="{{ route('rapports.stockBoulangerie')}}">- Stock Boulangerie</a></li>
@@ -260,7 +281,7 @@
             
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
-              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a>
             
             </li>
               
@@ -311,7 +332,7 @@
             
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
-              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a>
             
             </li>
               
@@ -352,7 +373,7 @@
             
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
-              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a>
             
             </li>
 
@@ -405,6 +426,7 @@
     }
   </style>
 
+  
   <!-- General JS Scripts -->
   <script src="{{asset('assets/backend/modules/jquery.min.js')}}"></script>
   <script src="{{asset('assets/backend/modules/popper.js')}}"></script>
@@ -425,16 +447,16 @@
   <script src="{{asset('assets/backend/modules/chocolat/dist/js/jquery.chocolat.min.js')}}"></script>
 
   <!-- JS Libraies -->
-  <script src="{{asset('assets/backend/modules/dataemplacements/dataemplacements.min.js')}}"></script>
-  <script src="{{asset('assets/backend/modules/dataemplacements/Dataemplacements-1.10.16/js/dataemplacements.bootstrap4.min.js')}}"></script>
-  <script src="{{asset('assets/backend/modules/dataemplacements/Select-1.2.4/js/dataemplacements.select.min.js')}}"></script>
+  <script src="{{asset('assets/backend/modules/datatables/datatables.min.js')}}"></script>
+  <script src="{{asset('assets/backend/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js')}}"></script>
+  <script src="{{asset('assets/backend/modules/datatables/Select-1.2.4/js/dataTables.select.min.js')}}"></script>
   <script src="{{asset('assets/backend/modules/jquery-ui/jquery-ui.min.js')}}"></script>
   <script src="{{asset('assets/backend/modules/jquery-selectric/jquery.selectric.min.js ')}}"></script>
   <script src="{{asset('assets/backend/modules/upload-preview/assets/js/jquery.uploadPreview.min.js ')}}"></script>
   <script src="{{asset('assets/backend/modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js ')}}"></script>
 
   <!-- Page Specific JS File -->
-  <script src="{{asset('assets/backend/js/page/modules-dataemplacements.js')}}"></script>
+  <script src="{{asset('assets/backend/js/page/modules-datatables.js')}}"></script>
   <script src="{{asset('assets/backend/js/bootstrap-iconpicker.bundle.min.js')}}"></script>
   <!-- Page Specific JS File -->
   <script src="{{asset('assets/backend/modules/upload-preview/assets/js/jquery.uploadPreview.min.js ')}}"></script>
@@ -450,6 +472,7 @@
   <!-- Bootstrap Select -->
   <script src="{{asset('assets/backend/bootstrap-select/dist/js/bootstrap.min.js')}}"></script>
   <script src="{{asset('assets/backend/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
+  
 
   <script>
     $(document).ready(function(){

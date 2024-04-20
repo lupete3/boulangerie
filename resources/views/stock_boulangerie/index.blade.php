@@ -67,16 +67,16 @@
 
                                                 <td> {{ $produit->id }} </td>
                                                 <td> {{ $produit->stockProduitFinis->designation }} </td>
-                                                <td> {{ $produit->stockProduitFinis->prix }} </td>
+                                                <td> {{ $produit->stockProduitFinis->prix }} Fc</td>
                                                 <td> {{ $produit->solde }} </td>
-                                                <td> {{ $produit->stockProduitFinis->prix * $produit->solde }} </td>
+                                                <td> {{ $produit->stockProduitFinis->prix * $produit->solde }} Fc</td>
                                                 
                                             </tr>
                                         @endforeach
                                     </tbody>
                                     <tr>
                                         <td colspan="4"><b>Total Valeur en stock</b></td>
-                                        <td colspan=""><b>{{ $tot }} fc</b></td>
+                                        <td colspan=""><b>{{ $tot }} Fc</b></td>
                                     </tr>
                                 </table>
                                 </div>

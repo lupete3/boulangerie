@@ -66,10 +66,10 @@
                                                         <th>Produit</th>
                                                         <th>Quantité produite</th>
                                                         <th>Prix de vente</th>
+                                                        <th>Liste des Compositions</th>
                                                         <th>Valeur de production</th>
                                                         <th>Coût de production</th>
                                                         <th>Bénéfice <br> (Val. Pr. - Coût Pr.)</th>
-                                                        <th>Liste des Compositions</th>
 
                                                     </tr>
                                                 </thead>
@@ -91,24 +91,29 @@
                                                             <td> {{ $production->created_at }} </td>
                                                             <td> {{ $production->produitFinis->designation }} </td>
                                                             <td> {{ $production->quantite }} </td>
-                                                            <td> {{ $production->produitFinis->prix }} </td>
+                                                            <td> {{ $production->produitFinis->prix }} Fc</td>
+                                                            <td> 
+                                                              @foreach ($production->compositions as $composition)
+                                                                  @php
+                                                                      $totProd += $composition->quantite * $composition->prix;  
+                                                                  @endphp
+                                                                  <span>({{ number_format($composition->quantite,0) }}) {{ $composition->designation }}</span><br>
+                                                              @endforeach    
+                                                            </td>
                                                             <td> {{ $production->quantite * $production->produitFinis->prix }} Fc</td>
                                                             <td>{{ $totProd }} Fc</td>
                                                             <td class="text-{{ (($totalBen - $totProd) >= 0)? 'info' : 'danger' }}">{{ $totalBen - $totProd }} Fc</td>
-                                                            
-                                                            <td> 
-                                                                @foreach ($production->compositions as $composition)
-                                                                    @php
-                                                                        $totProd += $composition->quantite * $composition->prix;  
-                                                                    @endphp
-                                                                    <span>({{ number_format($composition->quantite,0) }}) {{ $composition->designation }}</soan><br>
-                                                                @endforeach    
-                                                            </td>
                                                         </tr>
                                                     
                                                     @empty
 
                                                     @endforelse
+                                                    <tr>
+                                                      <td colspan="6"><b>Total </b></td>
+                                                      <td><b>{{ $total }} Fc</b></td>
+                                                      <td><b>{{ $totProd }} Fc</b></td>
+                                                      <td><b>{{ $total - $totProd }} Fc</b></td>
+                                                  </tr>
                                                 </tbody>
                                             </table>
                                         </div>

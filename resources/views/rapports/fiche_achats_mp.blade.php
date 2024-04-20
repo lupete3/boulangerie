@@ -101,7 +101,7 @@
                                                     @endphp
                                                     <tr>
                                                         <td colspan="5"><b>Total</b></td>
-                                                        <td><b>{{ $totQte }}$</b></td>
+                                                        <td><b>{{ $totQte }} Fc</b></td>
                                                         <td></td>
                                                     </tr>
                                                 </tbody>

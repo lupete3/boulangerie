@@ -76,8 +76,8 @@
                                                 <td> {{ $vente->created_at }} </td>
                                                 <td> {{ $vente->designation }} </td>
                                                 <td> {{ $vente->quantite }} </td>
-                                                <td> {{ $vente->prix }}fc </td>
-                                                <td> {{ $vente->quantite * $vente->prix }}fc </td>
+                                                <td> {{ $vente->prix }} Fc </td>
+                                                <td> {{ $vente->quantite * $vente->prix }} Fc </td>
                                                 <td> {{ $vente->reste }} </td>
                                                 <td> {{ $vente->observation }} </td>
                                                 
@@ -99,12 +99,13 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                        <tr>
-                                            <td colspan="5"><b>Total</b></td>
-                                            <td><b>{{ $tot }}fc</b></td>
-                                            <td colspan="3"></td>
-                                        </tr>
+                                        
                                     </tbody>
+                                    <tr>
+                                        <td colspan="5"><b>Total</b></td>
+                                        <td><b>{{ $tot }} Fc</b></td>
+                                        <td colspan="3"></td>
+                                    </tr>
                                 </table>
                                 </div>
                             </div>
