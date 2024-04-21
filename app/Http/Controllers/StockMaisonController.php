@@ -118,7 +118,6 @@ class StockMaisonController extends Controller
 
             'designation' => [
                 'required',
-                'unique:stock_maisons,designation',
             ],
             'prix' => 'required|numeric',
             'solde' => 'numeric'
@@ -128,7 +127,6 @@ class StockMaisonController extends Controller
             'designation.required' => 'Compléter le nom',
             'prix.required' => 'Compléter le prix d\'achat',
             'prix.numeric' => 'Le prix doit être un nombre',
-            'designation.unique' => 'Cette matière première existe déjà dans le stock',
             'designation.numeric' => 'La quantité en stock doit être un nombre',
 
         ]);

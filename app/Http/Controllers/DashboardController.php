@@ -167,7 +167,7 @@ class DashboardController extends Controller
     public function stockMpMaison(): View
     {
 
-        $viewData['title'] = 'Liste des matières premières disponibles en stock';
+        $viewData['title'] = 'Liste des matières premières disponibles en stock dépôt';
 
         $viewData['stockMpMaison'] = StockMaison::orderBy('designation', 'ASC')->get();
         
@@ -179,7 +179,7 @@ class DashboardController extends Controller
     public function entreeStockMpJour(): View
     {
 
-        $viewData['title'] = 'Liste des achats des matières premières du '. date('d-m-Y');
+        $viewData['title'] = 'Liste des achats des matières premières en stock dépôt du '. date('d-m-Y');
 
         $viewData['entrees'] = AchatStockMaison::whereDate('created_at', Carbon::today())->with('fournisseur','stockMaison')->get();
         
@@ -190,7 +190,7 @@ class DashboardController extends Controller
     public function entreeStockMpHebdo(): View
     {
 
-        $viewData['title'] = 'Liste des achats matières premières de la semaine';
+        $viewData['title'] = 'Liste des achats matières premières en stock dépôt de la semaine';
          
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
@@ -204,7 +204,7 @@ class DashboardController extends Controller
     public function entreeStockMpAnnuel(): View
     {
 
-        $viewData['title'] = 'Liste des achats matières premières de l\'année';
+        $viewData['title'] = 'Liste des achats matières premières en stock dépôt de l\'année';
          
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
@@ -218,7 +218,7 @@ class DashboardController extends Controller
     public function entreeStockMpDate(Request $request): View
     {
 
-        $viewData['title'] = 'Liste des achats matières premières du '.$request->debut.' au '.$request->fin;
+        $viewData['title'] = 'Liste des achats matières premières en stock dépôt du '.$request->debut.' au '.$request->fin;
          
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
@@ -231,7 +231,7 @@ class DashboardController extends Controller
     public function entreeStockMpAll(): View
     {
 
-        $viewData['title'] = 'Liste des achats matières premières stock' ;
+        $viewData['title'] = 'Liste des achats matières premières en stock dépôt' ;
 
         $viewData['entrees'] = AchatStockMaison::with('fournisseur','stockMaison')->get();
         

@@ -56,7 +56,7 @@
                     @endphp
                     @foreach ($viewData['stockUsines'] as $stockUsine)
                       @php
-                          $tot += ($stockUsine->stockMaison->prix * $stockUsine->stockMaison->solde);
+                          $tot += ($stockUsine->stockMaison->prix * $stockUsine->solde);
                       @endphp
                     @endforeach
                     {{ $tot }} Fc
