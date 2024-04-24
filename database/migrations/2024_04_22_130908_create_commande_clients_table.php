@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ventes', function (Blueprint $table) {
+        Schema::create('commande_clients', function (Blueprint $table) {
             $table->id();
-            $table->text('designation');
-            $table->decimal('quantite', 30);
-            $table->decimal('prix', 30);
+            $table->decimal('montant', 30);
+            $table->decimal('paye', 30);
             $table->decimal('reste', 30);
-            $table->foreignId('stock_pf_id');
+            $table->foreignId('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->text('observation')->nullable();
             $table->timestamps();
         });
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ventes');
+        Schema::dropIfExists('commande_clients');
     }
 };

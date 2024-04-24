@@ -51,13 +51,16 @@ class StockPfController extends Controller
                 'required',
                 'unique:stock_pfs,designation',
             ],
-            'prix' => 'required'
+            'prix' => 'required',
+            'solde' => 'required|numeric',
 
         ],[
 
             'designation.required' => 'Compléter le nom',
             'prix.required' => 'Compléter le prix d\'achat',
-            'designqtion.unique' => 'Ce produit existe déjà dans le stock',
+            'solde.required' => 'Compléter le solde disponible',
+            'solde.numeric' => 'Le solde n\'est pas un nombre',
+            'designation.unique' => 'Ce produit existe déjà dans le stock',
 
         ]);
 
@@ -113,13 +116,14 @@ class StockPfController extends Controller
                 'required',
             ],
             'prix' => 'required',
-            'solde' => 'required'
+            'solde' => 'required|numeric',
 
         ],[
 
-            'nom.required' => 'Compléter le nom',
+            'designation.required' => 'Compléter le nom',
             'prix.required' => 'Compléter le prix d\'achat',
             'solde.required' => 'Compléter le solde disponible',
+            'solde.numeric' => 'Le solde n\'est pas un nombre',
 
         ]);
 

@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\AchatStockMaisonController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\MouvementStockMpController;
 use App\Http\Controllers\MouvementStockPfController;
+use App\Http\Controllers\PaiementClientController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\StockBoulangerieController;
 use App\Http\Controllers\StockMaisonController;
@@ -46,6 +48,13 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/fournisseurs/{fournisseur}/edit', [FournisseurController::class, 'edit'])->name('fournisseurs.edit');
     Route::put('/fournisseurs/{fournisseur}/update', [FournisseurController::class, 'update'])->name('fournisseurs.update');
     Route::post('/fournisseurs/{fournisseur}/destroy', [FournisseurController::class, 'destroy'])->name('fournisseurs.destroy');
+  
+    Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::post('/clients/store', [ClientController::class, 'store'])->name('clients.store');
+    Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
+    Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
+    Route::put('/clients/{client}/update', [ClientController::class, 'update'])->name('clients.update');
+    Route::post('/clients/{client}/destroy', [ClientController::class, 'destroy'])->name('clients.destroy');
     
     Route::get('/stock-maison', [StockMaisonController::class, 'index'])->name('stock-maison.index');
     Route::post('/stock-maison/store', [StockMaisonController::class, 'store'])->name('stock-maison.store');
@@ -117,6 +126,17 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/ventes/{vente}/edit', [VenteController::class, 'edit'])->name('ventes.edit');
     Route::put('/ventes/{vente}/update', [VenteController::class, 'update'])->name('ventes.update');
     Route::post('/ventes/{vente}/destroy', [VenteController::class, 'destroy'])->name('ventes.destroy');
+    Route::post('/add-to-cart-vente', [VenteController::class, 'addToCart'])->name('ventes.addToCart');
+    Route::post('/clear-cart-vente', [VenteController::class, 'clearCart'])->name('ventes.clearCart');
+    Route::post('/remove-from-cart-vente', [VenteController::class, 'removeFromCart'])->name('ventes.removeFromCart');
+    Route::post('/remove-from-cart-edit-vente/{vente}/destroy', [VenteController::class, 'removeFromCartEdit'])->name('ventes.removeFromCartEdit');
+    Route::post('/add-to-cart-edit-vente/{vente}', [VenteController::class, 'addToCartEdit'])->name('ventes.addToCartEdit');
+
+    Route::get('/paiement-clients', [PaiementClientController::class, 'index'])->name('paiements.index');
+    Route::get('/dettes-clients', [PaiementClientController::class, 'detteClients'])->name('paiements.detteClients');
+    Route::get('/dettes-create/{commandeClient}', [PaiementClientController::class, 'create'])->name('paiements.create');
+    Route::post('/dettes-store', [PaiementClientController::class, 'store'])->name('paiements.store');
+
 
     Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses.index');
     Route::post('/depenses/store', [DepenseController::class, 'store'])->name('depenses.store');
@@ -143,6 +163,18 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/rapports/ventes-hebdomadaire', [DashboardController::class, 'venteHebdo'])->name('rapports.venteHebdo');
     Route::get('/rapports/ventes-annuel', [DashboardController::class, 'venteAnnuel'])->name('rapports.venteAnnuel');
     Route::post('/rapports/ventes-personnalise', [DashboardController::class, 'venteDate'])->name('rapports.venteDate');
+
+    Route::get('/rapports/dettes-all', [DashboardController::class, 'dettesAll'])->name('rapports.dettesAll');
+    Route::get('/rapports/dettes-journalier', [DashboardController::class, 'dettesJour'])->name('rapports.dettesJour');
+    Route::get('/rapports/dettes-hebdomadaire', [DashboardController::class, 'dettesHebdo'])->name('rapports.dettesHebdo');
+    Route::get('/rapports/dettes-annuel', [DashboardController::class, 'dettesAnnuel'])->name('rapports.dettesAnnuel');
+    Route::post('/rapports/dettes-personnalise', [DashboardController::class, 'dettesDate'])->name('rapports.dettesDate');
+
+    Route::get('/rapports/paiements-all', [DashboardController::class, 'paiementsAll'])->name('rapports.paiementsAll');
+    Route::get('/rapports/paiements-journalier', [DashboardController::class, 'paiementsJour'])->name('rapports.paiementsJour');
+    Route::get('/rapports/paiements-hebdomadaire', [DashboardController::class, 'paiementsHebdo'])->name('rapports.paiementsHebdo');
+    Route::get('/rapports/paiements-annuel', [DashboardController::class, 'paiementsAnnuel'])->name('rapports.paiementsAnnuel');
+    Route::post('/rapports/paiements-personnalise', [DashboardController::class, 'paiementsDate'])->name('rapports.paiementsDate');
 
     Route::get('/rapports/depenses-all', [DashboardController::class, 'depenseAll'])->name('rapports.depenseAll');
     Route::get('/rapports/depenses-journalier', [DashboardController::class, 'depenseJour'])->name('rapports.depenseJour');

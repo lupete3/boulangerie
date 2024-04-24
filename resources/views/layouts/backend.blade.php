@@ -102,10 +102,13 @@
               
               </li>
               
-              <li class="dropdown @if (request()->routeIs('fournisseurs.index', 'fournisseurs.create', 'fournisseurs.edit')) active @endif " >
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-person"></i> <span>Fournisseurs</span></a>
+              <li class="dropdown @if (request()->routeIs(
+                'fournisseurs.index', 'fournisseurs.create', 'fournisseurs.edit',
+                'clients.index', 'clients.create', 'clients.edit',
+                )) active @endif " >
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-person"></i> <span>Contacts</span></a>
                 <ul class="dropdown-menu">
-                  <li><a class="nav-link" href="{{ route('fournisseurs.create')}}">- Ajouter un fournisseur</a></li>
+                  <li><a class="nav-link" href="{{route('clients.index')}}">- Liste des clients</a></li>
                   <li><a class="nav-link" href="{{route('fournisseurs.index')}}">- Liste des fournisseurs</a></li>
                 </ul>
               </li>
@@ -170,6 +173,18 @@
               </li>
               
               <li class="dropdown @if (request()->routeIs(
+                'paiements.index',
+                'paiements.detteClients',
+                'paiements.create',
+                'paiements.store',  )) active @endif " >
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-cash"></i> <span>Dettes</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('paiements.detteClients')}}">- Dettes clients</a></li>
+                  <li><a class="nav-link" href="{{route('paiements.index')}}">- Paiements clients</a></li>
+                </ul>
+              </li>
+              
+              <li class="dropdown @if (request()->routeIs(
                 'depenses.index', 'depenses.create', 'depenses.edit' )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-cash"></i> <span>Dépenses</span></a>
                 <ul class="dropdown-menu">
@@ -204,6 +219,16 @@
                 'rapports.stockMpUsine',
                 'rapports.stockPf',
                 'rapports.stockBoulangerie',
+                'rapports.dettesAll',
+                'rapports.dettesJour',
+                'rapports.dettesHebdo',
+                'rapports.dettesAnnuel',
+                'rapports.dettesDate',
+                'rapports.paiementsAll',
+                'rapports.paiementsJour',
+                'rapports.paiementsHebdo',
+                'rapports.paiementsAnnuel',
+                'rapports.paiementsDate',
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-pie-graph"></i> <span>Rapports</span></a>
                 <ul class="dropdown-menu">
@@ -214,6 +239,8 @@
                   <li><a class="nav-link" href="{{route('rapports.entreeStockMpAll')}}">- Achats MP</a></li>
                   <li><a class="nav-link" href="{{route('rapports.productionAll')}}">- Fiche Productions</a></li>
                   <li><a class="nav-link" href="{{route('rapports.venteAll')}}">- Fiche Ventes</a></li>
+                  <li><a class="nav-link" href="{{route('rapports.dettesAll')}}">- Fiche Dettes Clients</a></li>
+                  <li><a class="nav-link" href="{{route('rapports.paiementsAll')}}">- Fiche Paiements Clients</a></li>
                   <li><a class="nav-link" href="{{route('rapports.depenseAll')}}">- Fiche Dépenses</a></li>
                 </ul>
               </li>
@@ -484,6 +511,8 @@
         });
     });
   </script>
+
+  
 
 </body>
 </html>

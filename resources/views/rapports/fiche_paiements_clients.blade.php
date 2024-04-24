@@ -21,13 +21,13 @@
             <div class="section-body ">
                 <div class="row">
                   <div class="col-2 col-md-2 col-lg-2 align-center">
-                    <a href="{{ route('rapports.venteJour')}}" class="btn btn-primary  valider">Rapport Journalier</a>
+                    <a href="{{ route('rapports.paiementsJour')}}" class="btn btn-primary  valider">Rapport Journalier</a>
                   </div>
                   <div class="col-3 col-md-3 col-lg-3 align-center">
-                    <a href="{{ route('rapports.venteHebdo')}}" class="btn btn-primary  valider">Rapport Hebdomadaire</a>
+                    <a href="{{ route('rapports.paiementsHebdo')}}" class="btn btn-primary  valider">Rapport Hebdomadaire</a>
                   </div>
                   <div class="col-2 col-md-2 col-lg-2 align-center">
-                    <a href="{{ route('rapports.venteAnnuel')}}" class="btn btn-primary  valider">Rapport Annuel</a>
+                    <a href="{{ route('rapports.paiementsAnnuel')}}" class="btn btn-primary  valider">Rapport Annuel</a>
                   </div>
                   <div class="col-2 col-md-2 col-lg-2 align-center">
                     <button type="button" class="btn btn-primary  valider" data-toggle="modal" data-target="#exampleModal">
@@ -58,68 +58,54 @@
                                     <div class="row spacer" style="margin-bottom:20px; " >
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <table class="table table-bordered table-striped table-sm" style="font-family:Century Gothic; font-size:0.7em;">
-                                              <thead>                                 
+                                                <thead>                                 
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Date Commannde</th>
+                                                        <th>Client</th>
+                                                        <th>Total à payer</th>
+                                                        <th>Total payé</th>
+                                                        <th>Date Paiement</th>
+                                                        <th>Montant </th>
+                                                        <th>Reste</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $tot = 0;
+                                                        $totPaye = 0;
+                                                        $totReste = 0;
+                                                        $id = 1;
+                                                    @endphp
+            
+                                                    @foreach ($viewData['commandes'] as $commande)
+                                                        @php
+                                                            $tot = $tot + $commande->paye;
+                                                        @endphp
+                                                        @foreach ($commande->paiements as $paiement)
+                                                            
+                                                            <tr>
+                                                                @if ($loop->first)
+                                                                    <td rowspan="{{ $commande->paiements->count() }}">{{ $id++ }}</td>
+                                                                    <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->created_at }}</td>
+                                                                    <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->client->nom }}</td>
+                                                                    <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->montant }} Fc</td>
+                                                                    <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->paye }} Fc</td>
+                                                                @endif
+                                                                <td> {{ $paiement->created_at }}</td>
+                                                                <td> {{ $paiement->montant }} Fc</td>
+                                                                <td> {{ $paiement->reste }} Fc</td>
+            
+                                                            </tr>
+                                                        @endforeach
+                                                    @endforeach
+            
+                                                </tbody>
                                                 <tr>
-                                                    <th>#</th>
-                                                    <th>Date Vente</th>
-                                                    <th>Client</th>
-                                                    <th>Total à payer</th>
-                                                    <th>Total payé</th>
-                                                    <th>Dette</th>
-                                                    <th>Produit</th>
-                                                    <th>Quantite Vendue</th>
-                                                    <th>Prix Vente</th>
-                                                    <th>Prix Total</th>
-                                                    <th>Reste en stock</th>
-                                                    <th>Observation</th>
+                                                    <td colspan="4"><b>Total</b></td>
+                                                    <td><b>{{ $tot }} Fc</b></td>
+                                                    <td colspan="3"></td>
                                                 </tr>
-                                              </thead>
-                                              <tbody>
-                                                  @php
-                                                      $tot = 0;
-                                                      $totPaye = 0;
-                                                      $totReste = 0;
-                                                      $id = 1;
-                                                  @endphp
-          
-                                                  @foreach ($viewData['commandes'] as $commande)
-                                                      @php
-                                                          $tot = $tot + $commande->montant;
-                                                          $totPaye = $totPaye + $commande->paye;
-                                                          $totReste = $totReste + $commande->reste;
-                                                      @endphp
-                                                      @foreach ($commande->ventes as $vente)
-                                                          
-                                                          <tr>
-                                                              @if ($loop->first)
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $id++ }}</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->created_at }}</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->client->nom }}</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->montant }} Fc</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->paye }} Fc</td>
-                                                                  <td class="@if ($commande->reste > 0) text-danger @else @endif" rowspan="{{ $commande->ventes->count() }}">{{ $commande->reste }} Fc</td>
-                                                              @endif
-                                                              <td> {{ $vente->designation }} </td>
-                                                              <td> {{ $vente->quantite }} </td>
-                                                              <td> {{ $vente->prix }} Fc </td>
-                                                              <td> {{ $vente->quantite * $vente->prix }} Fc </td>
-                                                              <td> {{ $vente->reste }} </td>
-                                                              @if ($loop->first)
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->observation }}</td>
-                                                              @endif
-          
-                                                          </tr>
-                                                      @endforeach
-                                                  @endforeach
-          
-                                              </tbody>
-                                              <tr>
-                                                  <td colspan="3"><b>Total</b></td>
-                                                  <td><b>{{ $tot }} Fc</b></td>
-                                                  <td><b>{{ $totPaye }} Fc</b></td>
-                                                  <td><b>{{ $totReste }} Fc</b></td>
-                                                  <td colspan="6"></td>
-                                              </tr>
                                             </table>
                                         </div>
             
@@ -168,7 +154,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form method="post" class="row" action="{{ route('rapports.venteDate')}}" enctype="multipart/form-data">
+            <form method="post" class="row" action="{{ route('rapports.paiementsDate')}}" enctype="multipart/form-data">
               @csrf
               <div class="form-group col-5 col-md-5 col-lg-5">
                 <label>Date début</label>

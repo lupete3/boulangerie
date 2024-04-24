@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Boisson;
+use App\Models\Client;
+use App\Models\CommandeClient;
 use App\Models\Nourriture;
+use App\Models\PaiementClient;
 use App\Models\StockBoulangerie;
 use App\Models\StockPf;
 use App\Models\Table;
 use App\Models\Vente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class VenteController extends Controller
 {
@@ -21,7 +25,7 @@ class VenteController extends Controller
 
         $viewData['title'] = 'Historique des ventes';
 
-        $viewData['ventes'] = Vente::orderBy('id', 'desc')->with('stockBoulangerie')->get();
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->with('ventes')->get();
 
         return view('ventes.index')->with('viewData', $viewData);
     }
@@ -35,10 +39,100 @@ class VenteController extends Controller
 
         $viewData['title'] = 'Ajouter une vente';
 
+        $viewData['clients'] = Client::all();
+
         $viewData['produits'] = StockBoulangerie::with('stockProduitFinis')->get();
 
         return view('ventes.create')->with('viewData', $viewData);
     }
+
+    
+    public function addToCart(Request $request)
+    {
+        // Récupérer l'ID du produit depuis la requête
+        $request->validate([
+            'produit_id' => 'required|exists:stock_boulangeries,stock_pf_id',
+            'quantite' => 'required|integer|min:1'
+        ]);
+
+        $productId = $request->produit_id;
+
+        // Rechercher le produit correspondant dans la base de données
+
+        $product = StockBoulangerie::where('id', $productId)->with('stockProduitFinis')->first();
+
+        // Récupérer le panier de la session ou créer un nouveau panier
+        $cart = session()->get('cart', []);
+
+        if ($product->solde < $request->quantite ) {
+
+            return redirect()->route('ventes.create')->with('error','Cette quantité est supérieur au solde actuel');
+        }
+
+        // Vérifier si le produit est déjà dans le panier
+        if (isset($cart[$product->id])) {
+            // Augmenter la quantité si le produit est déjà dans le panier
+            $cart[$product->id]['quantity'] += $request->quantite;
+
+        } else {
+            // Ajouter le produit au panier
+            $cart[$product->id] = [
+                'id' => $product->id,
+                'name' => $product->stockProduitFinis->designation,
+                'quantity' => $request->quantite,
+                'price' => $product->stockProduitFinis->prix,
+            ];
+        }
+
+        // Mettre à jour le panier dans la session
+        session()->put('cart', $cart);
+
+        return redirect()->route('ventes.create')->with('success', 'Produit ajouté à la composition avec succès.');
+
+    }
+
+    /**
+     * Retirer un article dans le panier
+     * public function removeFromCart(Request $request)
+    **/
+    public function removeFromCart(Request $request)
+    {
+        // Validation des données du formulaire
+        $request->validate([
+            'article_id' => 'required|exists:stock_boulangeries,stock_pf_id',
+        ]);
+
+        // Récupérer le produit à partir de la base de données
+        $productId = $request->article_id;
+
+        // Récupérer le panier de la session
+        $cart = Session::get('cart', []);
+
+        // Vérifier si le produit est présent dans le panier
+        if (isset($cart[$productId])) {
+            // Supprimer le produit du panier
+            unset($cart[$productId]);
+
+            // Mettre à jour le panier dans la session
+            Session::put('cart', $cart);
+
+            return redirect()->back()->with('success', 'Le produit a été supprimé de la composition avec succès.');
+        }
+
+        return redirect()->back()->with('error', 'Le produit n\'est pas dans la composition.');
+    }
+
+    /**
+     * Vider le pqnier
+     */
+    public function clearCart()
+    {
+        // Supprimer le panier de la session
+        Session::forget('cart');
+
+        return redirect()->route('ventes.create')->with('success', 'La composition a été vidée avec succès.');
+    }
+
 
 
     /**
@@ -48,39 +142,62 @@ class VenteController extends Controller
     {
         $request->validate([
 
-            'quantite' => 'required|numeric',
-            'produit_id' => 'required',
+            'montant' => 'required|numeric',
+            'client_id' => 'required',
 
         ],[
 
-            'quantite.required' => 'Compléter le champ quantité',
-            'quantite.numeric' => 'Entrer un nombre ',
-            'produit_id.required' => 'Choisir un produit',
+            'montant.required' => 'Compléter le champ montant payé',
+            'montant.numeric' => 'Entrer un nombre pour le montant',
+            'client_id.required' => 'Choisir un client à facturer',
 
         ]);
 
-        $produit = StockBoulangerie::where('stock_pf_id',$request->produit_id)->with('stockProduitFinis')->first();
+        $tot = 0;
 
-        if($produit->solde < $request->quantite)
+        foreach(session('cart', []) as $productId => $item)
         {
-            return redirect()->back()->with('error','Cette quantité n\'est pas didponible dans le stock');
+            $tot = $tot + ($item['price'] * $item['quantity']);
         }
 
-        $vente = Vente::create([
-            'designation' => $produit->stockProduitFinis->designation,
-            'quantite' => $request->quantite,
-            'prix' => $produit->stockProduitFinis->prix,
-            'reste' => $produit->solde - $request->quantite,
-            'stock_pf_id' => $request->produit_id,
-            'observation' => $request->observation
+        $commandeClient = CommandeClient::create([
+            'montant' => $tot,
+            'paye' => $request->montant,
+            'reste' => $tot - $request->montant,
+            'client_id' => $request->client_id,
+            'observation' => $request->observation,
         ]);
 
-        if($vente)
+        if(($tot - $request->montant) == 0 )
         {
-            $produit->update([
-                'solde' => $produit->solde - $request->quantite
+            PaiementClient::create([
+                'montant' => $request->montant,
+                'reste' => $tot - $request->montant,
+                'commande_client_id' => $commandeClient->id,
+                'client_id' => $commandeClient->client_id
             ]);
         }
+
+        foreach(session('cart', []) as $productId => $item)
+        {
+
+            $produit = StockBoulangerie::where('stock_pf_id',$productId)->with('stockProduitFinis')->first();
+
+            Vente::create([
+                'designation' => $item['name'],
+                'quantite' => $item['quantity'],
+                'prix' => $item['price'],
+                'reste' => $produit->solde - $item['quantity'],
+                'stock_pf_id' => $productId,
+                'commande_client_id' => $commandeClient->id, 
+            ]);
+
+            $produit->update([
+                'solde' => $produit->solde - $item['quantity']
+            ]);
+        }
+
+        Session::forget('cart');
 
         return redirect()->back()->with('success','Vente effectuée avec succès');
 

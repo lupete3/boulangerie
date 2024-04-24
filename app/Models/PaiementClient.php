@@ -6,23 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Vente extends Model
+class PaiementClient extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'designation',
-        'quantite',
-        'prix',
+        'montant',
         'reste',
-        'stock_pf_id',
         'commande_client_id',
+        'client_id',
     ];
-
-    public function stockBoulangerie(): BelongsTo
-    {
-        return $this->belongsTo(StockBoulangerie::class);
-    }
 
     public function commandeClient(): BelongsTo
     {

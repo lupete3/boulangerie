@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AchatStockMaison;
+use App\Models\CommandeClient;
 use App\Models\Depense;
 use App\Models\Fournisseur;
 use App\Models\Production;
@@ -343,7 +344,7 @@ class DashboardController extends Controller
 
         $viewData['title'] = 'Liste des ventes du '. date('d-m-Y');
 
-        $viewData['ventes'] = Vente::whereDate('created_at', Carbon::today())->with('stockBoulangerie')->get();
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereDate('created_at', Carbon::today())->with('ventes')->get();
         
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
@@ -357,7 +358,7 @@ class DashboardController extends Controller
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
 
-        $viewData['ventes'] = Vente::whereBetween('created_at', [$debutSemaine, $finSemaine])->with('stockBoulangerie')->get();
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$debutSemaine, $finSemaine])->with('ventes')->get();
         
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
@@ -371,7 +372,7 @@ class DashboardController extends Controller
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
 
-        $viewData['ventes'] = Vente::whereBetween('created_at', [$debutAnnee, $finAnnee])->with('stockBoulangerie')->get();
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$debutAnnee, $finAnnee])->with('ventes')->get();
         
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
@@ -385,7 +386,7 @@ class DashboardController extends Controller
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
 
-        $viewData['ventes'] = Vente::whereBetween('created_at', [$dateDebut, $dateFin])->with('stockBoulangerie')->get();
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$dateDebut, $dateFin])->with('ventes')->get();
         
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
@@ -396,9 +397,138 @@ class DashboardController extends Controller
 
         $viewData['title'] = 'Liste des ventes ';
 
-        $viewData['ventes'] = Vente::with('stockBoulangerie')->get();
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->get();
         
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
+    }
+
+
+    // Fiche des ventes journalieres
+    public function dettesJour(): View
+    {
+
+        $viewData['title'] = 'Liste des dettes du '. date('d-m-Y');
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->whereDate('created_at', Carbon::today())->with('ventes')->get();
+        
+        return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
+    }
+
+    // Fiche des ventes hebdomadaires
+    public function dettesHebdo(): View
+    {
+
+        $viewData['title'] = 'Liste des dettes de la semaine';
+         
+        $debutSemaine = Carbon::now()->startOfWeek();
+        $finSemaine = Carbon::now()->endOfWeek();
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->whereBetween('created_at', [$debutSemaine, $finSemaine])->with('ventes')->get();
+        
+        return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
+    }
+
+    // Fiche des ventes annuelles
+    public function dettesAnnuel(): View
+    {
+
+        $viewData['title'] = 'Liste des dettes de l\'année';
+         
+        $debutAnnee = Carbon::now()->startOfYear();
+        $finAnnee = Carbon::now()->endOfYear();
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->whereBetween('created_at', [$debutAnnee, $finAnnee])->with('ventes')->get();
+        
+        return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
+    }
+
+    // Fiche des ventes personnalise
+    public function dettesDate(Request $request): View
+    {
+
+        $viewData['title'] = 'Liste des dettes du '.$request->debut.' au '.$request->fin;
+         
+        $dateDebut = $request->input('debut');
+        $dateFin = $request->input('fin');
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->whereBetween('created_at', [$dateDebut, $dateFin])->with('ventes')->get();
+        
+        return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
+    }
+
+    //Fiche de toutes les ventes
+    public function dettesAll(): View
+    {
+
+        $viewData['title'] = 'Liste des dettes clients ';
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->get();
+        
+        return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
+    }
+
+    // Fiche des ventes journalieres
+    public function paiementsJour(): View
+    {
+
+        $viewData['title'] = 'Liste des paiements du '. date('d-m-Y');
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereDate('created_at', Carbon::today())->with('paiements')->get();
+                
+        return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
+    }
+
+    // Fiche des ventes hebdomadaires
+    public function paiementsHebdo(): View
+    {
+
+        $viewData['title'] = 'Liste des paiements de la semaine';
+         
+        $debutSemaine = Carbon::now()->startOfWeek();
+        $finSemaine = Carbon::now()->endOfWeek();
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$debutSemaine, $finSemaine])->with('paiements')->get();
+        
+        return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
+    }
+
+    // Fiche des ventes annuelles
+    public function paiementsAnnuel(): View
+    {
+
+        $viewData['title'] = 'Liste des paiements de l\'année';
+         
+        $debutAnnee = Carbon::now()->startOfYear();
+        $finAnnee = Carbon::now()->endOfYear();
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$debutAnnee, $finAnnee])->with('paiements')->get();
+        
+        return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
+    }
+
+    // Fiche des ventes personnalise
+    public function paiementsDate(Request $request): View
+    {
+
+        $viewData['title'] = 'Liste des paiements du '.$request->debut.' au '.$request->fin;
+         
+        $dateDebut = $request->input('debut');
+        $dateFin = $request->input('fin');
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$dateDebut, $dateFin])->with('paiements')->get();
+        
+        return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
+    }
+
+    //Fiche de toutes les ventes
+    public function paiementsAll(): View
+    {
+
+        $viewData['title'] = 'Liste des paiements clients ';
+
+        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->with('paiements')->get();
+        
+        return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
     }
 
 

@@ -52,17 +52,13 @@
                                     <thead>                                 
                                         <tr>
                                             <th>#</th>
-                                            <th>Date Vente</th>
+                                            <th>Date Commannde</th>
                                             <th>Client</th>
                                             <th>Total à payer</th>
                                             <th>Total payé</th>
-                                            <th>Dette</th>
-                                            <th>Produit</th>
-                                            <th>Quantite Vendue</th>
-                                            <th>Prix Vente</th>
-                                            <th>Prix Total</th>
-                                            <th>Reste en stock</th>
-                                            <th>Observation</th>
+                                            <th>Date Paiement</th>
+                                            <th>Montant </th>
+                                            <th>Reste</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -75,29 +71,21 @@
 
                                         @foreach ($viewData['commandes'] as $commande)
                                             @php
-                                                $tot = $tot + $commande->montant;
-                                                $totPaye = $totPaye + $commande->paye;
-                                                $totReste = $totReste + $commande->reste;
+                                                $tot = $tot + $commande->paye;
                                             @endphp
-                                            @foreach ($commande->ventes as $vente)
+                                            @foreach ($commande->paiements as $paiement)
                                                 
                                                 <tr>
                                                     @if ($loop->first)
-                                                        <td rowspan="{{ $commande->ventes->count() }}">{{ $id++ }}</td>
-                                                        <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->created_at }}</td>
-                                                        <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->client->nom }}</td>
-                                                        <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->montant }} Fc</td>
-                                                        <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->paye }} Fc</td>
-                                                        <td class="@if ($commande->reste > 0) text-danger @else @endif" rowspan="{{ $commande->ventes->count() }}">{{ $commande->reste }} Fc</td>
+                                                        <td rowspan="{{ $commande->paiements->count() }}">{{ $id++ }}</td>
+                                                        <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->created_at }}</td>
+                                                        <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->client->nom }}</td>
+                                                        <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->montant }} Fc</td>
+                                                        <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->paye }} Fc</td>
                                                     @endif
-                                                    <td> {{ $vente->designation }} </td>
-                                                    <td> {{ $vente->quantite }} </td>
-                                                    <td> {{ $vente->prix }} Fc </td>
-                                                    <td> {{ $vente->quantite * $vente->prix }} Fc </td>
-                                                    <td> {{ $vente->reste }} </td>
-                                                    @if ($loop->first)
-                                                        <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->observation }}</td>
-                                                    @endif
+                                                    <td> {{ $paiement->created_at }}</td>
+                                                    <td> {{ $paiement->montant }} Fc</td>
+                                                    <td> {{ $paiement->reste }} Fc</td>
 
                                                 </tr>
                                             @endforeach
@@ -105,11 +93,9 @@
 
                                     </tbody>
                                     <tr>
-                                        <td colspan="3"><b>Total</b></td>
+                                        <td colspan="4"><b>Total</b></td>
                                         <td><b>{{ $tot }} Fc</b></td>
-                                        <td><b>{{ $totPaye }} Fc</b></td>
-                                        <td><b>{{ $totReste }} Fc</b></td>
-                                        <td colspan="6"></td>
+                                        <td colspan="3"></td>
                                     </tr>
                                 </table>
                                 </div>
@@ -120,5 +106,6 @@
             </div>
         </section>
     </div>
+
 
 @endsection

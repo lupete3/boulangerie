@@ -52,6 +52,7 @@
                                     <thead>                                 
                                         <tr>
                                             <th>#</th>
+                                            <th>Action</th>
                                             <th>Date Vente</th>
                                             <th>Client</th>
                                             <th>Total à payer</th>
@@ -61,7 +62,6 @@
                                             <th>Quantite Vendue</th>
                                             <th>Prix Vente</th>
                                             <th>Prix Total</th>
-                                            <th>Reste en stock</th>
                                             <th>Observation</th>
                                         </tr>
                                     </thead>
@@ -84,6 +84,17 @@
                                                 <tr>
                                                     @if ($loop->first)
                                                         <td rowspan="{{ $commande->ventes->count() }}">{{ $id++ }}</td>
+                                                        <td rowspan="{{ $commande->ventes->count() }}">
+                                                            <div class="dropdown">
+                                                                <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
+                                                                
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                  
+                                                                    <a href="{{ route('paiements.create', $commande->id)}}" class="dropdown-item has-icon"><i class="fas fa-check text-primary"></i> Payer</a>
+                                                                                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </td>
                                                         <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->created_at }}</td>
                                                         <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->client->nom }}</td>
                                                         <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->montant }} Fc</td>
@@ -94,7 +105,6 @@
                                                     <td> {{ $vente->quantite }} </td>
                                                     <td> {{ $vente->prix }} Fc </td>
                                                     <td> {{ $vente->quantite * $vente->prix }} Fc </td>
-                                                    <td> {{ $vente->reste }} </td>
                                                     @if ($loop->first)
                                                         <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->observation }}</td>
                                                     @endif
@@ -105,11 +115,11 @@
 
                                     </tbody>
                                     <tr>
-                                        <td colspan="3"><b>Total</b></td>
+                                        <td colspan="4"><b>Total</b></td>
                                         <td><b>{{ $tot }} Fc</b></td>
                                         <td><b>{{ $totPaye }} Fc</b></td>
                                         <td><b>{{ $totReste }} Fc</b></td>
-                                        <td colspan="6"></td>
+                                        <td colspan="5"></td>
                                     </tr>
                                 </table>
                                 </div>
@@ -120,5 +130,42 @@
             </div>
         </section>
     </div>
+
+    <!-- Critere selon vehicule -->
+    <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Choisir un produit finis</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="post" class="row" action="{{ route('ventes.store') }}" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group col-12 col-md-12 col-lg-12">
+                  
+                  
+                </div> 
+                <div class="form-group col-12 col-md-12 col-lg-12">
+                  <label for="">Montant Payé*</label>
+                  <input type="text" name="montant" class="form-control" required>
+                </div>     
+                
+                <div class="form-group col-12 col-md-12 col-lg-12">
+                  <label>Observation</label>
+                  <textarea name="observation" id="observation" class="form-control" cols="30" rows="10">{{ old('observation') }}</textarea>
+                </div>
+  
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary  valider">Clôturer</button>
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
 
 @endsection
