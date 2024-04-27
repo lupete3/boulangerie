@@ -10,7 +10,7 @@
                 <h1>{{ $viewData['title'] }}</h1>
                 <div class="section-header-breadcrumb">
                   <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de bord</a></div>
-                  <div class="breadcrumb-item"><a href="{{ route('mouvement-stock-pf.index')}}">Mouvements stock produits finis</a></div>
+                  <div class="breadcrumb-item"><a href="{{ route('sites.index')}}">Points de vente</a></div>
                   <div class="breadcrumb-item">{{ $viewData['title'] }}</div>
                 </div>
             </div>
@@ -37,52 +37,19 @@
                             </h6>
                             </div> 
                         @endif
-                        @if(Session::has('error'))
-                            <div class="alert alert-danger alert-dismissible" id="msg" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h6>
-                                {{ Session::get('error') }}
-                            </h6>
-                            </div> 
-                        @endif
                       <div class="card ">
-                        <form method="post" action="{{ route('mouvement-stock-pf.store')}}" enctype="multipart/form-data">
+                        <form method="post" action="{{ route('sites.store')}}" enctype="multipart/form-data">
                             @csrf
                           <div class="card-header">
                             <h4>{{$viewData['title']}}</h4>
                             <div class="card-header-action">
-                                <a href="{{ route('mouvement-stock-pf.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher les sorties matières premières</a>
+                                <a href="{{ route('sites.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher les Points de vente</a>
                             </div> 
                           </div>
                           <div class="card-body">
                             <div class="form-group">
-                              <label>Choisir un point de vente*</label>
-                              <select name="site_id" class="form-control selectpicker" id="site_id" data-show-subtext="true" data-live-search="true" required>
-
-                                @foreach ($viewData['sites'] as $site)
-
-                                  <option value="{{ $site->id }}">{{ $site->nom }} </option>
-
-                                @endforeach
-                               
-                              </select>
-                            </div>
-                            <div class="form-group">
-                              <label>Choisir un produit finis*</label>
-                              <select name="produit_finis_id" class="form-control selectpicker" id="produit_finis_id" data-show-subtext="true" data-live-search="true" required>
-
-                                @foreach ($viewData['produits'] as $produit)
-
-                                  <option value="{{ $produit->id }}">{{ $produit->designation }} - Solde: {{ $produit->solde }}</option>
-
-                                @endforeach
-                               
-                              </select>
-                            </div>
-
-                            <div class="form-group">
-                              <label>Quantité sortie*</label>
-                              <input type="number" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
+                              <label>Nom point de vente*</label>
+                              <input type="text" class="form-control" name="nom" value="{{ old('nom') }}" placeholder="" required="">
                             </div>
                           </div>
                           <div class="card-footer text-right">

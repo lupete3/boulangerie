@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\CommandeClient;
 use App\Models\Nourriture;
 use App\Models\PaiementClient;
+use App\Models\Site;
 use App\Models\StockBoulangerie;
 use App\Models\StockPf;
 use App\Models\Table;
@@ -19,21 +20,21 @@ class VenteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Site $site)
     {
         $viewData = [];
 
-        $viewData['title'] = 'Historique des ventes';
+        $viewData['title'] = 'Historique des ventes du point de vente '.$site->nom;
 
-        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->with('ventes')->get();
+        $viewData['commandes'] = CommandeClient::where('site_id', $site->id)->orderBy('id', 'DESC')->with('ventes','site')->get();
 
-        return view('ventes.index')->with('viewData', $viewData);
+        return view('ventes.index', compact('site'))->with('viewData', $viewData);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Site $site)
     {
         $viewData = [];
 
@@ -41,9 +42,9 @@ class VenteController extends Controller
 
         $viewData['clients'] = Client::all();
 
-        $viewData['produits'] = StockBoulangerie::with('stockProduitFinis')->get();
+        $viewData['produits'] = StockBoulangerie::with('stockProduitFinis')->where('site_id', $site->id)->get();
 
-        return view('ventes.create')->with('viewData', $viewData);
+        return view('ventes.create', compact('site'))->with('viewData', $viewData);
     }
 
     
@@ -59,7 +60,7 @@ class VenteController extends Controller
 
         // Rechercher le produit correspondant dans la base de données
 
-        $product = StockBoulangerie::where('id', $productId)->with('stockProduitFinis')->first();
+        $product = StockBoulangerie::where('id', $productId)->where('site_id',$request->site_id)->with('stockProduitFinis')->first();
 
         // Récupérer le panier de la session ou créer un nouveau panier
         $cart = session()->get('cart', []);
@@ -87,7 +88,7 @@ class VenteController extends Controller
         // Mettre à jour le panier dans la session
         session()->put('cart', $cart);
 
-        return redirect()->route('ventes.create')->with('success', 'Produit ajouté à la composition avec succès.');
+        return redirect()->back()->with('success', 'Produit ajouté au panier avec succès.');
 
     }
 
@@ -116,10 +117,10 @@ class VenteController extends Controller
             // Mettre à jour le panier dans la session
             Session::put('cart', $cart);
 
-            return redirect()->back()->with('success', 'Le produit a été supprimé de la composition avec succès.');
+            return redirect()->back()->with('success', 'Le produit a été supprimé du panier avec succès.');
         }
 
-        return redirect()->back()->with('error', 'Le produit n\'est pas dans la composition.');
+        return redirect()->back()->with('error', 'Le produit n\'est pas dans le panier.');
     }
 
     /**
@@ -130,7 +131,7 @@ class VenteController extends Controller
         // Supprimer le panier de la session
         Session::forget('cart');
 
-        return redirect()->route('ventes.create')->with('success', 'La composition a été vidée avec succès.');
+        return redirect()->route('ventes.create')->with('success', 'Le panier a été vidé avec succès.');
     }
 
 
@@ -144,12 +145,14 @@ class VenteController extends Controller
 
             'montant' => 'required|numeric',
             'client_id' => 'required',
+            'site_id' => 'required',
 
         ],[
 
             'montant.required' => 'Compléter le champ montant payé',
             'montant.numeric' => 'Entrer un nombre pour le montant',
             'client_id.required' => 'Choisir un client à facturer',
+            'site_id.required' => 'Choisir un point de vente',
 
         ]);
 
@@ -166,6 +169,7 @@ class VenteController extends Controller
             'reste' => $tot - $request->montant,
             'client_id' => $request->client_id,
             'observation' => $request->observation,
+            'site_id' => $request->site_id,
         ]);
 
         if(($tot - $request->montant) == 0 )
@@ -174,14 +178,15 @@ class VenteController extends Controller
                 'montant' => $request->montant,
                 'reste' => $tot - $request->montant,
                 'commande_client_id' => $commandeClient->id,
-                'client_id' => $commandeClient->client_id
+                'client_id' => $commandeClient->client_id,
+                'site_id' => $request->site_id
             ]);
         }
 
         foreach(session('cart', []) as $productId => $item)
         {
 
-            $produit = StockBoulangerie::where('stock_pf_id',$productId)->with('stockProduitFinis')->first();
+            $produit = StockBoulangerie::where('stock_pf_id',$productId)->where('site_id', $request->site_id)->with('stockProduitFinis')->first();
 
             Vente::create([
                 'designation' => $item['name'],
@@ -220,7 +225,7 @@ class VenteController extends Controller
 
         $viewData['title'] = 'Mise à jour de la vente';
 
-        $viewData['produits'] = StockBoulangerie::with('stockProduitFinis')->get();
+        $viewData['produits'] = StockBoulangerie::with('stockProduitFinis')->where('site_id',$vente->commandeClient->site_id)->get();
 
         return view('ventes.update', compact('vente'))->with('viewData', $viewData);
     }
@@ -244,13 +249,13 @@ class VenteController extends Controller
 
         ]);
 
-        $produit = StockBoulangerie::where('stock_pf_id',$vente->stock_pf_id)->with('stockProduitFinis')->first();
+        $produit = StockBoulangerie::where('stock_pf_id',$vente->stock_pf_id)->whith('site_id', $vente->commandeClient->site_id)->with('stockProduitFinis')->first();
 
         $produit->update([
             'solde' => $produit->solde + $vente->quantite
         ]);
 
-        $newProduit = StockBoulangerie::where('stock_pf_id',$request->produit_id)->with('stockProduitFinis')->first();
+        $newProduit = StockBoulangerie::where('stock_pf_id',$vente->stock_pf_id)->whith('site_id', $vente->commandeClient->site_id)->with('stockProduitFinis')->first();
 
         $newProduit->update([
             'solde' => $newProduit->solde - $request->quantite
@@ -274,8 +279,8 @@ class VenteController extends Controller
     public function destroy(Vente $vente)
     {
         //Suppression de la vente
-        $produit = StockBoulangerie::where('stock_pf_id',$vente->stock_pf_id)->with('stockProduitFinis')->first();
-
+        $produit = StockBoulangerie::where('stock_pf_id',$vente->stock_pf_id)->whith('site_id', $vente->commandeClient->site_id)->with('stockProduitFinis')->first();
+        
         $produit->update([
             'solde' => $produit->solde + $vente->quantite
         ]);

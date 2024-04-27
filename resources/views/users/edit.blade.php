@@ -49,7 +49,7 @@
                           <div class="card-body">
                             <div class="form-group">
                               <label>Rôle de l'utilisateur*</label>
-                              <select name="role" class="form-control selectpicker" id="role" data-show-subtext="true" data-live-search="true" required>
+                              <select name="role" class="form-control selectpicker" id="role" onchange="afficherCacherZone()" data-show-subtext="true" data-live-search="true" required>
 
                                 <option @selected(old('role', 'admin') == $user->role) value="admin" >Administrateur</option>
                                 <option @selected(old('role', 'geran_depot_maison') == $user->role) value="geran_depot_maison" >Gérant Dépôt Maison</option>
@@ -57,6 +57,18 @@
                                 <option @selected(old('role', 'geran_depot_boulangerie') == $user->role) value="geran_depot_boulangerie" >Gérant Dépôt Boulangerie</option>
                                 <option @selected(old('role', 'geran_depot_magasin') == $user->role) value="geran_depot_magasin" >Gérant Boulangérie</option>
 
+                              </select>
+                            </div>
+                            <div class="form-group" id="site" style="display: none">
+                              <label>Point de vente</label>
+                              <select name="site_id" class="form-control selectpicker" id="site_id" data-show-subtext="true" data-live-search="true" required>
+
+                                @foreach ($viewData['sites'] as $site)
+
+                                  <option @selected(old('site_id', $user->site_id) == $site->id) value="{{ $site->id }}">{{ $site->nom }}</option>
+
+                                @endforeach
+                               
                               </select>
                             </div>
                             <div class="form-group">
@@ -79,5 +91,18 @@
           </div>
         </section>
     </div>
+
+    <script>
+      function afficherCacherZone() {
+        var role = document.getElementById("role");
+        var site = document.getElementById("site");
+
+        if (role.value == "geran_depot_magasin") {
+          site.style.display = "block";
+        } else {
+          site.style.display = "none";
+        }
+      }
+    </script>
 
 @endsection

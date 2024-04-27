@@ -52,6 +52,7 @@
                                     <thead>                                 
                                         <tr>
                                             <th>#</th>
+                                            <th>Point de vente</th>
                                             <th>Date Sortie</th>
                                             <th>Produit Finis</th>
                                             <th>Quantité Sortie</th>
@@ -64,6 +65,7 @@
                                             <tr>
 
                                                 <td> {{ $sortie->id }} </td>
+                                                <td> {{ $sortie->site->nom }} </td>
                                                 <td> {{ $sortie->created_at }} </td>
                                                 <td> {{ $sortie->stockPf->designation }} </td>
                                                 <td> {{ $sortie->quantite }} </td>

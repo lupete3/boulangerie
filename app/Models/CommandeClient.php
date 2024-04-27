@@ -17,6 +17,7 @@ class CommandeClient extends Model
         'reste',
         'client_id',
         'observation',
+        'site_id'
     ];
 
     public function ventes(): HasMany
@@ -32,5 +33,10 @@ class CommandeClient extends Model
     public function paiements(): HasMany
     {
         return $this->hasMany(PaiementClient::class);
+    }
+
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class);
     }
 }

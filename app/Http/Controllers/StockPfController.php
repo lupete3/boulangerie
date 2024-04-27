@@ -70,14 +70,6 @@ class StockPfController extends Controller
             'solde' => $request->solde,
         ]);
 
-        if($stockPf){
-
-            StockBoulangerie::create([
-                'stock_pf_id' => $stockPf->id
-            ]);
-        
-        }
-
         return redirect()->back()->with('success','Produit finis ajouté avec succès');
     }
 

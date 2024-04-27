@@ -28,4 +28,9 @@ class Vente extends Model
     {
         return $this->belongsTo(CommandeClient::class);
     }
+
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class);
+    }
 }

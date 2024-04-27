@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('quantite', 30);
             $table->decimal('reste_stock_pf', 30);
             $table->decimal('reste_boulangerie', 30);
+            $table->foreignId('site_id')->references('id')->on('sites')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

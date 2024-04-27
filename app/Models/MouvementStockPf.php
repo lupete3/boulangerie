@@ -17,6 +17,7 @@ class MouvementStockPf extends Model
         'quantite',
         'reste_stock_pf',
         'reste_boulangerie',
+        'site_id'
     ];
 
     public function stockPf(): BelongsTo
@@ -27,5 +28,10 @@ class MouvementStockPf extends Model
     public function stockBoulangerie(): BelongsTo
     {
         return $this->belongsTo(StockBoulangerie::class, 'stock_pf_id', 'id');
+    }
+
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class);
     }
 }

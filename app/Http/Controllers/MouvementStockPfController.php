@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MouvementStockPf;
 use App\Models\Production;
+use App\Models\Site;
 use App\Models\StockPf;
 use App\Models\StockBoulangerie;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class MouvementStockPfController extends Controller
 
         $viewData['title'] = 'Liste des sorties produits finis';
 
-        $viewData['sorties'] = MouvementStockPf::orderBy('id', 'DESC')->with('StockPf')->get();
+        $viewData['sorties'] = MouvementStockPf::orderBy('id', 'DESC')->with('StockPf','site')->get();
 
         return view('mouvements-pf.index')->with('viewData', $viewData);
         
@@ -28,16 +29,17 @@ class MouvementStockPfController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function indexBoulangerie()
+    public function indexBoulangerie(Site $site)
     {
         //Afficher les sorties des matères premières
         $viewData = [];
 
-        $viewData['title'] = 'Liste des entrées produits finis';
+        $viewData['title'] = 'Liste entrées produits finis du point de vente '.$site->nom;
 
-        $viewData['entrees'] = MouvementStockPf::orderBy('id', 'DESC')->with('StockBoulangerie')->get();
+        $viewData['entrees'] = MouvementStockPf::where('site_id', $site->id)->orderBy('id', 'DESC')->with('StockBoulangerie')->get();
 
-        return view('mouvements-pf.indexBoulangerie')->with('viewData', $viewData);
+
+        return view('mouvements-pf.indexBoulangerie', compact('site'))->with('viewData', $viewData);
         
     }
     /**
@@ -64,9 +66,11 @@ class MouvementStockPfController extends Controller
         //Afficher le formulaire de sortie matière première
         $viewData = [];
 
-        $viewData['title'] = 'Ajouter une sortie produit finis';
+        $viewData['title'] = 'Ajouter une sortie produit finit';
 
         $viewData['produits'] = StockPf::orderBy('designation', 'ASC')->get();
+
+        $viewData['sites'] = Site::orderBy('nom', 'ASC')->get();
 
         return view('mouvements-pf.create')->with('viewData', $viewData);
     }
@@ -82,19 +86,29 @@ class MouvementStockPfController extends Controller
 
             'quantite' => 'required|numeric',
             'produit_finis_id' => 'required',
+            'site_id' => 'required',
 
         ],[
 
             'quantite.required' => 'Compléter le champ quantité',
             'quantite.numeric' => 'La quantité doit être un nombre ',
             'produit_finis_id.required' => 'Choisir un produit finis ',
+            'site_id.required' => 'Choisir un site de destination ',
 
         ]);
 
         $stockPf = StockPf::find($request->produit_finis_id);
 
-        $stockBoulangerie = StockBoulangerie::where('stock_pf_id', $request->produit_finis_id)->first();
+        $stockBoulangerie = StockBoulangerie::where('stock_pf_id', $request->produit_finis_id)->where('site_id', $request->site_id)->first();
         
+        if (empty($stockBoulangerie)) {
+            $stockBoulangerie = StockBoulangerie::create([
+                'solde'	=> 0,
+                'stock_pf_id' => $stockPf->id,	
+                'site_id' => $request->site_id
+            ]);
+        }
+
         if ($stockPf->solde < $request->quantite) {
             return redirect()->back()->with('error','Cette quantité est supérieur que le solde actuel');
         }
@@ -107,12 +121,13 @@ class MouvementStockPfController extends Controller
             'stock_pf_id' => $request->produit_finis_id,
             'quantite' => $request->quantite,
             'reste_stock_pf' => $stockPf->solde,
-            'reste_boulangerie' => $stockBoulangerie->solde + $request->quantite
+            'reste_boulangerie' => $stockBoulangerie->solde + $request->quantite,
+            'site_id' => $request->site_id
         ]);
 
         if ($mouvementStockPf) {
             
-            $stockBoulangerie = StockBoulangerie::where('stock_pf_id',$stockPf->id)->first();
+            $stockBoulangerie = StockBoulangerie::where('stock_pf_id',$stockPf->id)->where('site_id', $request->site_id)->first();
 
             $stockBoulangerie->solde = $stockBoulangerie->solde + $request->quantite;
 
@@ -156,12 +171,14 @@ class MouvementStockPfController extends Controller
 
             'quantite' => 'required|numeric',
             'produit_finis_id' => 'required',
+            'site_id' => 'required',
 
         ],[
 
             'quantite.required' => 'Compléter le champ quantité',
             'quantite.numeric' => 'La quantité doit être un nombre ',
             'produit_finis_id.required' => 'Choisir une matière première ',
+            'site_id.required' => 'Choisir un point de vente ',
 
         ]);
 
@@ -187,7 +204,7 @@ class MouvementStockPfController extends Controller
         ]);
 
         if ($mouvementStockPf) {
-            $stockBoulangerie = StockBoulangerie::where('stock_pf_id', $request->produit_finis_id)->first();
+            $stockBoulangerie = StockBoulangerie::where('stock_pf_id', $request->produit_finis_id)->where('site_id', $mouvementStockPf->site_id)->first();
 
             $newSolde = ($stockBoulangerie->solde - $qnteInitMvt) + $request->quantite;
 
@@ -215,7 +232,7 @@ class MouvementStockPfController extends Controller
         $stockPf->save();
         
         
-        $stockBoulangerie = StockBoulangerie::where('stock_pf_id', $mouvementStockPf->stock_pf_id)->first();
+        $stockBoulangerie = StockBoulangerie::where('stock_pf_id', $mouvementStockPf->stock_pf_id)->where('site_id', $mouvementStockPf->site_id)->first();
 
         $newSolde = ($stockBoulangerie->solde - $qnteInitMvt);
 

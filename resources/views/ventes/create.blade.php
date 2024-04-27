@@ -17,7 +17,7 @@
                 <h1>{{ $viewData['title'] }}</h1>
                 <div class="section-header-breadcrumb">
                   <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de bord</a></div>
-                  <div class="breadcrumb-item"><a href="{{ route('ventes.index')}}">Liste des ventes</a></div>
+                  <div class="breadcrumb-item"><a href="{{ route('ventes.index', $site->id)}}">Liste des ventes</a></div>
                   <div class="breadcrumb-item">{{ $viewData['title'] }}</div>
                 </div>
             </div>
@@ -54,6 +54,7 @@
                         @csrf
 
                         <div class="form-group">
+                          <input type="hidden" name="site_id" value="{{ $site->id }}">
                           <label>Choisir un produit*</label>
                           <select name="produit_id" class="form-control selectpicker" id="produit_id" data-show-subtext="true" data-live-search="true" required>
 
@@ -151,6 +152,7 @@
             <form method="post" class="row" action="{{ route('ventes.store') }}" enctype="multipart/form-data">
               @csrf
               <div class="form-group col-12 col-md-12 col-lg-12">
+                <input type="hidden" name="site_id" value="{{ $site->id }}">
                 <select name="client_id" class="form-control selectpicker" id="client_id" data-live-search="true" required>
                   <option value="" selected disabled>Choisir un client*</option>
                   @foreach ($viewData['clients'] as $client)

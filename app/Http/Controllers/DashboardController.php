@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AchatStockMaison;
-use App\Models\CommandeClient;
-use App\Models\Depense;
-use App\Models\Fournisseur;
-use App\Models\Production;
-use App\Models\StockBoulangerie;
 use Carbon\Carbon;
-use App\Models\StockMaison;
-use App\Models\StockPf;
-use App\Models\StockUsine;
+use App\Models\Site;
 use App\Models\User;
 use App\Models\Vente;
+use App\Models\Depense;
+use App\Models\StockPf;
+use App\Models\Production;
+use App\Models\StockUsine;
+use App\Models\Fournisseur;
+use App\Models\StockMaison;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
+use App\Models\CommandeClient;
 use Illuminate\Validation\Rule;
+use App\Models\AchatStockMaison;
+use App\Models\StockBoulangerie;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\RedirectResponse;
 
 class DashboardController extends Controller
 {
@@ -68,7 +69,7 @@ class DashboardController extends Controller
 
         $viewData['title'] = 'Liste des utilisateurs';
 
-        $viewData['users'] = User::all();
+        $viewData['users'] = User::with('site')->get();
         
         return view('users.index')->with('viewData',$viewData);
     }
@@ -78,6 +79,8 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Ajouter un utilisateur';
+
+        $viewData['sites'] = Site::all();
         
         return view('users.create')->with('viewData',$viewData);
     }
@@ -104,6 +107,7 @@ class DashboardController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
+            'site_id' => $request->site_id,
             'password' => Hash::make($request->password),
             
         ]);
@@ -122,6 +126,8 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = $user->name;
+
+        $viewData['sites'] = Site::all();
         
         return view('users.edit', compact('user'))->with('viewData',$viewData);
     }
@@ -145,6 +151,7 @@ class DashboardController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->role = $request->role;
+        $user->site_id = $request->site_id;
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;

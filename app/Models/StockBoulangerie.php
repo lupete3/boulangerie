@@ -13,7 +13,8 @@ class StockBoulangerie extends Model
 
     protected $fillable = [
         'stock_pf_id',
-        'solde'
+        'solde',
+        'site_id'
     ];
 
     public function mouvementsSorties(): HasMany
@@ -29,5 +30,10 @@ class StockBoulangerie extends Model
     public function ventes(): HasMany
     {
         return $this->hasMany(Vente::class);
+    }
+
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class);
     }
 }

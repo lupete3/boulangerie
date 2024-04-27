@@ -10,6 +10,7 @@ use App\Http\Controllers\MouvementStockMpController;
 use App\Http\Controllers\MouvementStockPfController;
 use App\Http\Controllers\PaiementClientController;
 use App\Http\Controllers\ProductionController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\StockBoulangerieController;
 use App\Http\Controllers\StockMaisonController;
 use App\Http\Controllers\StockPfController;
@@ -42,6 +43,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified', ])->group(function () {
   
+    Route::get('/sites', [SiteController::class, 'index'])->name('sites.index');
+    Route::post('/sites/store', [SiteController::class, 'store'])->name('sites.store');
+    Route::get('/sites/create', [SiteController::class, 'create'])->name('sites.create');
+    Route::get('/sites/{site}/edit', [SiteController::class, 'edit'])->name('sites.edit');
+    Route::put('/sites/{site}/update', [SiteController::class, 'update'])->name('sites.update');
+    Route::post('/sites/{site}/destroy', [SiteController::class, 'destroy'])->name('sites.destroy');
+  
     Route::get('/fournisseurs', [FournisseurController::class, 'index'])->name('fournisseurs.index');
     Route::post('/fournisseurs/store', [FournisseurController::class, 'store'])->name('fournisseurs.store');
     Route::get('/fournisseurs/create', [FournisseurController::class, 'create'])->name('fournisseurs.create');
@@ -70,7 +78,7 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::put('/stock-usine/{stockUsine}/update', [StockUsineController::class, 'update'])->name('stock-usine.update');
     Route::post('/stock-usine/{stockUsine}/destroy', [StockUsineController::class, 'destroy'])->name('stock-usine.destroy');
     
-    Route::get('/stock-boulangerie', [StockBoulangerieController::class, 'index'])->name('stock-boulangerie.index');
+    Route::get('/stock-boulangerie/{site}', [StockBoulangerieController::class, 'index'])->name('stock-boulangerie.index');
     Route::post('/stock-boulangerie/store', [StockBoulangerieController::class, 'store'])->name('stock-boulangerie.store');
     Route::get('/stock-boulangerie/create', [StockBoulangerieController::class, 'create'])->name('stock-boulangerie.create');
     Route::get('/stock-boulangerie/{stockBoulangerie}/edit', [StockBoulangerieController::class, 'edit'])->name('stock-boulangerie.edit');
@@ -100,7 +108,7 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::post('/mouvement-stock-mp/{mouvementStockMp}/destroy', [MouvementStockMpController::class, 'destroy'])->name('mouvement-stock-mp.destroy');
 
     Route::get('/mouvement-stock-pf', [MouvementStockPfController::class, 'index'])->name('mouvement-stock-pf.index');
-    Route::get('/mouvement-stock-pf-boulangerie', [MouvementStockPfController::class, 'indexBoulangerie'])->name('mouvement-stock-pf-boulangerie.index');
+    Route::get('/mouvement-stock-pf-boulangerie/{site}', [MouvementStockPfController::class, 'indexBoulangerie'])->name('mouvement-stock-pf-boulangerie.index');
     Route::get('/mouvement-stock-pf-entree', [MouvementStockPfController::class, 'indexStockPf'])->name('mouvement-stock-pf-entree.index');
     Route::post('/mouvement-stock-pf/store', [MouvementStockPfController::class, 'store'])->name('mouvement-stock-pf.store');
     Route::get('/mouvement-stock-pf/create', [MouvementStockPfController::class, 'create'])->name('mouvement-stock-pf.create');
@@ -120,9 +128,9 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::post('/remove-from-cart-edit/{composition}/destroy', [ProductionController::class, 'removeFromCartEdit'])->name('production.removeFromCartEdit');
     Route::post('/add-to-cart-edit/{production}', [ProductionController::class, 'addToCartEdit'])->name('production.addToCartEdit');
 
-    Route::get('/ventes', [VenteController::class, 'index'])->name('ventes.index');
+    Route::get('/ventes{site}', [VenteController::class, 'index'])->name('ventes.index');
     Route::post('/ventes/store', [VenteController::class, 'store'])->name('ventes.store');
-    Route::get('/ventes/create', [VenteController::class, 'create'])->name('ventes.create');
+    Route::get('/ventes/{site}/create', [VenteController::class, 'create'])->name('ventes.create');
     Route::get('/ventes/{vente}/edit', [VenteController::class, 'edit'])->name('ventes.edit');
     Route::put('/ventes/{vente}/update', [VenteController::class, 'update'])->name('ventes.update');
     Route::post('/ventes/{vente}/destroy', [VenteController::class, 'destroy'])->name('ventes.destroy');

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('reste', 30);
             $table->foreignId('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->text('observation')->nullable();
+            $table->foreignId('site_id')->references('id')->on('sites')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

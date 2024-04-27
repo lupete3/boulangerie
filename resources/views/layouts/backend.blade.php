@@ -103,6 +103,16 @@
               </li>
               
               <li class="dropdown @if (request()->routeIs(
+                'sites.index', 'sites.create', 'sites.edit',
+                )) active @endif " >
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-home"></i> <span>Points de vente</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('sites.create')}}">- Ajouter point de vente</a></li>
+                  <li><a class="nav-link" href="{{route('sites.index')}}">- Liste points de ventes</a></li>
+                </ul>
+              </li>
+              
+              <li class="dropdown @if (request()->routeIs(
                 'fournisseurs.index', 'fournisseurs.create', 'fournisseurs.edit',
                 'clients.index', 'clients.create', 'clients.edit',
                 )) active @endif " >
@@ -166,9 +176,9 @@
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-home"></i> <span>Boulangerie</span></a>
                 <ul class="dropdown-menu">
-                  <li><a class="nav-link" href="{{route('stock-boulangerie.index')}}">- Liste des produits</a></li>
+                  {{-- <li><a class="nav-link" href="{{ route('stock-boulangerie.index') }}">- Liste des produits</a></li>
                   <li><a class="nav-link" href="{{ route('mouvement-stock-pf-boulangerie.index')}}">- Entrées produits </a></li>
-                  <li><a class="nav-link" href="{{ route('ventes.index')}}">- Ventes produits</a></li>
+                  <li><a class="nav-link" href="{{ route('ventes.index')}}">- Ventes produits</a></li> --}}
                 </ul>
               </li>
               
@@ -359,7 +369,7 @@
             
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
-              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a>
+              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord </span></a>
             
             </li>
               
@@ -396,11 +406,11 @@
 
         <div class="main-sidebar sidebar-style-2 valider">
           <ul class="sidebar-menu">
-            <li class="menu-header">Tableau de Bord</li>
+            <li class="menu-header">{{ Auth::user()->site->nom }}</li>
             
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
-              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a>
+              <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord </span></a>
             
             </li>
 
