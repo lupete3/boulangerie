@@ -68,7 +68,7 @@
                                                 <td> {{ $matiresPremiere->id }} </td>
                                                 <td> {{ $matiresPremiere->stockMaison->designation }} </td>
                                                 <td> {{ $matiresPremiere->stockMaison->prix }} Fc</td>
-                                                <td> {{ $matiresPremiere->solde }} </td>
+                                                <td> {{ $matiresPremiere->solde }} {{ $matiresPremiere->stockMaison->unite }}</td>
                                                 <td> {{ $matiresPremiere->stockMaison->prix * $matiresPremiere->solde }} Fc</td>
                                                 
                                             </tr>

@@ -61,6 +61,7 @@ class AchatStockMaisonController extends Controller
             'quantite.required' => 'Compléter le champ quantité',
             'prix.required' => 'Compléter le champ prix unitaire',
             'quantite.numeric' => 'La quantité doit être un nombre ',
+            'prix.numeric' => 'La quantité doit être un nombre ',
             'fournisseur_id.required' => 'Choisir un fournisseur ',
             'stock_maison_id.required' => 'Choisir une matière première'
 

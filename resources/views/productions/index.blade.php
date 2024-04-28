@@ -81,7 +81,7 @@
                                                     <td> {{ $production->id }} </td>
                                                     <td> {{ $production->created_at }} </td>
                                                     <td> {{ $production->produitFinis->designation }} </td>
-                                                    <td> {{ $production->quantite }} </td>
+                                                    <td> {{ $production->quantite }} {{ $production->produitFinis->unite }}</td>
                                                     <td> {{ $production->produitFinis->prix }} </td>
                                                     <td> {{ $production->quantite * $production->produitFinis->prix }} Fc</td>
                                                     <td> 
@@ -89,7 +89,7 @@
                                                             @php
                                                                 $totProd += $composition->quantite * $composition->prix;  
                                                             @endphp
-                                                            <li>({{ number_format($composition->quantite,0) }}) {{ $composition->designation }}</li>
+                                                            <li>({{ number_format($composition->quantite,0) }}{{ $composition->unite }}) {{ $composition->designation }}</li>
                                                         @endforeach    
                                                     </td>
                                                     <td>{{ $totProd }} Fc</td>

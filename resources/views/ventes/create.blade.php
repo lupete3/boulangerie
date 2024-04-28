@@ -60,7 +60,7 @@
 
                             @foreach ($viewData['produits'] as $produit)
 
-                              <option value="{{ $produit->stock_pf_id }}">{{ $produit->stockProduitFinis->designation }} - Solde: {{ $produit->solde }}</option>
+                              <option value="{{ $produit->id }}">{{ $produit->stockProduitFinis->designation }} - Solde: {{ $produit->solde }}</option>
 
                             @endforeach
                            

@@ -61,6 +61,7 @@
                                                 <thead>                                 
                                                     <tr>
                                                         <th>#</th>
+                                                        <th>Point de vente</th>
                                                         <th>Date Commannde</th>
                                                         <th>Client</th>
                                                         <th>Total à payer</th>
@@ -87,6 +88,7 @@
                                                             <tr>
                                                                 @if ($loop->first)
                                                                     <td rowspan="{{ $commande->paiements->count() }}">{{ $id++ }}</td>
+                                                                    <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->site->nom }}</td>
                                                                     <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->created_at }}</td>
                                                                     <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->client->nom }}</td>
                                                                     <td rowspan="{{ $commande->paiements->count() }}">{{ $commande->montant }} Fc</td>
@@ -102,7 +104,7 @@
             
                                                 </tbody>
                                                 <tr>
-                                                    <td colspan="4"><b>Total</b></td>
+                                                    <td colspan="5"><b>Total</b></td>
                                                     <td><b>{{ $tot }} Fc</b></td>
                                                     <td colspan="3"></td>
                                                 </tr>

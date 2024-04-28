@@ -53,6 +53,10 @@
                               <input type="text" class="form-control" name="designation" value="{{ $stockMaison->designation }}" required="">
                             </div>
                             <div class="form-group">
+                              <label>Unité de mesure*</label>
+                              <input type="text" class="form-control" name="designation" value="{{ $stockMaison->unite }}" required="">
+                            </div>
+                            <div class="form-group">
                               <label>Prix d'achat</label>
                               <input type="text" class="form-control" name="prix" value="{{ $stockMaison->prix }}" >
                             </div>

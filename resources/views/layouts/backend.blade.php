@@ -104,10 +104,16 @@
               
               <li class="dropdown @if (request()->routeIs(
                 'sites.index', 'sites.create', 'sites.edit',
+                'stock-boulangerie.index', 'stock-boulangerie.create', 'stock-boulangerie.edit',
+                'mouvement-stock-pf-boulangerie.index', 
+                'ventes.index', 'ventes.create', 'ventes.edit',
+                'paiements.index',
+                'paiements.detteClients',
+                'paiements.create',
+                'paiements.store',
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-home"></i> <span>Points de vente</span></a>
                 <ul class="dropdown-menu">
-                  <li><a class="nav-link" href="{{route('sites.create')}}">- Ajouter point de vente</a></li>
                   <li><a class="nav-link" href="{{route('sites.index')}}">- Liste points de ventes</a></li>
                 </ul>
               </li>
@@ -169,7 +175,7 @@
                 </ul>
               </li>
               
-              <li class="dropdown @if (request()->routeIs(
+              {{-- <li class="dropdown @if (request()->routeIs(
                 'stock-boulangerie.index', 'stock-boulangerie.create', 'stock-boulangerie.edit',
                 'mouvement-stock-pf-boulangerie.index', 
                 'ventes.index', 'ventes.create', 'ventes.edit',
@@ -178,10 +184,10 @@
                 <ul class="dropdown-menu">
                   {{-- <li><a class="nav-link" href="{{ route('stock-boulangerie.index') }}">- Liste des produits</a></li>
                   <li><a class="nav-link" href="{{ route('mouvement-stock-pf-boulangerie.index')}}">- Entrées produits </a></li>
-                  <li><a class="nav-link" href="{{ route('ventes.index')}}">- Ventes produits</a></li> --}}
+                  <li><a class="nav-link" href="{{ route('ventes.index')}}">- Ventes produits</a></li> 
                 </ul>
-              </li>
-              
+              </li> --}}
+{{--               
               <li class="dropdown @if (request()->routeIs(
                 'paiements.index',
                 'paiements.detteClients',
@@ -192,7 +198,7 @@
                   <li><a class="nav-link" href="{{route('paiements.detteClients')}}">- Dettes clients</a></li>
                   <li><a class="nav-link" href="{{route('paiements.index')}}">- Paiements clients</a></li>
                 </ul>
-              </li>
+              </li> --}}
               
               <li class="dropdown @if (request()->routeIs(
                 'depenses.index', 'depenses.create', 'depenses.edit' )) active @endif " >
@@ -245,7 +251,7 @@
                   <li><a class="nav-link" href="{{ route('rapports.stockMpMaison')}}">- Stock MP Dépôt</a></li>
                   <li><a class="nav-link" href="{{ route('rapports.stockMpUsine')}}">- Stock MP Usine</a></li>
                   <li><a class="nav-link" href="{{ route('rapports.stockPf')}}">- Stock Produits Finis</a></li>
-                  <li><a class="nav-link" href="{{ route('rapports.stockBoulangerie')}}">- Stock Boulangerie</a></li>
+                  <li><a class="nav-link" href="{{ route('rapports.stockBoulangerie',['site' => 'all'])}}">- Stock Point de vente</a></li>
                   <li><a class="nav-link" href="{{route('rapports.entreeStockMpAll')}}">- Achats MP</a></li>
                   <li><a class="nav-link" href="{{route('rapports.productionAll')}}">- Fiche Productions</a></li>
                   <li><a class="nav-link" href="{{route('rapports.venteAll')}}">- Fiche Ventes</a></li>

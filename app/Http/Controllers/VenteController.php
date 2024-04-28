@@ -52,7 +52,7 @@ class VenteController extends Controller
     {
         // Récupérer l'ID du produit depuis la requête
         $request->validate([
-            'produit_id' => 'required|exists:stock_boulangeries,stock_pf_id',
+            'produit_id' => 'required|exists:stock_boulangeries,id',
             'quantite' => 'required|integer|min:1'
         ]);
 
@@ -172,21 +172,18 @@ class VenteController extends Controller
             'site_id' => $request->site_id,
         ]);
 
-        if(($tot - $request->montant) == 0 )
-        {
-            PaiementClient::create([
-                'montant' => $request->montant,
-                'reste' => $tot - $request->montant,
-                'commande_client_id' => $commandeClient->id,
-                'client_id' => $commandeClient->client_id,
-                'site_id' => $request->site_id
-            ]);
-        }
+        PaiementClient::create([
+            'montant' => $request->montant,
+            'reste' => $tot - $request->montant,
+            'commande_client_id' => $commandeClient->id,
+            'client_id' => $commandeClient->client_id,
+            'site_id' => $request->site_id
+        ]);
 
         foreach(session('cart', []) as $productId => $item)
         {
 
-            $produit = StockBoulangerie::where('stock_pf_id',$productId)->where('site_id', $request->site_id)->with('stockProduitFinis')->first();
+            $produit = StockBoulangerie::where('id',$productId)->where('site_id', $request->site_id)->with('stockProduitFinis')->first();
 
             Vente::create([
                 'designation' => $item['name'],

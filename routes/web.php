@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/sites/create', [SiteController::class, 'create'])->name('sites.create');
     Route::get('/sites/{site}/edit', [SiteController::class, 'edit'])->name('sites.edit');
     Route::put('/sites/{site}/update', [SiteController::class, 'update'])->name('sites.update');
-    Route::post('/sites/{site}/destroy', [SiteController::class, 'destroy'])->name('sites.destroy');
+    Route::get('/sites/{site}/destroy', [SiteController::class, 'destroy'])->name('sites.destroy');
   
     Route::get('/fournisseurs', [FournisseurController::class, 'index'])->name('fournisseurs.index');
     Route::post('/fournisseurs/store', [FournisseurController::class, 'store'])->name('fournisseurs.store');
@@ -140,8 +140,8 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::post('/remove-from-cart-edit-vente/{vente}/destroy', [VenteController::class, 'removeFromCartEdit'])->name('ventes.removeFromCartEdit');
     Route::post('/add-to-cart-edit-vente/{vente}', [VenteController::class, 'addToCartEdit'])->name('ventes.addToCartEdit');
 
-    Route::get('/paiement-clients', [PaiementClientController::class, 'index'])->name('paiements.index');
-    Route::get('/dettes-clients', [PaiementClientController::class, 'detteClients'])->name('paiements.detteClients');
+    Route::get('/paiement-clients/{site}', [PaiementClientController::class, 'index'])->name('paiements.index');
+    Route::get('/dettes-clients/{site}', [PaiementClientController::class, 'detteClients'])->name('paiements.detteClients');
     Route::get('/dettes-create/{commandeClient}', [PaiementClientController::class, 'create'])->name('paiements.create');
     Route::post('/dettes-store', [PaiementClientController::class, 'store'])->name('paiements.store');
 
@@ -192,7 +192,7 @@ Route::middleware(['auth', 'verified', ])->group(function () {
 
     Route::get('/rapports/stock-mp-usine', [DashboardController::class, 'stockMpUsine'])->name('rapports.stockMpUsine');
     Route::get('/rapports/stock-pf-usine', [DashboardController::class, 'stockPf'])->name('rapports.stockPf');
-    Route::get('/rapports/stock-boulangerie', [DashboardController::class, 'stockBoulangerie'])->name('rapports.stockBoulangerie');
+    Route::get('/rapports/stock-boulangerie/{site}', [DashboardController::class, 'stockBoulangerie'])->name('rapports.stockBoulangerie');
 
     Route::get('/utilisateurs', [DashboardController::class, 'usersIndex'])->name('dashboard.usersIndex');
     Route::get('/utilisateurs/create', [DashboardController::class, 'usersCreate'])->name('dashboard.usersCreate');

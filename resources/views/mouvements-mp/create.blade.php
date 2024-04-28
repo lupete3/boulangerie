@@ -61,7 +61,7 @@
 
                                 @foreach ($viewData['matieres'] as $matiere)
 
-                                  <option value="{{ $matiere->id }}">{{ $matiere->designation }}</option>
+                                  <option value="{{ $matiere->id }}">{{ $matiere->designation }} ({{ $matiere->unite }})</option>
 
                                 @endforeach
                                
@@ -69,7 +69,7 @@
                             </div>
 
                             <div class="form-group">
-                              <label>Quantité sortie*</label>
+                              <label>Quantité sortie en ({{ $matiere->unite }})*</label>
                               <input type="number" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
                             </div>
                           </div>

@@ -22,6 +22,19 @@
                 <div class="row">
                   <div class="row">
                     <div class="col-12 col-md-12 col-lg-12 align-center valider">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-primary">Choisir un site</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                          <span class="sr-only">Choisir un site</span>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="{{ route('rapports.stockBoulangerie', ['site' => 'all']) }}">Tous les points de vente</a>
+                          @foreach ($viewData['sites'] as $site)
+                            <a class="dropdown-item" href="{{ route('rapports.stockBoulangerie', $site->id) }}">{{ $site->nom }}</a>
+                          @endforeach
+                          
+                        </div>
+                      </div>
                     </div>
                   </div>
                     <div class="col-12 col-md-12 col-lg-12 align-center">

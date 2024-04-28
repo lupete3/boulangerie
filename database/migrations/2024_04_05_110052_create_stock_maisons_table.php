@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('stock_maisons', function (Blueprint $table) {
             $table->id();
             $table->text('designation');
+            $table->text('unite');
             $table->decimal('prix', 30);
             $table->decimal('solde', 30)->default(0);
             $table->timestamps();

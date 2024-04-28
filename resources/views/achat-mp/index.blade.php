@@ -74,7 +74,7 @@
                                                 <td> {{ $entree->id }} </td>
                                                 <td> {{ $entree->created_at }} </td>
                                                 <td> {{ $entree->stockMaison->designation }} </td>
-                                                <td> {{ $entree->quantite }} </td>
+                                                <td> {{ $entree->quantite }} ({{ $entree->stockMaison->unite }})</td>
                                                 <td> {{ $entree->prix_achat }} Fc </td>
                                                 <td> {{ $entree->quantite * $entree->prix_achat }} Fc </td>
                                                 <td> {{ $entree->fournisseur->nom }} </td>

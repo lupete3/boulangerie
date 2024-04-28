@@ -12,7 +12,7 @@
                 <h1>{{ $viewData['title'] }}</h1>
                 <div class="section-header-breadcrumb">
                   <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de Bord</a></div>
-                  <div class="breadcrumb-item"><a href="{{ route('ventes.index')}}">Liste des ventes</a></div>
+                  <div class="breadcrumb-item"><a href="{{ route('ventes.index',$site->id)}}">Liste des ventes</a></div>
                   <div class="breadcrumb-item">{{ $viewData['title'] }}</div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                             <div class="card-header">
                                 <h4>{{ $viewData['title'] }} </h4>
                                 <div class="card-header-action">
-                                    <a href="{{ route('ventes.create')}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i>Ajouter vente</a>
+                                    <a href="{{ route('ventes.create',$site->id)}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i>Ajouter vente</a>
                                 </div>   
                             </div>
                             <div class="card-body">

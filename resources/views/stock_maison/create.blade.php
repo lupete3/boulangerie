@@ -52,6 +52,10 @@
                               <input type="text" class="form-control" name="designation" value="{{ old('designation') }}" placeholder="" required="">
                             </div>
                             <div class="form-group">
+                              <label>Unité de mesure*</label>
+                              <input type="text" class="form-control" name="unite" value="{{ old('unite') }}" placeholder="ex: kg" required="">
+                            </div>
+                            <div class="form-group">
                               <label>Prix d'achat*</label>
                               <input type="text" class="form-control" name="prix" value="{{ old('prix') }}" placeholder="" >
                             </div>

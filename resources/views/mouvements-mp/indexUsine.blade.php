@@ -62,8 +62,8 @@
                                                 <td> {{ $entree->id }} </td>
                                                 <td> {{ $entree->created_at }} </td>
                                                 <td> {{ $entree->stockMaison->designation }} </td>
-                                                <td> {{ $entree->quantite }} </td>
-                                                <td> {{ $entree->reste_usine }} </td>
+                                                <td> {{ $entree->quantite }} ({{ $entree->stockMaison->unite }})</td>
+                                                <td> {{ $entree->reste_usine }} {{ $entree->stockMaison->unite }}</td>
                                                 
                                             </tr>
                                         @endforeach

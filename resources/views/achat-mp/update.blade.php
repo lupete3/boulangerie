@@ -67,7 +67,7 @@
 
                                 @foreach ($viewData['stockMaisons'] as $stockMaison)
 
-                                  <option @selected(old('stock_maison_id', $achatStockMaison->id_stock_maisons) == $stockMaison->id) value="{{ $stockMaison->id }}" >{{ $stockMaison->designation }}</option>
+                                  <option @selected(old('stock_maison_id', $achatStockMaison->id_stock_maisons) == $stockMaison->id) value="{{ $stockMaison->id }}" >{{ $stockMaison->designation }} ({{ $stockMaison->unite }})</option>
 
                                 @endforeach
                                
@@ -80,7 +80,7 @@
                             </div>
 
                             <div class="form-group">
-                              <label>Prix d'achat*</label>
+                              <label>Prix d'achat par ({{ $stockMaison->unite }})*</label>
                               <input type="text" class="form-control" name="prix" value="{{ $achatStockMaison->prix_achat }}" required="">
                             </div>
                           </div>

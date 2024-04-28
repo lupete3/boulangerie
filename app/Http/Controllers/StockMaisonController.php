@@ -49,17 +49,17 @@ class StockMaisonController extends Controller
 
             'designation' => [
                 'required',
-                'unique:stock_maisons,designation',
             ],
+            'unite' => 'required',
             'prix' => 'required|numeric',
             'solde' => 'numeric'
 
         ],[
 
             'designation.required' => 'Compléter le nom',
+            'designation.required' => 'Compléter le champ unité de mesure',
             'prix.required' => 'Compléter le prix d\'achat',
             'prix.numeric' => 'Le prix doit être un nombre',
-            'designation.unique' => 'Cette matière première existe déjà dans le stock',
             'designation.numeric' => 'La quantité en stock doit être un nombre',
 
         ]);
@@ -67,6 +67,7 @@ class StockMaisonController extends Controller
         $stockMaison = new StockMaison();
 
         $stockMaison->designation = $request->designation;
+        $stockMaison->unite = $request->unite;
         $stockMaison->prix = $request->prix;
         $stockMaison->solde = $request->solde;
 
@@ -119,12 +120,14 @@ class StockMaisonController extends Controller
             'designation' => [
                 'required',
             ],
+            'unite' => 'required',
             'prix' => 'required|numeric',
             'solde' => 'numeric'
 
         ],[
 
             'designation.required' => 'Compléter le nom',
+            'designation.required' => 'Compléter le champ unité de mesure',
             'prix.required' => 'Compléter le prix d\'achat',
             'prix.numeric' => 'Le prix doit être un nombre',
             'designation.numeric' => 'La quantité en stock doit être un nombre',
@@ -133,6 +136,7 @@ class StockMaisonController extends Controller
 
         $stockMaison->update([
             'designation' => $request->designation,
+            'unite' => $request->unite,
             'prix' => $request->prix,
             'solde' => $request->solde,
             

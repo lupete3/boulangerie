@@ -13,6 +13,7 @@ class StockMaison extends Model
 
     protected $fillable = [
         'designation',
+        'unite',
         'prix',
         'solde',
     ];

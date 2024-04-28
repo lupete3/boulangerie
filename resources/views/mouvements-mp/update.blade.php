@@ -64,7 +64,7 @@
 
                                 @foreach ($viewData['matieres'] as $matiere)
 
-                                  <option @selected(old('matiere_premiere_id', $mouvementStockMp->id_stock_mp) == $matiere->id) value="{{ $matiere->id }}" >{{ $matiere->designation }}</option>
+                                  <option @selected(old('matiere_premiere_id', $mouvementStockMp->id_stock_mp) == $matiere->id) value="{{ $matiere->id }}" >{{ $matiere->designation }} ({{ $matiere->unite }})</option>
 
                                 @endforeach
                                
@@ -72,7 +72,7 @@
                             </div>
 
                             <div class="form-group">
-                              <label>Quantité Sortie*</label>
+                              <label>Quantité Sortie en ({{ $matiere->unite }})*</label>
                               <input type="number" class="form-control" name="quantite" value="{{ $mouvementStockMp->quantite }}" required="">
                             </div>
                             

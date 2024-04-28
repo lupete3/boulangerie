@@ -38,14 +38,14 @@
 
                             @foreach ($viewData['matieresPremieres'] as $article)
 
-                              <option value="{{ $article->id }}">{{ $article->stockMaison->designation }}</option>
+                              <option value="{{ $article->id }}">{{ $article->stockMaison->designation }} disponible : {{ $article->solde }} {{ $article->stockMaison->unite }}</option>
 
                             @endforeach
                           
                           </select>
                         </div>
                         <div class="form-group">
-                          <label>Quantité Utilisée*</label>
+                          <label>Quantité Utilisée en ({{ $article->stockMaison->unite }})*</label>
                           <input type="text" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
                         </div>
                     
@@ -66,7 +66,7 @@
                       <thead>
                         <tr>
                           <th>Matière première</th>
-                          <th>Quantité utilisée</th>
+                          <th>Quantité utilisée en ({{ $article->stockMaison->unite }})</th>
                           <th></th>
                         </tr>
                       </thead>

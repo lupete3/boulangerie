@@ -269,12 +269,18 @@ class DashboardController extends Controller
     }
 
     //Liste des produits dans le stock
-    public function stockBoulangerie(): View
+    public function stockBoulangerie(Request $request, $site): View
     {
+        $viewData['sites'] = Site::all();
 
-        $viewData['title'] = 'Liste des produits disponibles en boulangerie';
-
-        $viewData['stockBoulangerie'] = StockBoulangerie::with('stockProduitFinis')->get();
+        if($site == 'all'){
+            $viewData['title'] = 'Liste des produits disponibles dans tous les points de vente ';
+            $viewData['stockBoulangerie'] = StockBoulangerie::with('stockProduitFinis')->get();
+        }else{
+            $sites = Site::find($site);
+            $viewData['title'] = 'Liste des produits disponibles dans le point de vente '.$sites->nom;
+            $viewData['stockBoulangerie'] = StockBoulangerie::where('site_id',$sites->id)->with('stockProduitFinis')->get();
+        }
         
         return view('rapports.fiche_stock_boulangerie')->with('viewData',$viewData);
     }

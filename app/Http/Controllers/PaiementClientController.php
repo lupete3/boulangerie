@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CommandeClient;
 use App\Models\PaiementClient;
+use App\Models\Site;
 use Illuminate\Http\Request;
 
 class PaiementClientController extends Controller
@@ -11,32 +12,32 @@ class PaiementClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Site $site)
     {
         //
         //
         $viewData = [];
 
-        $viewData['title'] = 'Historique des paiements clients';
+        $viewData['title'] = 'Historique des paiements clients de '.$site->nom;
 
-        $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->with('paiements')->get();
+        $viewData['commandes'] = CommandeClient::where('site_id',$site->id)->orderBy('id', 'DESC')->with('paiements')->get();
 
-        return view('paiements_clients.index')->with('viewData', $viewData);
+        return view('paiements_clients.index', compact('site'))->with('viewData', $viewData);
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function detteClients()
+    public function detteClients(Site $site)
     {
         //
         $viewData = [];
 
-        $viewData['title'] = 'Liste des dettes clients';
+        $viewData['title'] = 'Liste des dettes clients de '.$site->nom;
 
-        $viewData['commandes'] = CommandeClient::where('reste', '>', 0)->orderBy('id', 'DESC')->with('ventes')->get();
+        $viewData['commandes'] = CommandeClient::where('reste', '>', 0)->where('site_id', $site->id)->orderBy('id', 'DESC')->with('ventes')->get();
 
-        return view('dettes_clients.index')->with('viewData', $viewData);
+        return view('dettes_clients.index', compact('site'))->with('viewData', $viewData);
     }
 
     /**
@@ -47,7 +48,7 @@ class PaiementClientController extends Controller
         //
         $viewData = [];
 
-        $viewData['title'] = 'Coammande client '.$commandeClient->client->nom ;
+        $viewData['title'] = 'Commande client '.$commandeClient->client->nom ;
 
         return view('dettes_clients.create', compact('commandeClient'))->with('viewData', $viewData);
     }

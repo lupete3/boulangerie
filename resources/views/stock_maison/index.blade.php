@@ -73,8 +73,8 @@
                                                 <td> {{ $i++ }} </td>
                                                 <td> {{ $matiresPremiere->designation }} </td>
                                                 <td> {{ $matiresPremiere->prix }} </td>
-                                                <td> {{ $matiresPremiere->solde }} </td>
-                                                <td> {{ $matiresPremiere->prix * $matiresPremiere->solde }} </td>
+                                                <td> {{ $matiresPremiere->solde }} ({{ $matiresPremiere->unite }})</td>
+                                                <td> {{ $matiresPremiere->prix * $matiresPremiere->solde }} Fc</td>
                                                 
                                                 <td>
                                                     <div class="dropdown">

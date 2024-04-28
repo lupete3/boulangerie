@@ -144,7 +144,7 @@
 
                   @foreach ($viewData['matieresPremieres'] as $article)
 
-                    <option value="{{ $article->id }}">{{ $article->stockMaison->designation }}</option>
+                    <option value="{{ $article->id }}">{{ $article->stockMaison->designation }} {{ $article->stockMaison->unite }}</option>
 
                   @endforeach
                           

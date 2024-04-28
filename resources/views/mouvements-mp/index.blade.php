@@ -66,8 +66,8 @@
                                                 <td> {{ $sortie->id }} </td>
                                                 <td> {{ $sortie->created_at }} </td>
                                                 <td> {{ $sortie->stockMaison->designation }} </td>
-                                                <td> {{ $sortie->quantite }} </td>
-                                                <td> {{ $sortie->reste_maison }} </td>
+                                                <td> {{ $sortie->quantite }} ({{ $sortie->stockMaison->unite }})</td>
+                                                <td> {{ $sortie->reste_maison }} ({{ $sortie->stockMaison->unite }})</td>
                                                 
                                                 <td>
                                                     <div class="dropdown">

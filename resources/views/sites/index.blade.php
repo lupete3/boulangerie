@@ -47,6 +47,61 @@
                                 </div>   
                             </div>
                             <div class="card-body">
+                                <div class="row">
+                                    @foreach ($viewData['sites'] as $site)
+                                        <div class="col-12 col-md-6 col-lg-6">
+                                            <div class="pricing pricing-highlight">
+                                            <div class="pricing-title">
+                                                POINT DE VENTE
+                                            </div>
+                                            <div class="pricing-padding">
+                                                <div class="pricing-price">
+                                                <div>{{ $site->nom }}</div>
+                                                </div>
+                                                <div class="pricing-details">
+                                                    
+                                                    <div class="pricing-item">
+                                                        <div class="pricing-item-icon"><i class="far fa-edit"></i></div>
+                                                        <div class="pricing-item-label"><a href="{{ route('sites.edit', $site->id)}}"> Modifier le point de vente</a></div>
+                                                    </div>
+                                                    
+                                                    <div class="pricing-item">
+                                                        <div class="pricing-item-icon"><i class="fas fa-list-alt"></i></div>
+                                                        <div class="pricing-item-label"><a href="{{ route('stock-boulangerie.index', $site->id)}}"> Liste des produits disponibles</a></div>
+                                                    </div>
+                                                    
+                                                    <div class="pricing-item">
+                                                        <div class="pricing-item-icon"><i class="fas fa-arrow-down"></i></div>
+                                                        <div class="pricing-item-label"><a href="{{ route('mouvement-stock-pf-boulangerie.index', $site->id)}}">Liste des entrées produits</a></div>
+                                                    </div>
+                                                    
+                                                    <div class="pricing-item">
+                                                        <div class="pricing-item-icon"><i class="fas fa-arrow-up"></i></div>
+                                                        <div class="pricing-item-label"><a href="{{ route('ventes.index', $site->id)}}"> Liste des ventes produits</a></div>
+                                                    </div>
+                                                    
+                                                    <div class="pricing-item">
+                                                        <div class="pricing-item-icon"><i class="fas fa-credit-card"></i></div>
+                                                        <div class="pricing-item-label"><a href="{{ route('paiements.detteClients', $site->id)}}"> Liste de dettes clients</a></div>
+                                                    </div>
+                                                    
+                                                    <div class="pricing-item">
+                                                        <div class="pricing-item-icon"><i class="far fa-credit-card"></i></div>
+                                                        <div class="pricing-item-label"><a href="{{ route('paiements.index', $site->id)}}"> Liste de paiements lients</a></div>
+                                                    </div>
+                                                    
+
+
+                                                </div>
+                                            </div>
+                                            <div class="pricing-cta bg-danger">
+                                                <a href="{{ route('sites.destroy', $site->id)}}"><i class="fas fa-trash"> </i> Supprimer le point de vente</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                {{-- </div>
                                 <div class="table-responsive">
                                     <table class="table table-striped" id="table-1">
                                         <thead>                                 
@@ -66,29 +121,29 @@
                                                     <td> {{ $site->nom }} </td>
                                                     
                                                     <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
-                                                            
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                            
+                                                        <div class="btn-group">
+                                                            <button type="button" class="btn btn-danger">Action sur le point de vente</button>
+                                                            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                                                              <span class="sr-only">Toggle Dropdown</span>
+                                                            </button>
+                                                            <div class="dropdown-menu">
+
                                                                 <a href="{{ route('sites.edit', $site->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Modifier</a>
                                                                 <a href="{{ route('stock-boulangerie.index', $site->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Liste des produits</a>
                                                                 <a href="{{ route('mouvement-stock-pf-boulangerie.index', $site->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Entrées produits</a>
                                                                 <a href="{{ route('ventes.index', $site->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Ventes produits</a>
-                                                            
-                                                            <form action="{{ route('sites.destroy', $site->id)}}" method="post">
-                                                                @csrf
-                                                                <button  type="submit" class="dropdown-item has-icon"><i class="fas fa-trash text-danger"></i> Supprimer</button>
-                                                            </form>
-                                                            
+                                                                <a href="{{ route('paiements.detteClients', $site->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Dettes clients</a>
+                                                                <a href="{{ route('paiements.index', $site->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Paiements clients</a>
+                                                                <a href="{{ route('sites.destroy', $site->id)}}" class="dropdown-item has-icon"><i class="fas fa-trash text-dange"></i> Supprimer</a>
+                                                                                                                        
                                                             </div>
-                                                        </div>
+                                                          </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
