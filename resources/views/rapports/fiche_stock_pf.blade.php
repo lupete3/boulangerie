@@ -75,6 +75,10 @@
                                                       </tr>
 
                                                     @empty
+
+                                                      <tr>
+                                                        <td colspan="5" class="text-center" style="font-size: 20px">Aucune donnée disponible</td>
+                                                      </tr>
                                                     
                                                     @endforelse
 

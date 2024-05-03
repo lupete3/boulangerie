@@ -86,13 +86,17 @@
                                                         <td>{{ $num++ }}</td>
                                                         <td>{{ $entree->created_at }}</td>
                                                         <td>{{ $entree->stockMaison->designation }}</td>
-                                                        <td>{{ $entree->quantite }}</td>
+                                                        <td>{{ $entree->quantite }} {{ $entree->stockMaison->unite }}</td>
                                                         <td>{{ $entree->prix_achat }}</td>
                                                         <td><b>{{ $entree->quantite * $entree->prix_achat}} Fc</b></td>
                                                         <td>{{ $entree->fournisseur->nom }}</td>
                                                       </tr>
 
                                                     @empty
+
+                                                      <tr>
+                                                        <td colspan="7" class="text-center" style="font-size: 20px">Aucune donnée disponible</td>
+                                                      </tr>
                                                     
                                                     @endforelse
 

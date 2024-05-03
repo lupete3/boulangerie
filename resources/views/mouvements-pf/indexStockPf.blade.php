@@ -65,7 +65,7 @@
                                                 <td> {{ $entree->quantite }} </td>
                                                 <td> 
                                                     @foreach ($entree->compositions as $item)
-                                                        <span>({{ number_format($item->quantite,0) }}) {{ $item->designation }}</span><br>
+                                                        <span>({{ number_format($item->quantite,0) }} {{ $item->unite }}) {{ $item->designation }}</span><br>
                                                     @endforeach    
                                                 </td>
                                                 

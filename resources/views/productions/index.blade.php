@@ -57,8 +57,8 @@
                                                 <th>Quantité produite</th>
                                                 <th>Prix de vente</th>
                                                 <th>Valeur de production</th>
-                                                <th>Composition</th>
-                                                <th>Coût de production</th>
+                                                <th>Composition_Matières_Premières</th>
+                                                <th>Coût de production (Composition + Personnel + Autres Charges)</th>
                                                 <th>Bénéfice (Valeur Production - Coût Production)</th>
                                                 <th>Action</th>
                                             </tr>
@@ -68,7 +68,9 @@
                                             @php
                                                 $total = 0;
                                                 $totProd = 0;
-                                                $totBenefice = 0;
+                                                $totalBen = 0;
+                                                $totCharge = 0;
+                                                $sommeCharges = 0;
                                             @endphp
 
                                             @foreach ($viewData['productions'] as $production) 
@@ -76,12 +78,13 @@
                                                     @php
                                                         $total += $production->quantite * $production->produitFinis->prix;
                                                         $totalBen = $production->quantite * $production->produitFinis->prix;
+                                                        $totCharge = $production->charge_paersonnel + $production->autres_charges;
                                                         $designations = explode(', ', $production->designation);
                                                     @endphp
                                                     <td> {{ $production->id }} </td>
                                                     <td> {{ $production->created_at }} </td>
                                                     <td> {{ $production->produitFinis->designation }} </td>
-                                                    <td> {{ $production->quantite }} {{ $production->produitFinis->unite }}</td>
+                                                    <td> {{ $production->quantite }} </td>
                                                     <td> {{ $production->produitFinis->prix }} </td>
                                                     <td> {{ $production->quantite * $production->produitFinis->prix }} Fc</td>
                                                     <td> 
@@ -92,8 +95,9 @@
                                                             <li>({{ number_format($composition->quantite,0) }}{{ $composition->unite }}) {{ $composition->designation }}</li>
                                                         @endforeach    
                                                     </td>
-                                                    <td>{{ $totProd }} Fc</td>
-                                                    <td class="text-{{ (($totalBen - $totProd) >= 0)? 'info' : 'danger' }}">{{ $totalBen - $totProd }} Fc</td>
+                                                    <td>{{ $totProd + $totCharge }} Fc</td>
+                                                    <td class="text-{{ (($totalBen - ($totProd + $totCharge)) >= 0)? 'info' : 'danger' }}">
+                                                        {{ $totalBen - ($totProd + $totCharge) }} Fc</td>
                                                     <td>
                                                         <div class="dropdown">
                                                             <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
@@ -105,7 +109,10 @@
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    
+                                                    @php
+                                                        $sommeCharges = $sommeCharges + $totCharge + $totProd;
+
+                                                    @endphp
                                                 </tr>
                                             @endforeach
                                             
@@ -114,8 +121,8 @@
                                             <td colspan="5"><b>Total </b></td>
                                             <td><b>{{ $total }} Fc</b></td>
                                             <td></td>
-                                            <td><b>{{ $totProd }} Fc</b></td>
-                                            <td><b>{{ $total - $totProd }} Fc</b></td>
+                                            <td><b>{{ $sommeCharges }} Fc</b></td>
+                                            <td><b>{{ $total - $sommeCharges }} Fc</b></td>
                                             <td></td>
                                         </tr>
                                     </table>

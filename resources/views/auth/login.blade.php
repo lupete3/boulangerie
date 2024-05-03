@@ -45,12 +45,12 @@
             </x-primary-button>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        {{-- <div class="flex items-center justify-end mt-4">
             <x-primary-button class="ml-3">
                 <a class="" href="{{ route('register') }}">
                     {{ __('Créer un compte') }}
                 </a>
             </x-primary-button>        
-        </div>
+        </div> --}}
     </form>
 </x-guest-layout>

@@ -157,42 +157,43 @@ class MouvementStockMpController extends Controller
         ]);
 
         $stockMaison = StockMaison::find($request->matiere_premiere_id);
+
+        $qnteInitMvt = $mouvementStockMp->quantite;
         
         $soldeMaison = $stockMaison->solde;
 
-        $qnteInitMvt = $mouvementStockMp->quantite;
+        $stockMaison->solde = $soldeMaison + $mouvementStockMp->quantite;
 
-        if ($soldeMaison < $request->quantite) {
+        $stockMaison->save();
+
+        if ($stockMaison->solde < $request->quantite) {
             return redirect()->back()->with('error','Cette quantité est est supérieur que le solde actuel');
         }
 
-        $stockMaison->solde = $soldeMaison + $mouvementStockMp->quantite - $request->quantite;
+        $stockMaison->solde = $stockMaison->solde - $request->quantite;
 
         $stockMaison->save();
+
+
+        $stockUsine = StockUsine::where('id_stock_maisons', $request->matiere_premiere_id)->first();
+
+        $stockUsine->solde = $stockUsine->solde - $qnteInitMvt;
+
+        $stockUsine->save();
+
+        $stockUsine->solde = $stockUsine->solde + $request->quantite;
+
+        $stockUsine->save();
         
         $mouvementStockMp->update([
             'id_stock_mp' => $request->matiere_premiere_id,
             'quantite' => $request->quantite,
-            'reste' => $soldeMaison + $mouvementStockMp->quantite - $request->quantite
+            'reste_maison' => $stockMaison->solde,
+            'reste_usine' => $stockUsine->solde,
         ]);
 
-        if ($mouvementStockMp) {
-            $stockUsine = StockUsine::where('id_stock_maisons', $request->matiere_premiere_id)->get();
+        return redirect()->back()->with('success','Mise à jour effectuée avec succès');
 
-            foreach ($stockUsine as $stockUsin) {
-                $idStockUsine = $stockUsin->id;
-            }
-
-            $stockUsine = StockUsine::find($idStockUsine);
-
-            $newSolde = ($stockUsine->solde - $qnteInitMvt) + $request->quantite;
-
-            $stockUsine->solde = $newSolde;
-
-            $stockUsine->save();
-
-            return redirect()->back()->with('success','Mise à jour effectuée avec succès');
-        }
     }
 
     /**
@@ -213,13 +214,7 @@ class MouvementStockMpController extends Controller
         $stockMaison->save();
         
         
-        $stockUsine = StockUsine::where('id_stock_maisons', $mouvementStockMp->id_stock_mp)->get();
-
-        foreach ($stockUsine as $stockUsin) {
-            $idStockUsine = $stockUsin->id;
-        }
-
-        $stockUsine = StockUsine::find($idStockUsine);
+        $stockUsine = StockUsine::where('id_stock_maisons', $mouvementStockMp->id_stock_mp)->first();
 
         $newSolde = ($stockUsine->solde - $qnteInitMvt);
 

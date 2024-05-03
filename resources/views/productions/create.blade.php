@@ -22,6 +22,26 @@
             <div class="section-body ">
             
               <div class="row">
+                <div class="col-md-12">
+                  
+                  @if(Session::has('error'))
+                      <div class="alert alert-danger alert-dismissible" id="msg" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h6>
+                            {{ Session::get('error') }}
+                        </h6>
+                      </div> 
+                  @endif
+              
+                  @if(Session::has('success'))
+                      <div class="alert alert-success alert-dismissible" id="msg" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h6>
+                            {{ Session::get('success') }}
+                        </h6>
+                      </div> 
+                  @endif
+                </div>
                 <!-- Colonne des articles -->
                 <div class="col-md-5">
                   <h4>Production</h4>
@@ -46,11 +66,11 @@
                         </div>
                         <div class="form-group">
                           <label>Quantité Utilisée en ({{ $article->stockMaison->unite }})*</label>
-                          <input type="text" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
+                          <input type="number" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
                         </div>
                     
                         <div class="card-footer text-right">
-                          <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Enregistrer</button>
+                          <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Enregistrer</button>
                         </div>
                       </form>
                     </div>
@@ -66,7 +86,7 @@
                       <thead>
                         <tr>
                           <th>Matière première</th>
-                          <th>Quantité utilisée en ({{ $article->stockMaison->unite }})</th>
+                          <th>Quantité utilisée </th>
                           <th></th>
                         </tr>
                       </thead>
@@ -74,7 +94,7 @@
                         @foreach(session('cart', []) as $productId => $item)
                             <tr>
                                 <td>{{ $item['name'] }}</td>
-                                <td>{{ $item['quantity'] }}</td>
+                                <td>{{ $item['quantity'] }} {{ $item['unite'] }}</td>
                                
                                 <td>
                                   <form action="{{ route('production.removeFromCart') }}" method="post">
@@ -89,7 +109,7 @@
                     </table>
                   </div>
                   <div class="row" style="margin-top: 50px">
-                    <button  class="btn btn-success col-md-3 mt-2" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-credit-card"></i> Clôturer la production</button>
+                    <button  class="btn btn-success col-md-3 mt-2" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-check"></i> Clôturer la production</button>
                     <form action="{{ route('production.clearCart') }}" class="col-md-3 mt-2" method="post">
                         @csrf
                         <button class="btn btn-danger col-md-12 "><i class="fas fa-trash"> </i> Supprimer tout</button>
@@ -130,6 +150,16 @@
               <div class="form-group col-12 col-md-12 col-lg-12">
                 <label for="">Quantité produite*</label>
                 <input type="text" name="quantite" class="form-control" required>
+              </div>  
+
+              <div class="form-group col-12 col-md-12 col-lg-12">
+                <label for="">Charge du personnel*</label>
+                <input type="number" name="charge_personnel" class="form-control" required>
+              </div> 
+
+              <div class="form-group col-12 col-md-12 col-lg-12">
+                <label for="">Autres charges*</label>
+                <input type="number" name="autres_charges" class="form-control" required>
               </div>     
           </div>
           <div class="modal-footer">

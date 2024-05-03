@@ -12,6 +12,7 @@ class Composition extends Model
 
     protected $fillable = [
         'designation',
+        'unite',
         'quantite',
         'prix',
         'stock_usine_id',

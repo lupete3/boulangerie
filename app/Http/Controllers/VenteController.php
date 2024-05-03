@@ -67,7 +67,7 @@ class VenteController extends Controller
 
         if ($product->solde < $request->quantite ) {
 
-            return redirect()->route('ventes.create')->with('error','Cette quantité est supérieur au solde actuel');
+            return redirect()->back()->with('error','Cette quantité est supérieur au solde actuel');
         }
 
         // Vérifier si le produit est déjà dans le panier

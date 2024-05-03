@@ -83,7 +83,7 @@
                                                       $id = 1;
                                                   @endphp
           
-                                                  @foreach ($viewData['commandes'] as $commande)
+                                                  @forelse ($viewData['commandes'] as $commande)
                                                       @php
                                                           $tot = $tot + $commande->montant;
                                                           $totPaye = $totPaye + $commande->paye;
@@ -112,7 +112,13 @@
           
                                                           </tr>
                                                       @endforeach
-                                                  @endforeach
+                                                  
+                                                  @empty
+                                                    <tr>
+                                                      <td colspan="13" class="text-center" style="font-size: 20px">Aucune donnée disponible</td>
+                                                    </tr>
+                                                  @endforelse
+                                                  
           
                                               </tbody>
                                               <tr>

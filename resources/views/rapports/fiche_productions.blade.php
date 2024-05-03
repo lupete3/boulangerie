@@ -59,62 +59,74 @@
             
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <table class="table table-bordered table-striped table-sm" style="font-family:Century Gothic; font-size:0.7em;">
-                                                <thead>
-                                                    <tr>
-                                                        <th>N°</th>
-                                                        <th>Date production</th>
-                                                        <th>Produit</th>
-                                                        <th>Quantité produite</th>
-                                                        <th>Prix de vente</th>
-                                                        <th>Liste des Compositions</th>
-                                                        <th>Valeur de production</th>
-                                                        <th>Coût de production</th>
-                                                        <th>Bénéfice <br> (Val. Pr. - Coût Pr.)</th>
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @php
-                                                        $total = 0;
-                                                        $totProd = 0;
-                                                    @endphp
-
-                                                    @forelse ( $viewData['productions'] as $production )
-                                                                                                
-                                                        <tr>
-                                                            @php
-                                                                $total += $production->quantite * $production->produitFinis->prix;
-                                                                $totalBen = $production->quantite * $production->produitFinis->prix;
-                                                                $designations = explode(', ', $production->designation);
-                                                            @endphp
-                                                            <td> {{ $production->id }} </td>
-                                                            <td> {{ $production->created_at }} </td>
-                                                            <td> {{ $production->produitFinis->designation }} </td>
-                                                            <td> {{ $production->quantite }} </td>
-                                                            <td> {{ $production->produitFinis->prix }} Fc</td>
-                                                            <td> 
+                                              <thead>                                 
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Date production</th>
+                                                    <th>Produit</th>
+                                                    <th>Quantité produite</th>
+                                                    <th>Prix de vente</th>
+                                                    <th>Valeur de production</th>
+                                                    <th>Composition_Matières_Premières</th>
+                                                    <th>Coût de production (Composition + Personnel + Autres Charges)</th>
+                                                    <th>Bénéfice (Valeur Production - Coût Production)</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+      
+                                                  @php
+                                                      $total = 0;
+                                                      $totProd = 0;
+                                                      $totalBen = 0;
+                                                      $totCharge = 0;
+                                                      $sommeCharges = 0;
+                                                  @endphp
+      
+                                                  @forelse ($viewData['productions'] as $production) 
+                                                      <tr>
+                                                          @php
+                                                              $total += $production->quantite * $production->produitFinis->prix;
+                                                              $totalBen = $production->quantite * $production->produitFinis->prix;
+                                                              $totCharge = $production->charge_paersonnel + $production->autres_charges;
+                                                              $designations = explode(', ', $production->designation);
+                                                          @endphp
+                                                          <td> {{ $production->id }} </td>
+                                                          <td> {{ $production->created_at }} </td>
+                                                          <td> {{ $production->produitFinis->designation }} </td>
+                                                          <td> {{ $production->quantite }} </td>
+                                                          <td> {{ $production->produitFinis->prix }} </td>
+                                                          <td> {{ $production->quantite * $production->produitFinis->prix }} Fc</td>
+                                                          <td> 
                                                               @foreach ($production->compositions as $composition)
                                                                   @php
                                                                       $totProd += $composition->quantite * $composition->prix;  
                                                                   @endphp
-                                                                  <span>({{ number_format($composition->quantite,0) }}) {{ $composition->designation }}</span><br>
+                                                                  <li>({{ number_format($composition->quantite,0) }}{{ $composition->unite }}) {{ $composition->designation }}</li>
                                                               @endforeach    
-                                                            </td>
-                                                            <td> {{ $production->quantite * $production->produitFinis->prix }} Fc</td>
-                                                            <td>{{ $totProd }} Fc</td>
-                                                            <td class="text-{{ (($totalBen - $totProd) >= 0)? 'info' : 'danger' }}">{{ $totalBen - $totProd }} Fc</td>
-                                                        </tr>
-                                                    
-                                                    @empty
-
-                                                    @endforelse
-                                                    <tr>
-                                                      <td colspan="6"><b>Total </b></td>
-                                                      <td><b>{{ $total }} Fc</b></td>
-                                                      <td><b>{{ $totProd }} Fc</b></td>
-                                                      <td><b>{{ $total - $totProd }} Fc</b></td>
-                                                  </tr>
-                                                </tbody>
+                                                          </td>
+                                                          <td>{{ $totProd + $totCharge }} Fc</td>
+                                                          <td class="text-{{ (($totalBen - ($totProd + $totCharge)) >= 0)? 'info' : 'danger' }}">
+                                                              {{ $totalBen - ($totProd + $totCharge) }} Fc</td>
+                                                          
+                                                          @php
+                                                              $sommeCharges = $sommeCharges + $totCharge + $totProd;
+      
+                                                          @endphp
+                                                      </tr>
+                                                  @empty
+                                                      <tr>
+                                                        <td colspan="9" class="text-center" style="font-size: 20px">Aucune donnée disponible</td>
+                                                      </tr>
+                                                  @endforelse
+                                                  
+                                              </tbody>
+                                              <tr>
+                                                  <td colspan="5"><b>Total </b></td>
+                                                  <td><b>{{ $total }} Fc</b></td>
+                                                  <td></td>
+                                                  <td><b>{{ $sommeCharges }} Fc</b></td>
+                                                  <td><b>{{ $total - $sommeCharges }} Fc</b></td>
+                                              </tr>
                                             </table>
                                         </div>
             

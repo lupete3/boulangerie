@@ -68,6 +68,14 @@
                           <label>Quantité Produite*</label>
                           <input type="text" class="form-control" name="quantite" value="{{ $production->quantite }}" placeholder="" required="">
                         </div>
+                        <div class="form-group">
+                          <label>Charge personnel*</label>
+                          <input type="text" class="form-control" name="charge_personnel" value="{{ $production->charge_personnel }}" placeholder="" required="">
+                        </div>
+                        <div class="form-group">
+                          <label>Autres Charges*</label>
+                          <input type="text" class="form-control" name="autres_charges" value="{{ $production->autres_charges }}" placeholder="" required="">
+                        </div>
                     
                         <div class="card-footer text-right">
                           <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Mettre à jour</button>

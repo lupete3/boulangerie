@@ -61,7 +61,7 @@
 
                                 @foreach ($viewData['matieres'] as $matiere)
 
-                                  <option value="{{ $matiere->id }}">{{ $matiere->designation }} ({{ $matiere->unite }})</option>
+                                  <option value="{{ $matiere->id }}">{{ $matiere->designation }} disponible: {{ $matiere->solde }} ({{ $matiere->unite }})</option>
 
                                 @endforeach
                                

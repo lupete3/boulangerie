@@ -14,6 +14,8 @@ class Production extends Model
     protected $fillable = [
         'designation',
         'quantite',
+        'charge_personnel',
+        'autres_charges',
         'stock_pf_id',
     ];
 

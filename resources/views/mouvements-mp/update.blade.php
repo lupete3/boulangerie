@@ -64,7 +64,7 @@
 
                                 @foreach ($viewData['matieres'] as $matiere)
 
-                                  <option @selected(old('matiere_premiere_id', $mouvementStockMp->id_stock_mp) == $matiere->id) value="{{ $matiere->id }}" >{{ $matiere->designation }} ({{ $matiere->unite }})</option>
+                                  <option @selected(old('matiere_premiere_id', $mouvementStockMp->id_stock_mp) == $matiere->id) value="{{ $matiere->id }}" >{{ $matiere->designation }} disponible: {{ $matiere->solde }} ({{ $matiere->unite }})</option>
 
                                 @endforeach
                                

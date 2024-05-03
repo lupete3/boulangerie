@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->text('designation');
             $table->decimal('quantite', 30);
+            $table->decimal('charge_personnel', 30)->default(0);
+            $table->decimal('autres_charges', 30)->default(0);
             $table->foreignId('stock_pf_id')->references('id')->on('stock_pfs')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

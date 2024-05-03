@@ -70,7 +70,7 @@ class ProductionController extends Controller
 
         if ($solde < $request->quantite ) {
 
-            return redirect()->route('production.create')->with('error','Cette quantité est supérieur au solde actuel');
+            return redirect()->back()->with('error','Cette quantité est supérieur au solde actuel');
         }
 
         // Vérifier si le produit est déjà dans le panier
@@ -83,6 +83,7 @@ class ProductionController extends Controller
             $cart[$id] = [
                 'id' => $id,
                 'name' => $product->stockMaison->designation,
+                'unite' => $product->stockMaison->unite,
                 'quantity' => $request->quantite,
                 'price' => $prix,
             ];
@@ -148,14 +149,29 @@ class ProductionController extends Controller
 
             'produit_finis_id' => 'required',
             'quantite' => 'required|numeric',
+            'charge_personnel' => 'required|numeric',
+            'autres_charges' => 'required|numeric',
 
         ],[
 
             'quantite.required' => 'Compléter le champ quantité',
             'quantite.numeric' => 'La quantité doit être un nombre ',
+
+            'charge_personnel.required' => 'Compléter le champ charge du personel',
+            'charge_personnel.numeric' => 'Le montant de la charge du personnel doit être un nombre ',
+
+            'autres_charges.required' => 'Compléter le champ autres charges',
+            'autres_charges.numeric' => 'Le montant autres charges doit être un nombre ',
+
             'produit_finis_id.required' => 'Choisir un produit finis ',
 
         ]);
+
+        try {
+            //code...
+        
+
+        $cart = Session::get('cart', []);
 
         //Mise a jour de la quantite produit finis
         $produitFinis = StockPf::find($request->produit_finis_id);
@@ -175,6 +191,8 @@ class ProductionController extends Controller
         Production::create([
             'designation' => $designations,
             'quantite' => $request->quantite,
+            'charge_personnel' => $request->charge_personnel,
+            'autres_charges' => $request->autres_charges,
             'stock_pf_id' => $request->produit_finis_id,
         ]);
 
@@ -186,23 +204,18 @@ class ProductionController extends Controller
         // Enregistrer les articles du panier dans la table Composition
         foreach ($cart as $composition) {
             //Mise a jour de la quantite matiere premiere
-            $stockUsine = StockUsine::where('id_stock_maisons', $composition['id'])->get();
+            $stockUsine = StockUsine::where('id_stock_maisons', $composition['id'])->first();
 
-            foreach ($stockUsine as $stockUsin) {
-                $idStockUsine = $stockUsin->id;
-            }
+            $solde = $stockUsine->solde;
 
-            $matierePremiere = StockUsine::find($idStockUsine);
+            $stockUsine->solde = $stockUsine->solde - $composition['quantity'];
 
-            $solde = $matierePremiere->solde;
-
-            $matierePremiere->solde = $solde - $composition['quantity'];
-
-            $matierePremiere->save();
+            $stockUsine->save();
 
             Composition::create([
                 'stock_usine_id' => $composition['id'],
                 'designation' => $composition['name'], 
+                'unite' => $composition['unite'], 
                 'quantite' => $composition['quantity'], 
                 'prix' => $composition['price'], 
                 'production_id' => $newProductionId
@@ -214,6 +227,14 @@ class ProductionController extends Controller
         Session::forget('cart');
 
         return redirect()->route('production.index')->with('success', 'La production a été crée avec succès.');
+
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Une erreur s\'est produite.');
+
+        }
+
+
     }
 
     /**
@@ -288,6 +309,8 @@ class ProductionController extends Controller
 
             'designation' => $designationList,
             'quantite' => $request->quantite,
+            'charge_personnel' => $request->charge_personnel,
+            'autres_charges' => $request->autres_charges,
             'stock_pf_id' => $request->produit_finis_id,
 
         ]);
@@ -330,6 +353,7 @@ class ProductionController extends Controller
             $id = $product->id;
             $prix = $product->stockMaison->prix;
             $designation = $product->stockMaison->designation;
+            $unite = $product->stockMaison->unite;
             $solde = $product->solde;
         }
 
@@ -360,6 +384,7 @@ class ProductionController extends Controller
             Composition::create([
                 'stock_usine_id' => $id,
                 'designation' => $designation, 
+                'unite' => $unite, 
                 'quantite' => $request->quantite, 
                 'prix' => $prix, 
                 'production_id' => $productionId

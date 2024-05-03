@@ -70,11 +70,15 @@
                                                         <td>{{ $num++ }}</td>
                                                         <td>{{ $produit->stockMaison->designation }}</td>
                                                         <td>{{ $produit->stockMaison->prix }} Fc</td>
-                                                        <td>{{ $produit->solde }}</td>
+                                                        <td>{{ $produit->solde }} {{ $produit->stockMaison->unite }}</td>
                                                         <td>{{ $produit->stockMaison->prix * $produit->solde }} Fc</td>
                                                       </tr>
 
                                                     @empty
+
+                                                      <tr>
+                                                        <td colspan="5" class="text-center" style="font-size: 20px">Aucune donnée disponible</td>
+                                                      </tr>
                                                     
                                                     @endforelse
 

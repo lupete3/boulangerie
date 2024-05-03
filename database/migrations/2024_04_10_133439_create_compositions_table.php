@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('compositions', function (Blueprint $table) {
             $table->id();
             $table->text('designation');
+            $table->text('unite');
             $table->decimal('quantite', 30);
             $table->decimal('prix', 30);
             $table->foreignId('stock_usine_id')->references('id')->on('stock_usines')->onUpdate('cascade')->onDelete('cascade');
