@@ -4,7 +4,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12 align-center">
                         @if($errors->any())
@@ -35,7 +35,7 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                       <div class="card ">
                         <form method="post" action="{{ route('dashboard.usersStore')}}" enctype="multipart/form-data">
@@ -44,31 +44,19 @@
                             <h4>{{$viewData['title']}}</h4>
                             <div class="card-header-action">
                                 <a href="{{ route('dashboard.usersIndex')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher les utilisateurs</a>
-                            </div> 
+                            </div>
                           </div>
                           <div class="card-body">
                             <div class="form-group">
                               <label>Rôle de l'utilisateur*</label>
-                              <select name="role" class="form-control selectpicker" id="role" onchange="afficherCacherZone()" data-show-subtext="true" data-live-search="true" required>
+                              <select name="role" class="form-control select2" id="role" data-show-subtext="true" data-live-search="true" required>
 
                                 <option value="admin">Administrateur</option>
-                                <option value="geran_depot_maison">Gérant Dépôt Maison</option>
-                                <option value="geran_depot_usine">Gérant Dépôt Usine</option>
-                                <option value="geran_depot_boulangerie">Gérant Dépôt Boulangerie</option>
-                                <option value="geran_depot_magasin">Gérant Boulangérie</option>
-                               
-                              </select>
-                            </div>
-                            <div class="form-group" id="site" style="display: none">
-                              <label>Point de vente</label>
-                              <select name="site_id" class="form-control selectpicker" id="site_id" data-show-subtext="true" data-live-search="true" required>
+                                <option value="chef_distribution">Chef Distribution</option>
+                                <option value="chef_production">Chef Production</option>
+                                <option value="chef_depot">Chef Dépôt</option>
+                                <option value="guichetier">Guichetier</option>
 
-                                @foreach ($viewData['sites'] as $site)
-
-                                  <option value="{{ $site->id }}">{{ $site->nom }}</option>
-
-                                @endforeach
-                               
                               </select>
                             </div>
                             <div class="form-group">
@@ -83,7 +71,7 @@
                               <label>Mot de passe*</label>
                               <input type="password" class="form-control" name="password"  required="">
                             </div>
-                          
+
                           </div>
                           <div class="card-footer text-right">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Enregistrer</button>

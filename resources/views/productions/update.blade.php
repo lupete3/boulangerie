@@ -53,7 +53,7 @@
 
                         <div class="form-group">
                           
-                          <select name="produit_finis_id" class="form-control selectpicker" id="produit_finis_id" data-live-search="true" required>
+                          <select name="produit_finis_id" class="form-control select2" id="produit_finis_id" data-live-search="true" required>
                             
                             @foreach ($viewData['produitsFinis'] as $produit)
                             
@@ -148,7 +148,7 @@
               @csrf
               <div class="form-group col-12 col-md-12 col-lg-12">
                 <label>Choisir une matière prémière</label>
-                <select name="article_id" class="form-control selectpicker" id="article_id" data-show-subtext="true" data-live-search="true" required>
+                <select name="article_id" class="form-control select2" id="article_id" data-show-subtext="true" data-live-search="true" required>
 
                   @foreach ($viewData['matieresPremieres'] as $article)
 

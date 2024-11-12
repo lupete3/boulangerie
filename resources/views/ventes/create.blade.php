@@ -56,7 +56,7 @@
                         <div class="form-group">
                           <input type="hidden" name="site_id" value="{{ $site->id }}">
                           <label>Choisir un produit*</label>
-                          <select name="produit_id" class="form-control selectpicker" id="produit_id" data-show-subtext="true" data-live-search="true" required>
+                          <select name="produit_id" class="form-control select2" id="produit_id" data-show-subtext="true" data-live-search="true" required>
 
                             @foreach ($viewData['produits'] as $produit)
 

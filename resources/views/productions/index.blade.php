@@ -1,138 +1,65 @@
-
-
 @extends('layouts.backend')
 
+<style>
+    table tr{
+        font-size: 12px;
+    }
+</style>
+
 @section('content')
-
-    <!-- Main Content -->
-    <div class="main-content">
-        
-        <section class="section">
-            <div class="section-header">
-                <h1>{{ $viewData['title'] }}</h1>
-                <div class="section-header-breadcrumb">
-                  <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de Bord</a></div>
-                  <div class="breadcrumb-item"><a href="{{ route('production.index')}}">Liste des productions</a></div>
-                  <div class="breadcrumb-item">{{ $viewData['title'] }}</div>
-                </div>
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Production</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de Bord</a></div>
+                <div class="breadcrumb-item">Productions</div>
             </div>
+        </div>
 
-            <div class="section-body ">
-            
-                <div class="row">
-                    <div class="col-12">
-                        @if($errors->any())
-                            @foreach ($errors->all() as $error)
-                            <div class="alert alert-danger alert-dismissible" id="msg" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h6>
-                                {{ $error }}
-                                </h6>
-                            </div>
-                            @endforeach
-                        @endif
-                        @if(Session::has('success'))
-                            <div class="alert alert-success alert-dismissible" id="msg" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h6>
-                                {{ Session::get('success') }}
-                            </h6>
-                            </div> 
-                        @endif
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>{{ $viewData['title'] }} </h4>
-                                <div class="card-header-action">
-                                    <a href="{{ route('production.create')}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i>Ajouter production</a>
-                                </div>   
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped" id="table-1">
-                                        <thead>                                 
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Date production</th>
-                                                <th>Produit</th>
-                                                <th>Quantité produite</th>
-                                                <th>Prix de vente</th>
-                                                <th>Valeur de production</th>
-                                                <th>Composition_Matières_Premières</th>
-                                                <th>Coût de production (Composition + Personnel + Autres Charges)</th>
-                                                <th>Bénéfice (Valeur Production - Coût Production)</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @php
-                                                $total = 0;
-                                                $totProd = 0;
-                                                $totalBen = 0;
-                                                $totCharge = 0;
-                                                $sommeCharges = 0;
-                                            @endphp
-
-                                            @foreach ($viewData['productions'] as $production) 
-                                                <tr>
-                                                    @php
-                                                        $total += $production->quantite * $production->produitFinis->prix;
-                                                        $totalBen = $production->quantite * $production->produitFinis->prix;
-                                                        $totCharge = $production->charge_paersonnel + $production->autres_charges;
-                                                        $designations = explode(', ', $production->designation);
-                                                    @endphp
-                                                    <td> {{ $production->id }} </td>
-                                                    <td> {{ $production->created_at }} </td>
-                                                    <td> {{ $production->produitFinis->designation }} </td>
-                                                    <td> {{ $production->quantite }} </td>
-                                                    <td> {{ $production->produitFinis->prix }} </td>
-                                                    <td> {{ $production->quantite * $production->produitFinis->prix }} Fc</td>
-                                                    <td> 
-                                                        @foreach ($production->compositions as $composition)
-                                                            @php
-                                                                $totProd += $composition->quantite * $composition->prix;  
-                                                            @endphp
-                                                            <li>({{ number_format($composition->quantite,0) }}{{ $composition->unite }}) {{ $composition->designation }}</li>
-                                                        @endforeach    
-                                                    </td>
-                                                    <td>{{ $totProd + $totCharge }} Fc</td>
-                                                    <td class="text-{{ (($totalBen - ($totProd + $totCharge)) >= 0)? 'info' : 'danger' }}">
-                                                        {{ $totalBen - ($totProd + $totCharge) }} Fc</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
-                                                            
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                              
-                                                                <a href="{{ route('production.edit', $production->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Modifier</a>
-                                                              
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    @php
-                                                        $sommeCharges = $sommeCharges + $totCharge + $totProd;
-
-                                                    @endphp
-                                                </tr>
-                                            @endforeach
-                                            
-                                        </tbody>
-                                        <tr>
-                                            <td colspan="5"><b>Total </b></td>
-                                            <td><b>{{ $total }} Fc</b></td>
-                                            <td></td>
-                                            <td><b>{{ $sommeCharges }} Fc</b></td>
-                                            <td><b>{{ $total - $sommeCharges }} Fc</b></td>
-                                            <td></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+        <div class="section-body">
+            <!-- Formulaire de filtrage par date -->
+            <form method="GET" action="{{ route('productions.index') }}" id="filterForm">
+                <div class="form-group row">
+                    <label for="date" class="col-sm-2 col-form-label">Date :</label>
+                    <div class="col-sm-4">
+                        <input type="date" name="date" id="date" value="{{ $selectedDate }}" class="form-control" onchange="document.getElementById('filterForm').submit();">
                     </div>
                 </div>
-            </div>
-        </section>
-    </div>
+            </form>
 
+            <div class="card">
+                <div class="card-header">
+                    <h4>Production du {{ \Carbon\Carbon::parse($selectedDate)->format('d/m/Y') }}</h4>
+
+                    <div class="card-header-action">
+                        <a href="{{ route('productions.create')}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i> Ajouter </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered table-striped table-sm" id="table">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Quantité Demandée (kg)</th>
+                                <th>Quantité Demandée </th>
+                                <th>Quantité Produite </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($productions as $produit)
+                            <tr>
+                                <td>{{ $produit->nom }}</td>
+                                <td>{{ $produit->quantity_kg_demande ?? 0 }} kg</td>
+                                <td>{{ $produit->quantity_demande ?? 0 }}</td>
+                                <td>{{ $produit->quantity_produced ?? 0 }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 @endsection

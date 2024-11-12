@@ -1,21 +1,21 @@
 <?php
 
-use App\Http\Controllers\AchatStockMaisonController;
-use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ChefDistributionController;
+use App\Http\Controllers\ChefProductionController;
+use App\Http\Controllers\ClotureController;
+use App\Http\Controllers\CommandeController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DepenseController;
+use App\Http\Controllers\DepotController;
+use App\Http\Controllers\DistributionController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\FournisseurController;
-use App\Http\Controllers\MouvementStockMpController;
-use App\Http\Controllers\MouvementStockPfController;
-use App\Http\Controllers\PaiementClientController;
+use App\Http\Controllers\OperationGuichetController;
+use App\Http\Controllers\PartenaireController;
 use App\Http\Controllers\ProductionController;
+use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\SiteController;
-use App\Http\Controllers\StockBoulangerieController;
-use App\Http\Controllers\StockMaisonController;
-use App\Http\Controllers\StockPfController;
-use App\Http\Controllers\StockUsineController;
-use App\Http\Controllers\VenteController;
+use App\Http\Controllers\SyntheseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +33,68 @@ Route::get('/', function(){
     return view('auth.login');
 });
 
+
+// Routes pour l'admin
+Route::middleware(['auth', 'admin'])->group(function() {
+
+    Route::resource('/sites', SiteController::class);
+
+    Route::resource('/categories', CategoryController::class);
+
+    Route::resource('/partenaires', PartenaireController::class);
+
+    Route::resource('/categories', CategoryController::class);
+
+    Route::resource('/produits', ProduitController::class);
+
+    Route::get('/operation_guichets/admin', [OperationGuichetController::class, 'index'])->name('operation_guichets.indexAdmin');
+
+    Route::resource('/syntheses', SyntheseController::class);
+
+    Route::get('/utilisateurs', [DashboardController::class, 'usersIndex'])->name('dashboard.usersIndex');
+    Route::get('/utilisateurs/create', [DashboardController::class, 'usersCreate'])->name('dashboard.usersCreate');
+    Route::post('/utilisateurs/store', [DashboardController::class, 'usersStore'])->name('dashboard.usersStore');
+    Route::get('/utilisateurs/{user}/edit', [DashboardController::class, 'usersEdit'])->name('dashboard.usersEdit');
+    Route::post('/utilisateurs/{user}/update', [DashboardController::class, 'usersUpdate'])->name('dashboard.usersUpdate');
+    Route::post('/utilisateurs/{user}/supprimer', [DashboardController::class, 'usersDelete'])->name('dashboard.usersDelete');
+});
+
+// Routes pour le chef de production
+Route::middleware(['auth', 'chef_production'])->group(function() {
+
+    Route::resource('/productions', ProductionController::class);
+
+});
+
+
+// Routes pour le chef de districution
+Route::middleware(['auth', 'chef_distribution'])->group(function() {
+
+    Route::resource('/commandes', CommandeController::class);
+    Route::post('/commandes/preview', [CommandeController::class, 'preview'])->name('commandes.preview');
+
+    Route::resource('/distributions', DistributionController::class);
+
+});
+
+// Routes pour le chef dépôt
+Route::middleware(['auth', 'chef_depot'])->group(function() {
+
+    Route::get('/depots', [DepotController::class, 'index'])->name('depots.index');
+    Route::get('/depots/create', [DepotController::class, 'create'])->name('depots.create');
+    Route::post('/depots/store', [DepotController::class, 'store'])->name('depots.store');
+
+});
+
+Route::middleware(['auth', 'guichetier'])->group(function() {
+
+    Route::get('/operation_guichets/user', [OperationGuichetController::class, 'index'])->name('operation_guichets.index');
+    Route::get('/operation_guichets/create', [OperationGuichetController::class, 'create'])->name('operation_guichets.create');
+    Route::post('/operation_guichets/store', [OperationGuichetController::class, 'store'])->name('operation_guichets.store');
+
+});
+
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -42,116 +104,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::middleware(['auth', 'verified', ])->group(function () {
-  
-    Route::get('/sites', [SiteController::class, 'index'])->name('sites.index');
-    Route::post('/sites/store', [SiteController::class, 'store'])->name('sites.store');
-    Route::get('/sites/create', [SiteController::class, 'create'])->name('sites.create');
-    Route::get('/sites/{site}/edit', [SiteController::class, 'edit'])->name('sites.edit');
-    Route::put('/sites/{site}/update', [SiteController::class, 'update'])->name('sites.update');
-    Route::get('/sites/{site}/destroy', [SiteController::class, 'destroy'])->name('sites.destroy');
-  
-    Route::get('/fournisseurs', [FournisseurController::class, 'index'])->name('fournisseurs.index');
-    Route::post('/fournisseurs/store', [FournisseurController::class, 'store'])->name('fournisseurs.store');
-    Route::get('/fournisseurs/create', [FournisseurController::class, 'create'])->name('fournisseurs.create');
-    Route::get('/fournisseurs/{fournisseur}/edit', [FournisseurController::class, 'edit'])->name('fournisseurs.edit');
-    Route::put('/fournisseurs/{fournisseur}/update', [FournisseurController::class, 'update'])->name('fournisseurs.update');
-    Route::post('/fournisseurs/{fournisseur}/destroy', [FournisseurController::class, 'destroy'])->name('fournisseurs.destroy');
-  
-    Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
-    Route::post('/clients/store', [ClientController::class, 'store'])->name('clients.store');
-    Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
-    Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
-    Route::put('/clients/{client}/update', [ClientController::class, 'update'])->name('clients.update');
-    Route::post('/clients/{client}/destroy', [ClientController::class, 'destroy'])->name('clients.destroy');
-    
-    Route::get('/stock-maison', [StockMaisonController::class, 'index'])->name('stock-maison.index');
-    Route::post('/stock-maison/store', [StockMaisonController::class, 'store'])->name('stock-maison.store');
-    Route::get('/stock-maison/create', [StockMaisonController::class, 'create'])->name('stock-maison.create');
-    Route::get('/stock-maison/{stockMaison}/edit', [StockMaisonController::class, 'edit'])->name('stock-maison.edit');
-    Route::put('/stock-maison/{stockMaison}/update', [StockMaisonController::class, 'update'])->name('stock-maison.update');
-    Route::post('/stock-maison/{stockMaison}/destroy', [StockMaisonController::class, 'destroy'])->name('stock-maison.destroy');
-    
-    Route::get('/stock-usine', [StockUsineController::class, 'index'])->name('stock-usine.index');
-    Route::post('/stock-usine/store', [StockUsineController::class, 'store'])->name('stock-usine.store');
-    Route::get('/stock-usine/create', [StockUsineController::class, 'create'])->name('stock-usine.create');
-    Route::get('/stock-usine/{stockUsine}/edit', [StockUsineController::class, 'edit'])->name('stock-usine.edit');
-    Route::put('/stock-usine/{stockUsine}/update', [StockUsineController::class, 'update'])->name('stock-usine.update');
-    Route::post('/stock-usine/{stockUsine}/destroy', [StockUsineController::class, 'destroy'])->name('stock-usine.destroy');
-    
-    Route::get('/stock-boulangerie/{site}', [StockBoulangerieController::class, 'index'])->name('stock-boulangerie.index');
-    Route::post('/stock-boulangerie/store', [StockBoulangerieController::class, 'store'])->name('stock-boulangerie.store');
-    Route::get('/stock-boulangerie/create', [StockBoulangerieController::class, 'create'])->name('stock-boulangerie.create');
-    Route::get('/stock-boulangerie/{stockBoulangerie}/edit', [StockBoulangerieController::class, 'edit'])->name('stock-boulangerie.edit');
-    Route::put('/stock-boulangerie/{stockBoulangerie}/update', [StockBoulangerieController::class, 'update'])->name('stock-boulangerie.update');
-    Route::post('/stock-boulangerie/{stockBoulangerie}/destroy', [StockBoulangerieController::class, 'destroy'])->name('stock-boulangerie.destroy');
-    
-    Route::get('/stock-pf', [StockPfController::class, 'index'])->name('stock-pf.index');
-    Route::post('/stock-pf/store', [StockPfController::class, 'store'])->name('stock-pf.store');
-    Route::get('/stock-pf/create', [StockPfController::class, 'create'])->name('stock-pf.create');
-    Route::get('/stock-pf/{stockPf}/edit', [StockPfController::class, 'edit'])->name('stock-pf.edit');
-    Route::put('/stock-pf/{stockPf}/update', [StockPfController::class, 'update'])->name('stock-pf.update');
-    Route::post('/stock-pf/{stockPf}/destroy', [StockPfController::class, 'destroy'])->name('stock-pf.destroy');
- 
-    Route::get('/achat-mp', [AchatStockMaisonController::class, 'index'])->name('achat-mp.index');
-    Route::post('/achat-mp/store', [AchatStockMaisonController::class, 'store'])->name('achat-mp.store');
-    Route::get('/achat-mp/create', [AchatStockMaisonController::class, 'create'])->name('achat-mp.create');
-    Route::get('/achat-mp/{achatStockMaison}/edit', [AchatStockMaisonController::class, 'edit'])->name('achat-mp.edit');
-    Route::put('/achat-mp/{achatStockMaison}/update', [AchatStockMaisonController::class, 'update'])->name('achat-mp.update');
-    Route::post('/achat-mp/{achatStockMaison}/destroy', [AchatStockMaisonController::class, 'destroy'])->name('achat-mp.destroy');
- 
-    Route::get('/mouvement-stock-mp', [MouvementStockMpController::class, 'index'])->name('mouvement-stock-mp.index');
-    Route::get('/mouvement-stock-mp-usine', [MouvementStockMpController::class, 'indexUsine'])->name('mouvement-stock-mp-usine.index');
-    Route::post('/mouvement-stock-mp/store', [MouvementStockMpController::class, 'store'])->name('mouvement-stock-mp.store');
-    Route::get('/mouvement-stock-mp/create', [MouvementStockMpController::class, 'create'])->name('mouvement-stock-mp.create');
-    Route::get('/mouvement-stock-mp/{mouvementStockMp}/edit', [MouvementStockMpController::class, 'edit'])->name('mouvement-stock-mp.edit');
-    Route::put('/mouvement-stock-mp/{mouvementStockMp}/update', [MouvementStockMpController::class, 'update'])->name('mouvement-stock-mp.update');
-    Route::post('/mouvement-stock-mp/{mouvementStockMp}/destroy', [MouvementStockMpController::class, 'destroy'])->name('mouvement-stock-mp.destroy');
-
-    Route::get('/mouvement-stock-pf', [MouvementStockPfController::class, 'index'])->name('mouvement-stock-pf.index');
-    Route::get('/mouvement-stock-pf-boulangerie/{site}', [MouvementStockPfController::class, 'indexBoulangerie'])->name('mouvement-stock-pf-boulangerie.index');
-    Route::get('/mouvement-stock-pf-entree', [MouvementStockPfController::class, 'indexStockPf'])->name('mouvement-stock-pf-entree.index');
-    Route::post('/mouvement-stock-pf/store', [MouvementStockPfController::class, 'store'])->name('mouvement-stock-pf.store');
-    Route::get('/mouvement-stock-pf/create', [MouvementStockPfController::class, 'create'])->name('mouvement-stock-pf.create');
-    Route::get('/mouvement-stock-pf/{mouvementStockPf}/edit', [MouvementStockPfController::class, 'edit'])->name('mouvement-stock-pf.edit');
-    Route::put('/mouvement-stock-pf/{mouvementStockPf}/update', [MouvementStockPfController::class, 'update'])->name('mouvement-stock-pf.update');
-    Route::post('/mouvement-stock-pf/{mouvementStockPf}/destroy', [MouvementStockPfController::class, 'destroy'])->name('mouvement-stock-pf.destroy');
-
-    Route::get('/production', [ProductionController::class, 'index'])->name('production.index');
-    Route::post('/production/store', [ProductionController::class, 'store'])->name('production.store');
-    Route::get('/production/create', [ProductionController::class, 'create'])->name('production.create');
-    Route::get('/production/{production}/edit', [ProductionController::class, 'edit'])->name('production.edit');
-    Route::post('/production/{production}/update', [ProductionController::class, 'update'])->name('production.update');
-    Route::post('/production/{production}/destroy', [ProductionController::class, 'destroy'])->name('production.destroy');
-    Route::post('/add-to-cart', [ProductionController::class, 'addToCart'])->name('production.addToCart');
-    Route::post('/clear-cart', [ProductionController::class, 'clearCart'])->name('production.clearCart');
-    Route::post('/remove-from-cart', [ProductionController::class, 'removeFromCart'])->name('production.removeFromCart');
-    Route::post('/remove-from-cart-edit/{composition}/destroy', [ProductionController::class, 'removeFromCartEdit'])->name('production.removeFromCartEdit');
-    Route::post('/add-to-cart-edit/{production}', [ProductionController::class, 'addToCartEdit'])->name('production.addToCartEdit');
-
-    Route::get('/ventes{site}', [VenteController::class, 'index'])->name('ventes.index');
-    Route::post('/ventes/store', [VenteController::class, 'store'])->name('ventes.store');
-    Route::get('/ventes/{site}/create', [VenteController::class, 'create'])->name('ventes.create');
-    Route::get('/ventes/{vente}/edit', [VenteController::class, 'edit'])->name('ventes.edit');
-    Route::put('/ventes/{vente}/update', [VenteController::class, 'update'])->name('ventes.update');
-    Route::post('/ventes/{vente}/destroy', [VenteController::class, 'destroy'])->name('ventes.destroy');
-    Route::post('/add-to-cart-vente', [VenteController::class, 'addToCart'])->name('ventes.addToCart');
-    Route::post('/clear-cart-vente', [VenteController::class, 'clearCart'])->name('ventes.clearCart');
-    Route::post('/remove-from-cart-vente', [VenteController::class, 'removeFromCart'])->name('ventes.removeFromCart');
-    Route::post('/remove-from-cart-edit-vente/{vente}/destroy', [VenteController::class, 'removeFromCartEdit'])->name('ventes.removeFromCartEdit');
-    Route::post('/add-to-cart-edit-vente/{vente}', [VenteController::class, 'addToCartEdit'])->name('ventes.addToCartEdit');
-
-    Route::get('/paiement-clients/{site}', [PaiementClientController::class, 'index'])->name('paiements.index');
-    Route::get('/dettes-clients/{site}', [PaiementClientController::class, 'detteClients'])->name('paiements.detteClients');
-    Route::get('/dettes-create/{commandeClient}', [PaiementClientController::class, 'create'])->name('paiements.create');
-    Route::post('/dettes-store', [PaiementClientController::class, 'store'])->name('paiements.store');
-
-
-    Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses.index');
-    Route::post('/depenses/store', [DepenseController::class, 'store'])->name('depenses.store');
-    Route::get('/depenses/create', [DepenseController::class, 'create'])->name('depenses.create');
-    Route::get('/depenses/{depense}/edit', [DepenseController::class, 'edit'])->name('depenses.edit');
-    Route::put('/depenses/{depense}/update', [DepenseController::class, 'update'])->name('depenses.update');
-    Route::post('/depenses/{depense}/destroy', [DepenseController::class, 'destroy'])->name('depenses.destroy');
 
     Route::get('/rapports/stock-mp', [DashboardController::class, 'stockMpMaison'])->name('rapports.stockMpMaison');
     Route::get('/rapports/achats-mp-all', [DashboardController::class, 'entreeStockMpAll'])->name('rapports.entreeStockMpAll');
@@ -171,6 +123,13 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/rapports/ventes-hebdomadaire', [DashboardController::class, 'venteHebdo'])->name('rapports.venteHebdo');
     Route::get('/rapports/ventes-annuel', [DashboardController::class, 'venteAnnuel'])->name('rapports.venteAnnuel');
     Route::post('/rapports/ventes-personnalise', [DashboardController::class, 'venteDate'])->name('rapports.venteDate');
+
+    Route::get('/rapports/syntheses-all', [DashboardController::class, 'syntheseAll'])->name('rapports.syntheseAll');
+    Route::get('/rapports/syntheses-journalier', [DashboardController::class, 'syntheseJour'])->name('rapports.syntheseJour');
+    Route::get('/rapports/syntheses-hebdomadaire', [DashboardController::class, 'syntheseHebdo'])->name('rapports.syntheseHebdo');
+    Route::get('/rapports/syntheses-mensuel', [DashboardController::class, 'syntheseMensuel'])->name('rapports.syntheseMensuel');
+    Route::get('/rapports/syntheses-annuel', [DashboardController::class, 'syntheseAnnuel'])->name('rapports.syntheseAnnuel');
+    Route::post('/rapports/syntheses-personnalise', [DashboardController::class, 'syntheseDate'])->name('rapports.syntheseDate');
 
     Route::get('/rapports/dettes-all', [DashboardController::class, 'dettesAll'])->name('rapports.dettesAll');
     Route::get('/rapports/dettes-journalier', [DashboardController::class, 'dettesJour'])->name('rapports.dettesJour');
@@ -194,12 +153,7 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/rapports/stock-pf-usine', [DashboardController::class, 'stockPf'])->name('rapports.stockPf');
     Route::get('/rapports/stock-boulangerie/{site}', [DashboardController::class, 'stockBoulangerie'])->name('rapports.stockBoulangerie');
 
-    Route::get('/utilisateurs', [DashboardController::class, 'usersIndex'])->name('dashboard.usersIndex');
-    Route::get('/utilisateurs/create', [DashboardController::class, 'usersCreate'])->name('dashboard.usersCreate');
-    Route::post('/utilisateurs/store', [DashboardController::class, 'usersStore'])->name('dashboard.usersStore');
-    Route::get('/utilisateurs/{user}/edit', [DashboardController::class, 'usersEdit'])->name('dashboard.usersEdit');
-    Route::post('/utilisateurs/{user}/update', [DashboardController::class, 'usersUpdate'])->name('dashboard.usersUpdate');
-    Route::post('/utilisateurs/{user}/supprimer', [DashboardController::class, 'usersDelete'])->name('dashboard.usersDelete');
+    
 
 });
 

@@ -12,12 +12,26 @@ class Production extends Model
     use HasFactory;
 
     protected $fillable = [
-        'designation',
-        'quantite',
-        'charge_personnel',
-        'autres_charges',
-        'stock_pf_id',
+        'produit_id',
+        'user_id',
+        'quantity_demande',
+        'quantity'
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);  // Une production est associée à un produit
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);  // Une production est réalisée par un chef de production
+    }
+
+
+
+
+
 
     public function produitFinis(): BelongsTo
     {

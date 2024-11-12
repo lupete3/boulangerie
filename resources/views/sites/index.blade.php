@@ -49,7 +49,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     @foreach ($viewData['sites'] as $site)
-                                        <div class="col-12 col-md-6 col-lg-6">
+                                        <div class="col-12 col-md-4 col-lg-4">
                                             <div class="pricing pricing-highlight">
                                             <div class="pricing-title">
                                                 POINT DE VENTE
@@ -64,38 +64,11 @@
                                                         <div class="pricing-item-icon"><i class="far fa-edit"></i></div>
                                                         <div class="pricing-item-label"><a href="{{ route('sites.edit', $site->id)}}"> Modifier le point de vente</a></div>
                                                     </div>
-                                                    
-                                                    <div class="pricing-item">
-                                                        <div class="pricing-item-icon"><i class="fas fa-list-alt"></i></div>
-                                                        <div class="pricing-item-label"><a href="{{ route('stock-boulangerie.index', $site->id)}}"> Liste des produits disponibles</a></div>
-                                                    </div>
-                                                    
-                                                    <div class="pricing-item">
-                                                        <div class="pricing-item-icon"><i class="fas fa-arrow-down"></i></div>
-                                                        <div class="pricing-item-label"><a href="{{ route('mouvement-stock-pf-boulangerie.index', $site->id)}}">Liste des entrées produits</a></div>
-                                                    </div>
-                                                    
-                                                    <div class="pricing-item">
-                                                        <div class="pricing-item-icon"><i class="fas fa-arrow-up"></i></div>
-                                                        <div class="pricing-item-label"><a href="{{ route('ventes.index', $site->id)}}"> Liste des ventes produits</a></div>
-                                                    </div>
-                                                    
-                                                    <div class="pricing-item">
-                                                        <div class="pricing-item-icon"><i class="fas fa-credit-card"></i></div>
-                                                        <div class="pricing-item-label"><a href="{{ route('paiements.detteClients', $site->id)}}"> Liste de dettes clients</a></div>
-                                                    </div>
-                                                    
-                                                    <div class="pricing-item">
-                                                        <div class="pricing-item-icon"><i class="far fa-credit-card"></i></div>
-                                                        <div class="pricing-item-label"><a href="{{ route('paiements.index', $site->id)}}"> Liste de paiements lients</a></div>
-                                                    </div>
-                                                    
-
 
                                                 </div>
                                             </div>
                                             <div class="pricing-cta bg-danger">
-                                                <a href="{{ route('sites.destroy', $site->id)}}"><i class="fas fa-trash"> </i> Supprimer le point de vente</a>
+                                                <a href="{{ route('sites.destroy', $site->id)}}"><i class="fas fa-trash"> </i> Supprimer </a>
                                             </div>
                                             </div>
                                         </div>

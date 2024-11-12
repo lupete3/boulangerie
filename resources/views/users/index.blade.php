@@ -55,7 +55,6 @@
                                             <th>Noms</th>
                                             <th>Email</th>
                                             <th>Rôle</th>
-                                            <th>Point de vente</th>
                                             <th>Date Inscription</th>
                                             <th>Action</th>
                                         </tr>
@@ -68,11 +67,6 @@
                                                 <td> {{ $user->name }} </td>
                                                 <td> {{ $user->email }} </td>
                                                 <td class="{{ ($user->role == 'admin' ? 'text-primary' : '') }}"> {{ $user->role }} </td>
-                                                <td>@if ($user->site == null)
-                                                    
-                                                @else
-                                                    {{ $user->site->nom }}
-                                                @endif</td>
                                                 <td> {{ $user->created_at }} </td>
                                                 
                                                 <td>

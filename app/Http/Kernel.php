@@ -64,6 +64,11 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'user-access' => \App\Http\Middleware\UserAccess::class,
+
+        'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        'chef_distribution' => \App\Http\Middleware\ChefDistributionMiddleware::class,
+        'chef_depot' => \App\Http\Middleware\ChefDepotMiddleware::class,
+        'chef_production' => \App\Http\Middleware\ChefProductionMiddleware::class,
+        'guichetier' => \App\Http\Middleware\GuichetierMiddleware::class,
     ];
 }
