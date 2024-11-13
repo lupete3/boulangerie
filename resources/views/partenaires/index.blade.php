@@ -43,7 +43,7 @@
                             <div class="card-header">
                                 <h4>{{ $viewData['title'] }} </h4>
                                 <div class="card-header-action">
-                                    <a href="{{ route('partenaires.create')}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i> Ajouter psrtenire</a>
+                                    <a href="{{ route('partenaires.create')}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i> Ajouter </a>
                                 </div>   
                             </div>
                             <div class="card-body">

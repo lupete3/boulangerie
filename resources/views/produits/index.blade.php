@@ -1,5 +1,11 @@
 @extends('layouts.backend')
 
+<style>
+    table tr{
+        font-size: 12px;
+    }
+</style>
+
 @section('content')
 
     <!-- Main Content -->
@@ -42,7 +48,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped" id="table-1">
+                                    <table class="table table-bordered table-striped table-sm" id="table-1">
                                         <thead>                                 
                                             <tr>
                                                 <th>#</th>

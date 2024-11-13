@@ -211,17 +211,15 @@
                         <span>Rapports</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="nav-link" href="{{ route('rapports.stockMpMaison')}}">- Stock MP Dépôt</a></li>
-                        <li><a class="nav-link" href="{{ route('rapports.stockMpUsine')}}">- Stock MP Usine</a></li>
-                        <li><a class="nav-link" href="{{ route('rapports.stockPf')}}">- Stock Produits Finis</a></li>
-                        <li><a class="nav-link" href="{{ route('rapports.stockBoulangerie',['site' => 'all'])}}">- Stock Point de vente</a></li>
-                        <li><a class="nav-link" href="{{route('rapports.entreeStockMpAll')}}">- Achats MP</a></li>
-                        <li><a class="nav-link" href="{{route('rapports.productionAll')}}">- Fiche Productions</a></li>
-                        <li><a class="nav-link" href="{{route('rapports.syntheseAll')}}">- Fiche Synthese</a></li>
-                        <li><a class="nav-link" href="{{route('rapports.venteAll')}}">- Fiche Ventes</a></li>
-                        <li><a class="nav-link" href="{{route('rapports.dettesAll')}}">- Fiche Dettes Clients</a></li>
-                        <li><a class="nav-link" href="{{route('rapports.paiementsAll')}}">- Fiche Paiements Clients</a></li>
-                        <li><a class="nav-link" href="{{route('rapports.depenseAll')}}">- Fiche Dépenses</a></li>
+                        <li><a class="nav-link" href="{{ route('rapports.renconciliationAdmin')}}">- Reconciliation</a></li>
+                        <li><a class="nav-link" href="{{route('rapports.venteAdmin')}}">- Fiche Ventes</a></li>
+                        <li><a class="nav-link" href="{{ route('rapports.produitAdmin')}}">- Fiche Produits</a></li>
+                        <li><a class="nav-link" href="{{ route('rapports.commandeAdmin')}}">- Fiche Commande </a></li>
+                        <li><a class="nav-link" href="{{ route('rapports.productionAdmin')}}">- Fiche Production</a></li>
+                        <li><a class="nav-link" href="{{ route('rapports.depotAdmin')}}">- Fiche Entrée Dépôt</a></li>
+                        <li><a class="nav-link" href="{{ route('rapports.distributionAdmin')}}">- Fiche Distribution</a></li>
+
+                       
                     </ul>
                 </li>
 
@@ -416,7 +414,7 @@
 
       <footer class="main-footer valider">
         <div class="footer-left">
-          Copyright &copy; {{ date('Y') }} <div class="bullet"></div> <a href="pdevtuto.com" target="__blank">Boulangerie Pqin d'Or</a>
+          Copyright &copy; {{ date('Y') }} <div class="bullet"></div> <a href="https://pdevtuto.com" target="__blank">Boulangerie Pain d'Or</a>
         </div>
         <div class="footer-right">
 

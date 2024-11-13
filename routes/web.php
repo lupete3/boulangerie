@@ -14,6 +14,7 @@ use App\Http\Controllers\OperationGuichetController;
 use App\Http\Controllers\PartenaireController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\RapportsController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\SyntheseController;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,16 @@ Route::middleware(['auth', 'admin'])->group(function() {
     Route::get('/operation_guichets/admin', [OperationGuichetController::class, 'index'])->name('operation_guichets.indexAdmin');
 
     Route::resource('/syntheses', SyntheseController::class);
+
+
+    //Génération des rapports
+    Route::get('/rapports_reconciliation', [RapportsController::class, 'renconciliationAdmin'])->name('rapports.renconciliationAdmin');
+    Route::get('/rapports_ventes_admin', [RapportsController::class, 'venteAdmin'])->name('rapports.venteAdmin');
+    Route::get('/rapports_produits_admin', [RapportsController::class, 'produits'])->name('rapports.produitAdmin');
+    Route::get('/rapports_commandes_admin', [RapportsController::class, 'commande'])->name('rapports.commandeAdmin');
+    Route::get('/rapports_productions_admin', [RapportsController::class, 'production'])->name('rapports.productionAdmin');
+    Route::get('/rapports_depot_admin', [RapportsController::class, 'depot'])->name('rapports.depotAdmin');
+    Route::get('/rapports_distribution_admin', [RapportsController::class, 'distribution'])->name('rapports.distributionAdmin');
 
     Route::get('/utilisateurs', [DashboardController::class, 'usersIndex'])->name('dashboard.usersIndex');
     Route::get('/utilisateurs/create', [DashboardController::class, 'usersCreate'])->name('dashboard.usersCreate');

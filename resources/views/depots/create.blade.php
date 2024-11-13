@@ -52,7 +52,7 @@
                             <thead>
                                 <tr>
                                     <th>Produit</th>
-                                    <th>Quantité Produite</th>
+                                    <th>Quantité Reçue</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,7 +60,7 @@
                                     <tr>
                                         <td>{{ $produit->nom }}</td>
                                         <td>
-                                            <input type="number" step="0.01" name="quantities[{{ $produit->id }}]" class="form-control" placeholder="Entrez la quantité produite" min="0">
+                                            <input type="number" step="0.01" name="quantities[{{ $produit->id }}]" class="form-control" placeholder="Entrez la quantité reçue" min="0">
                                         </td>
                                     </tr>
                                 @endforeach

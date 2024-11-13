@@ -67,7 +67,7 @@
                                             <td>
 
                                                 @forelse ($distributionsSites[$produit->id] ?? [] as $distributionSite)
-                                                    <span>{{ $distributionSite->site->nom }} : {{ $distributionSite->quantity }} </span> <br>
+                                                    <span>{{ $distributionSite->site->nom }} : <b>{{ $distributionSite->quantity }}</b> </span> <br>
                                                 @empty
                                                     <span>Aucune distribution</span>
                                                 @endforelse
@@ -77,7 +77,7 @@
                                             <!-- Détails des Partenaires -->
                                             <td>
                                                 @forelse ($distributionsPartenaires[$produit->id] ?? [] as $distributionPartenaire)
-                                                    <span>{{ $distributionPartenaire->partenaire->nom }} : {{ $distributionPartenaire->quantity }} </span><br>
+                                                    <span>{{ $distributionPartenaire->partenaire->nom }} : <b>{{ $distributionPartenaire->quantity }}</b> </span><br>
                                                 @empty
                                                     <span>Aucune distribution</span>
                                                 @endforelse

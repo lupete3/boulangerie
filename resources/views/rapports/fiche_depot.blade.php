@@ -23,7 +23,7 @@
 
         <div class="section-body ">
            <!-- Formulaire de filtrage par date -->
-           <form method="GET" action="{{ route('rapports.productionAdmin') }}" id="filterForm">
+           <form method="GET" action="{{ route('rapports.depotAdmin') }}" id="filterForm" class="valider">
                 <div class="form-group row">
                     <label for="date" class="col-sm-2 col-form-label">Date :</label>
                     <div class="col-sm-4">
@@ -36,7 +36,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <center>
                         <p style="font-weight:bold; font-family:Century Gothic; font-size:1.6em;">
-                            Fiche Production du {{ \Carbon\Carbon::parse($selectedDate)->format('d/m/Y') }}
+                            Fiche Entrée dépôt du {{ \Carbon\Carbon::parse($selectedDate)->format('d/m/Y') }}
                         </p>
                     </center>
                 </div>
@@ -48,29 +48,24 @@
                     <table class="table table-bordered table-striped table-sm" style="font-family:Century Gothic; font-size:0.7em;">
                         <thead>
                             <tr>
+                                <th>Categorie</th>
                                 <th>Produit</th>
-                                <th>Quantité Demandée (kg)</th>
-                                <th>Quantité Demandée </th>
-                                <th>Quantité Produite </th>
-                                <th>Variation </th>
+                                <th>Quantité Stockée</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($productions as $produit)
-                            <tr>
-                                <td>{{ $produit->nom }}</td>
-                                <td>{{ $produit->quantity_kg_demande ?? 0 }} kg</td>
-                                <td>{{ $produit->quantity_demande ?? 0 }}</td>
-                                <td>{{ $produit->quantity_produced ?? 0 }}</td>
-                                <td class="@if (($produit->quantity_produced - $produit->quantity_demande) > 0)
-                                    text-primary 
-                                    @elseif(($produit->quantity_produced - $produit->quantity_demande) < 0)
-                                        text-danger
-                                    @else
-                                        text-black
-                                    @endif ">{{ $produit->quantity_produced - $produit->quantity_demande ?? 0 }}
-                                </td>
-                            </tr>
+                            @foreach ($categories as $category)
+                                
+                                @foreach ($category->produits as $produit)
+                                    <tr>
+                                        @if($loop->first)
+                                            <td rowspan="{{ $category->produits->count() }}"><b>{{ $category->name }}</b></td>
+                                        @endif
+                                        <td>{{ $produit->nom }}</td>
+                                        <td>{{ $produit->quantity_produite ?? 0 }}</td>
+                                    </tr>
+                                @endforeach
+
                             @endforeach
                         </tbody>
                     </table>

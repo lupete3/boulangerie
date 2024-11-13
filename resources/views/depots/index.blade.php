@@ -63,7 +63,7 @@
                         <thead>
                             <tr>
                                 <th>Produit</th>
-                                <th>Quantité Produite</th>
+                                <th>Quantité Reçue</th>
                             </tr>
                         </thead>
                         <tbody>

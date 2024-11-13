@@ -58,7 +58,7 @@
                                             <th>Quantité Restante</th>
                                             <th>Quantité Abîmée</th>
                                             <th>Quantité Consommée</th>
-                                            <th>Quantité Partie en Dette</th>
+                                            <th>Montant Parti en Dette</th>
                                         </tr>
                                     </thead>
                                     <tbody>

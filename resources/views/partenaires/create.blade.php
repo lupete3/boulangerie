@@ -43,7 +43,7 @@
                           <div class="card-header">
                             <h4>{{$viewData['title']}}</h4>
                             <div class="card-header-action">
-                                <a href="{{ route('partenaires.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher les Points de vente</a>
+                                <a href="{{ route('partenaires.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher </a>
                             </div> 
                           </div>
                           <div class="card-body">

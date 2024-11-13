@@ -33,7 +33,7 @@
         <div class="section-body">
             <div class="card table-responsive">
                 <div class="p-2">
-                    <h6>Synthèse des Produits par Catégorie</h6>
+                    <h6>Synthèse de réconsciliation</h6>
                 </div>
                 <table class="table table-bordered table-striped table-sm" id="table">
                     <thead>
@@ -66,7 +66,10 @@
                         @foreach($categories as $category)
                             @foreach($category->produits as $produit)
                                 <tr>
-                                    <td>{{ $category->name }}</td>
+                                    @if ($loop->first)
+                                        <td rowspan="{{ $category->produits->count() }}"><b>{{ $category->name }}</b></td>
+                                    @endif
+                                    
                                     <td>{{ $produit->nom }}</td>
                                     <td>{{ number_format($produit->kg_par_sac, 2) }}</td>
                                     <td>{{ number_format($produit->qte_par_sac, 2) }}</td>
@@ -92,7 +95,7 @@
                                     <td>{{ number_format($produit->distribution, 2) }}</td>
                                     <td>{{ number_format($produit->perte_depot, 2) }}</td>
                                     <td>{{ number_format($produit->bon_produit, 2) }}</td>
-                                    <td>{{ number_format($produit->kg_reel, 2) }}</td>
+                                    <td>{{ number_format($produit->kg_reel , 2) }}</td>
                                     <td>{{ number_format($produit->prix, 0) }} Fc</td>
                                     <td>{{ number_format($produit->perte_production_valorisee, 0) }} Fc</td>
                                 </tr>
@@ -102,18 +105,18 @@
                     <tfoot>
                         <tr>
                             <td colspan="5">Total</td>
-                            <td>{{ number_format($total_kg_demanded, 2) }}Kg</td>
-                            <td>{{ number_format($total_kg_par_sac, 2) }}Sacs</td>
+                            <td><b>{{ number_format($total_kg_demanded, 2) }}Kg</b></td>
+                            <td><b>{{ number_format($total_kg_par_sac, 2) }}Sacs</b></td>
                             <td colspan="@php echo count($sites) + count($partenaires) + 6 @endphp"></td>
-                            <td>{{ number_format($total_kg_reel, 2) }}Kg</td>
-                            <td>{{ number_format($total_prix, 2) }}Sacs</td>
-                            <td>{{ number_format($total_perte_production_valorisee, 0) }}Fc</td>
+                            <td><b>{{ number_format($total_kg_reel, 2) }}Kg</b></td>
+                            <td><b>{{ number_format($total_prix, 2) }}Sacs</b></td>
+                            <td><b>{{ number_format($total_perte_production_valorisee, 0) }}Fc</b></td>
                         </tr>
                         @foreach($category_kg_reels as $category_name => $kg_reel_total)
                             <tr>
                                 <td colspan="@php echo count($sites) + count($partenaires) + 13 @endphp">{{ $category_name }}</td>
-                                <td>{{ number_format($kg_reel_total, 2) }}Kg</td>
-                                <td>{{ number_format($kg_reel_total / 25, 2) }}Sacs</td>
+                                <td><b>{{ number_format($kg_reel_total, 2) }}Kg</b></td>
+                                <td><b>{{ number_format($kg_reel_total / 25, 2) }}Sacs</b></td>
                             </tr>
                         @endforeach
                     </tfoot>
