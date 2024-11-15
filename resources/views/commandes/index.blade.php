@@ -8,14 +8,14 @@
 
 @section('content')
     <div class="main-content">
-        <section class="section">
-            <div class="section-header">
+        <section class="section" style="margin:-15px">
+            {{-- <div class="section-header">
                 <h1>Commandes du {{ $selectedDate }}</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de Bord</a></div>
                     <div class="breadcrumb-item">Commandes</div>
                 </div>
-            </div>
+            </div> --}}
 
             <div class="section-body">
                 <div class="row">
@@ -38,15 +38,7 @@
                             </h6>
                             </div>
                         @endif
-                        <!-- Formulaire de sélection de date -->
-                        <form method="GET" action="{{ route('commandes.index') }}" id="filterForm">
-                            <div class="form-group row">
-                                <label for="date" class="col-sm-2 col-form-label">Date :</label>
-                                <div class="col-sm-4">
-                                    <input type="date" name="date" id="date" value="{{ $selectedDate }}" class="form-control" onchange="document.getElementById('filterForm').submit();">
-                                </div>
-                            </div>
-                        </form>
+                        
 
                         <!-- Tableau des commandes -->
                         <div class="card">
@@ -58,6 +50,15 @@
                                 </div>
                             </div>
                             <div class="card-body">
+                                <!-- Formulaire de sélection de date -->
+                                <form method="GET" action="{{ route('commandes.index') }}" id="filterForm">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-sm-2 col-form-label">Date :</label>
+                                        <div class="col-sm-4">
+                                            <input type="date" name="date" id="date" value="{{ $selectedDate }}" class="form-control form-control-sm" onchange="document.getElementById('filterForm').submit();">
+                                        </div>
+                                    </div>
+                                </form>
                                 <table class="table table-bordered table-striped table-sm" id="table">
                                     <thead>
                                         <tr>

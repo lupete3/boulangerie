@@ -9,29 +9,53 @@
 @section('content')
 
 <div class="main-content">
-    <section class="section">
-        <div class="section-header">
+    <section class="section" style="margin:-15px">
+        {{-- <div class="section-header">
             <h1>Récapitulatif des Distributions</h1>   
-        </div>
+        </div> --}}
 
         <div class="section-body">
-            <!-- Filtre par date -->
-            <form action="{{ route('distributions.index') }}" method="GET" class="mb-4">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="date">Filtrer par date :</label>
-                        <input type="date" id="date" name="date" class="form-control" value="{{ $date }}" onchange="this.form.submit()">
-                    </div>
-                </div>
-            </form>
+            
 
             <div class="row">
                 <div class="col-12">
-                    <div class="card" >
-                        <div class="p-2">
-                            <a href="{{ route('distributions.create')}}" class="btn btn-icon icon-left btn-success float-right"><i class="fas fa-plus"></i> Ajouter </a>
+                    @if($errors->any())
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                {{ $error }}
+                            </div>
+                        @endforeach
+                    @endif
+                    @if(Session::has('success'))
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{ Session::get('success') }}
                         </div>
-                        <div class="card-body" style="padding:-0px">
+                    @endif
+                    <div class="card" >
+                        <div class="card-header">
+                            <h4>Distribution du {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}</h4>
+                            
+                            <div class="card-header-action">
+                                <a href="{{ route('distributions.create')}}" class="btn btn-icon icon-left btn-success"><i
+                                        class="fas fa-plus"></i> Ajouter </a>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding:10px">
+                            <!-- Filtre par date -->
+                            <form action="{{ route('distributions.index') }}" method="GET" class="mb-4">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="date">Filtrer par date :</label>
+                                        <input type="date" id="date" name="date" class="form-control" value="{{ $date }}" onchange="this.form.submit()">
+                                    </div>
+                                </div>
+                            </form>
                             <table class="table table-bordered table-striped table-sm">
                                 <thead>
                                     <tr>

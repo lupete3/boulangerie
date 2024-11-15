@@ -8,27 +8,13 @@
 
 @section('content')
 <div class="main-content">
-    <section class="section">
-        <div class="section-header">
-            <h1>Production</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Tableau de Bord</a></div>
-                <div class="breadcrumb-item">Productions</div>
-            </div>
-        </div>
+    <section class="section" style="margin:-20px">
+
 
         <div class="section-body">
-            <!-- Formulaire de filtrage par date -->
-            <form method="GET" action="{{ route('productions.index') }}" id="filterForm">
-                <div class="form-group row">
-                    <label for="date" class="col-sm-2 col-form-label">Date :</label>
-                    <div class="col-sm-4">
-                        <input type="date" name="date" id="date" value="{{ $selectedDate }}" class="form-control" onchange="document.getElementById('filterForm').submit();">
-                    </div>
-                </div>
-            </form>
 
             <div class="card">
+                
                 <div class="card-header">
                     <h4>Production du {{ \Carbon\Carbon::parse($selectedDate)->format('d/m/Y') }}</h4>
 
@@ -37,6 +23,15 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <!-- Formulaire de filtrage par date -->
+                    <form method="GET" action="{{ route('productions.index') }}" id="filterForm">
+                        <div class="form-group row">
+                            <label for="date" class="col-sm-2 col-form-label">Filtrer par Date :</label>
+                            <div class="col-sm-4">
+                                <input type="date" name="date" id="date" value="{{ $selectedDate }}" class="form-control" onchange="document.getElementById('filterForm').submit();">
+                            </div>
+                        </div>
+                    </form>
                     <table class="table table-bordered table-striped table-sm" id="table">
                         <thead>
                             <tr>

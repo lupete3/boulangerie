@@ -43,6 +43,7 @@
 
   gtag('config', 'UA-94034622-3');
 </script>
+
 <!-- /END GA --></head>
 
 
@@ -219,7 +220,7 @@
                         <li><a class="nav-link" href="{{ route('rapports.depotAdmin')}}">- Fiche Entrée Dépôt</a></li>
                         <li><a class="nav-link" href="{{ route('rapports.distributionAdmin')}}">- Fiche Distribution</a></li>
 
-                       
+
                     </ul>
                 </li>
 

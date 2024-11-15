@@ -4,7 +4,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12 align-center">
                         @if($errors->any())
@@ -35,7 +35,7 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                       <div class="card ">
                         <form action="{{ route('categories.store') }}" method="POST">
@@ -44,12 +44,12 @@
                             <h4>{{$viewData['title']}}</h4>
                             <div class="card-header-action">
                                 <a href="{{ route('categories.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Liste des catégories</a>
-                            </div> 
+                            </div>
                           </div>
                           <div class="card-body">
                             <div class="form-group">
                                 <label for="name">Nom de la catégorie</label>
-                                <input type="text" name="name" class="form-control" required>
+                                <input type="text" name="name" class="form-control form-control-sm" required>
                             </div>
                           </div>
                           <div class="card-footer text-right">

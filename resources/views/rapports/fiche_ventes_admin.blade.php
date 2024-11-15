@@ -293,8 +293,8 @@
                     <tbody>
                         @php
                             // Calcul du manquant et de l'excédent
-                            $totalManquant = max(0, $totalVendu - $totalMontantPhysique);
-                            $totalExcedent = max(0, $totalMontantPhysique - $totalVendu);
+                            $totalManquant = max(0, $totalVendu - $totalMontantPhysique - $totalMontantChange);
+                            $totalExcedent = max(0, $totalMontantPhysique - $totalVendu - $totalMontantChange);
                         @endphp
                         <tr>
                             <td>{{ number_format($totalPrixTot,0) }}Fc</td>

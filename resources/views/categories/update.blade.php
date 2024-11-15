@@ -4,7 +4,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12 align-center">
                         @if($errors->any())
@@ -35,22 +35,22 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                       <div class="card ">
                         <form method="post" action="{{ route('categories.update',$category->id)}}" enctype="multipart/form-data">
-                          @method('PUT')  
+                          @method('PUT')
                           @csrf
                           <div class="card-header">
                             <h4>{{$viewData['title']}}</h4>
                             <div class="card-header-action">
                                 <a href="{{ route('categories.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher les catégories</a>
-                            </div> 
+                            </div>
                           </div>
                           <div class="card-body">
                             <div class="form-group">
                               <label>Nom catégorie*</label>
-                              <input type="text" class="form-control" name="name" value="{{ $category->name }}" required="">
+                              <input type="text" class="form-control form-control-sm" name="name" value="{{ $category->name }}" required="">
                             </div>
                           </div>
                           <div class="card-footer text-right">
