@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cloture;
+use App\Models\Depense;
 use App\Models\Site;
 use App\Models\StockBoulangerie;
 use App\Models\StockPf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StockBoulangerieController extends Controller
@@ -25,6 +28,58 @@ class StockBoulangerieController extends Controller
         $viewData['produits_finis'] = StockPf::orderBy('designation', 'ASC')->get();
 
         return view('stock_boulangerie.index',compact('site'))->with('viewData', $viewData);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function inventaire(Site $site)
+    {
+        //Liste des produits
+
+        $viewData = [];
+
+        $viewData['title'] = 'Liste des produits du point de vente '.$site->nom;
+
+        $date = Carbon::toDay()->toDateString();
+
+        $viewData['produits'] = StockBoulangerie::where('site_id', $site->id)->where('updated_at','<',$date)->with('stockProduitFinis')->get();
+
+        $viewData['inventaires'] = Cloture::where('site_id', $site->id)
+            ->with('stockProduitFinis')
+            ->with('site')
+            ->with('user')
+            ->whereDate('created_at', Carbon::toDay())
+            ->get();
+
+        $viewData['produits_finis'] = StockPf::orderBy('designation', 'ASC')->get();
+
+        $viewData['depenses'] = Depense::whereDate('created_at', Carbon::toDay())->sum('montant');
+
+        return view('stock_boulangerie.inventaire',compact('site'))->with('viewData', $viewData);
+    }
+    /**
+     * Display a listing of the resource.
+     */
+    public function cloture(Site $site)
+    {
+        //Liste des produits
+
+        $viewData = [];
+
+        $viewData['title'] = 'Inventaire du point de vente '.$site->nom;
+
+        $hier = Carbon::yesterday()->toDateString();
+
+        $viewData['inventaires'] = Cloture::where('site_id', $site->id)
+            ->with('stockProduitFinis')
+            ->with('site')
+            ->with('user')
+            ->latest()->get();
+
+        $viewData['produits_finis'] = StockPf::orderBy('designation', 'ASC')->get();
+
+        return view('stock_boulangerie.cloture',compact('site'))->with('viewData', $viewData);
     }
 
     /**

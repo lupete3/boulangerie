@@ -57,7 +57,7 @@
                           <div class="card-body">
                             <div class="form-group">
                               <label>Choisir une matière première*</label>
-                              <select name="matiere_premiere_id" class="form-control selectpicker" id="matiere_premiere_id" data-show-subtext="true" data-live-search="true" required>
+                              <select name="matiere_premiere_id" class="form-control select2" id="matiere_premiere_id" data-show-subtext="true" data-live-search="true" required>
 
                                 @foreach ($viewData['matieres'] as $matiere)
 

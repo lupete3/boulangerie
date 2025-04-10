@@ -11,17 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clotures', function (Blueprint $table) {
+        Schema::create('syntheses', function (Blueprint $table) {
             $table->id();
-            $table->decimal('qnte_entree', 30);
-            $table->decimal('qnte_sortie', 30);
+            $table->decimal('vente', 30);
             $table->decimal('avarie', 30);
+            $table->decimal('depense', 30);
             $table->decimal('consommation', 30);
-            $table->decimal('prix', 30);
-            $table->decimal('solde', 30);
-            $table->foreignId('stock_pf_id');
+            $table->decimal('dette', 30);
+            $table->decimal('change', 30);
+            $table->decimal('total', 30);
+            $table->decimal('espece', 30);
+            $table->decimal('manquant', 30);
             $table->foreignId('site_id')->references('id')->on('sites')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            
             $table->timestamps();
         });
     }
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clotures');
+        Schema::dropIfExists('syntheses');
     }
 };

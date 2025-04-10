@@ -49,7 +49,7 @@
                           <div class="card-body">
                             <div class="form-group">
                               <label>Rôle de l'utilisateur*</label>
-                              <select name="role" class="form-control selectpicker" id="role" onchange="afficherCacherZone()" data-show-subtext="true" data-live-search="true" required>
+                              <select name="role" class="form-control select2" id="role" onchange="afficherCacherZone()" data-show-subtext="true" data-live-search="true" required>
 
                                 <option @selected(old('role', 'admin') == $user->role) value="admin" >Administrateur</option>
                                 <option @selected(old('role', 'geran_depot_maison') == $user->role) value="geran_depot_maison" >Gérant Dépôt Maison</option>
@@ -61,7 +61,7 @@
                             </div>
                             <div class="form-group" id="site" style="display: none">
                               <label>Point de vente</label>
-                              <select name="site_id" class="form-control selectpicker" id="site_id" data-show-subtext="true" data-live-search="true" required>
+                              <select name="site_id" class="form-control select2" id="site_id" data-show-subtext="true" data-live-search="true" required>
 
                                 @foreach ($viewData['sites'] as $site)
 

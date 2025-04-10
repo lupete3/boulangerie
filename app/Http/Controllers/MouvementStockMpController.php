@@ -22,7 +22,7 @@ class MouvementStockMpController extends Controller
         $viewData['sorties'] = MouvementStockMp::orderBy('id', 'DESC')->with('stockMaison')->get();
 
         return view('moUvements-mp.index')->with('viewData', $viewData);
-        
+
     }
     /**
      * Display a listing of the resource.
@@ -37,7 +37,7 @@ class MouvementStockMpController extends Controller
         $viewData['entrees'] = MouvementStockMp::orderBy('id', 'DESC')->with('stockUsine')->get();
 
         return view('moUvements-mp.indexUsine')->with('viewData', $viewData);
-        
+
     }
 
     /**
@@ -83,7 +83,7 @@ class MouvementStockMpController extends Controller
             $idStockUsine = $stockUsin->id;
             $soldeUsine = $stockUsin->solde;
         }
-        
+
         $soldeMaison = $stockMaison->solde;
 
         if ($soldeMaison < $request->quantite) {
@@ -93,7 +93,7 @@ class MouvementStockMpController extends Controller
         $stockMaison->solde = $soldeMaison - $request->quantite;
 
         $stockMaison->save();
-        
+
         $mouvementStockMp = MouvementStockMp::create([
             'id_stock_mp' => $request->matiere_premiere_id,
             'quantite' => $request->quantite,
@@ -102,7 +102,7 @@ class MouvementStockMpController extends Controller
         ]);
 
         if ($mouvementStockMp) {
-            
+
             $stockUsine = StockUsine::find($idStockUsine);
 
             $stockUsine->solde = $stockUsine->solde + $request->quantite;
@@ -159,7 +159,7 @@ class MouvementStockMpController extends Controller
         $stockMaison = StockMaison::find($request->matiere_premiere_id);
 
         $qnteInitMvt = $mouvementStockMp->quantite;
-        
+
         $soldeMaison = $stockMaison->solde;
 
         $stockMaison->solde = $soldeMaison + $mouvementStockMp->quantite;
@@ -184,7 +184,7 @@ class MouvementStockMpController extends Controller
         $stockUsine->solde = $stockUsine->solde + $request->quantite;
 
         $stockUsine->save();
-        
+
         $mouvementStockMp->update([
             'id_stock_mp' => $request->matiere_premiere_id,
             'quantite' => $request->quantite,
@@ -204,7 +204,7 @@ class MouvementStockMpController extends Controller
         //Sauvegarde dans la base de donnees
 
         $stockMaison = StockMaison::find($mouvementStockMp->id_stock_mp);
-        
+
         $soldeMaison = $stockMaison->solde;
 
         $qnteInitMvt = $mouvementStockMp->quantite;
@@ -212,8 +212,8 @@ class MouvementStockMpController extends Controller
         $stockMaison->solde = $soldeMaison + $qnteInitMvt;
 
         $stockMaison->save();
-        
-        
+
+
         $stockUsine = StockUsine::where('id_stock_maisons', $mouvementStockMp->id_stock_mp)->first();
 
         $newSolde = ($stockUsine->solde - $qnteInitMvt);

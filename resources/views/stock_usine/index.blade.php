@@ -6,7 +6,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -18,7 +18,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12">
                         @if($errors->any())
@@ -37,7 +37,7 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                         <div class="card">
                             <div class="card-header">
@@ -46,20 +46,22 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">
-                                    <thead>                                 
+                                    <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Matières premières</th>
                                             <th>Prix d'achat</th>
                                             <th>Solde</th>
                                             <th>Valeur du stock</th>
+                                            <th>Qté Utilisée par sac de 25kg </th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
                                             $tot = 0;
                                         @endphp
-                                        @foreach ($viewData['matiresPremieres'] as $matiresPremiere) 
+                                        @foreach ($viewData['matiresPremieres'] as $matiresPremiere)
                                             @php
                                                 $tot+=($matiresPremiere->stockMaison->prix * $matiresPremiere->solde)
                                             @endphp
@@ -70,7 +72,8 @@
                                                 <td> {{ $matiresPremiere->stockMaison->prix }} Fc</td>
                                                 <td> {{ $matiresPremiere->solde }} {{ $matiresPremiere->stockMaison->unite }}</td>
                                                 <td> {{ $matiresPremiere->stockMaison->prix * $matiresPremiere->solde }} Fc</td>
-                                                
+                                                <td> {{ $matiresPremiere->stockMaison->configuration }}{{ $matiresPremiere->stockMaison->unite }}</td>
+
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -16,6 +16,7 @@ class StockMaison extends Model
         'unite',
         'prix',
         'solde',
+        'configuration',
     ];
 
     public function achatStockMaisons(): HasMany

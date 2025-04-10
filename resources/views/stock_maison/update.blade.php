@@ -4,7 +4,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12 align-center">
                         @if($errors->any())
@@ -35,17 +35,17 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                       <div class="card ">
                         <form method="post" action="{{ route('stock-maison.update',$stockMaison->id)}}" enctype="multipart/form-data">
-                          @method('PUT')  
+                          @method('PUT')
                           @csrf
                           <div class="card-header">
                             <h4>{{$viewData['title']}}</h4>
                             <div class="card-header-action">
                                 <a href="{{ route('stock-maison.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher les matières premières</a>
-                            </div> 
+                            </div>
                           </div>
                           <div class="card-body">
                             <div class="form-group">
@@ -54,7 +54,7 @@
                             </div>
                             <div class="form-group">
                               <label>Unité de mesure*</label>
-                              <input type="text" class="form-control" name="designation" value="{{ $stockMaison->unite }}" required="">
+                              <input type="text" class="form-control" name="unite" value="{{ $stockMaison->unite }}" required="">
                             </div>
                             <div class="form-group">
                               <label>Prix d'achat</label>
@@ -64,6 +64,10 @@
                               <label>Solde disponible</label>
                               <input type="text" class="form-control" name="solde" value="{{ $stockMaison->solde }}" >
                             </div>
+                            <div class="form-group">
+                                <label>Quantité de {{ $stockMaison->unite }} par sac de 25kg</label>
+                                <input type="text" class="form-control" name="configuration" value="{{ $stockMaison->configuration }}" placeholder="" >
+                              </div>
                           </div>
                           <div class="card-footer text-right">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Mettre à jour </button>

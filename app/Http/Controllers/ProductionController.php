@@ -22,7 +22,7 @@ class ProductionController extends Controller
 
         $viewData['title'] = 'Liste des productions ';
 
-        $viewData['productions'] = Production::orderBy('id', 'DESC')->with('produitFinis')->get();
+        $viewData['productions'] = Production::orderBy('created_at', 'DESC')->with(['produitFinis','compositions'])->get();
 
         return view('productions.index')->with('viewData', $viewData);
     }
@@ -44,56 +44,61 @@ class ProductionController extends Controller
 
         return view('productions.create')->with('viewData', $viewData);
     }
-    
+
 
     public function addToCart(Request $request)
     {
-        // Récupérer l'ID du produit depuis la requête
+        // Validation des données reçues
         $request->validate([
-            'article_id' => 'required|exists:stock_usines,id',
-            'quantite' => 'required|integer|min:1'
+            'quantites' => 'required|array',
+            'quantites.*' => 'nullable|numeric|min:0', // Les quantités doivent être numériques et positives
         ]);
 
-        $productId = $request->article_id;
+        // Récupérer les quantités saisies depuis la requête
+        $quantites = $request->quantites;
 
-        // Rechercher le produit correspondant dans la base de données
-        $products = StockUsine::where('id', $productId)->with('stockMaison')->get();
-
-        foreach ($products as $product) {
-            $id = $product->id;
-            $prix = $product->stockMaison->prix;
-            $solde = $product->solde;
-        }
-
-        // Récupérer le panier de la session ou créer un nouveau panier
+        // Initialiser le panier ou récupérer celui existant
         $cart = session()->get('cart', []);
 
-        if ($solde < $request->quantite ) {
+        // Parcourir les quantités saisies
+        foreach ($quantites as $productId => $quantity) {
+            // Ignorer les quantités nulles ou non définies
+            if ($quantity <= 0) {
+                continue;
+            }
 
-            return redirect()->back()->with('error','Cette quantité est supérieur au solde actuel');
-        }
+            // Rechercher la matière première correspondante dans la base de données
+            $product = StockUsine::with('stockMaison')->find($productId);
 
-        // Vérifier si le produit est déjà dans le panier
-        if (isset($cart[$id])) {
-            // Augmenter la quantité si le produit est déjà dans le panier
-            $cart[$id]['quantity'] += $request->quantite;
+            if (!$product) {
+                return redirect()->back()->with('error', 'Une matière première sélectionnée est invalide.');
+            }
 
-        } else {
-            // Ajouter le produit au panier
-            $cart[$id] = [
-                'id' => $id,
-                'name' => $product->stockMaison->designation,
-                'unite' => $product->stockMaison->unite,
-                'quantity' => $request->quantite,
-                'price' => $prix,
-            ];
+            // Vérifier si la quantité saisie dépasse le solde disponible
+            if ($product->solde < $quantity) {
+                return redirect()->back()->with('error', "La quantité saisie pour {$product->stockMaison->designation} dépasse le solde disponible.");
+            }
+
+            // Ajouter ou mettre à jour la matière première dans le panier
+            if (isset($cart[$productId])) {
+                // Augmenter la quantité si la matière première est déjà dans le panier
+                $cart[$productId]['quantity'] += $quantity;
+            } else {
+                // Ajouter la matière première au panier
+                $cart[$productId] = [
+                    'id' => $productId,
+                    'name' => $product->stockMaison->designation,
+                    'unite' => $product->stockMaison->unite,
+                    'quantity' => $quantity,
+                    'price' => $product->stockMaison->prix,
+                ];
+            }
         }
 
         // Mettre à jour le panier dans la session
         session()->put('cart', $cart);
 
-        return redirect()->route('production.create')->with('success', 'Matière première ajoutée à la composition avec succès.');
-
+        return redirect()->route('production.create')->with('success', 'Les matières premières ont été ajoutées à la composition avec succès.');
     }
 
     /**
@@ -144,7 +149,7 @@ class ProductionController extends Controller
     public function store(Request $request)
     {
         //
-        
+
         $request->validate([
 
             'produit_finis_id' => 'required',
@@ -169,7 +174,7 @@ class ProductionController extends Controller
 
         try {
             //code...
-        
+
 
         $cart = Session::get('cart', []);
 
@@ -214,10 +219,10 @@ class ProductionController extends Controller
 
             Composition::create([
                 'stock_usine_id' => $composition['id'],
-                'designation' => $composition['name'], 
-                'unite' => $composition['unite'], 
-                'quantite' => $composition['quantity'], 
-                'prix' => $composition['price'], 
+                'designation' => $composition['name'],
+                'unite' => $composition['unite'],
+                'quantite' => $composition['quantity'],
+                'prix' => $composition['price'],
                 'production_id' => $newProductionId
 
             ]);
@@ -300,7 +305,7 @@ class ProductionController extends Controller
 
         $solde = $produitFinis->solde;
 
-        $produitFinis->solde = $solde + $production->quantite;
+        $produitFinis->solde = $solde + $request->quantite;
 
         $produitFinis->save();
 
@@ -383,10 +388,10 @@ class ProductionController extends Controller
 
             Composition::create([
                 'stock_usine_id' => $id,
-                'designation' => $designation, 
-                'unite' => $unite, 
-                'quantite' => $request->quantite, 
-                'prix' => $prix, 
+                'designation' => $designation,
+                'unite' => $unite,
+                'quantite' => $request->quantite,
+                'prix' => $prix,
                 'production_id' => $productionId
 
             ]);
@@ -417,8 +422,8 @@ class ProductionController extends Controller
 
         $products->save();
 
-        $composition->delete();  
-        
+        $composition->delete();
+
         $designationList = implode(', ',$productionString);
 
         $production->designation = $designationList;

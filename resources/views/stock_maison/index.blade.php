@@ -6,7 +6,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -18,7 +18,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12">
                         @if($errors->any())
@@ -37,25 +37,26 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                         <div class="card">
                             <div class="card-header">
                                 <h4>{{ $viewData['title'] }} </h4>
                                 <div class="card-header-action">
                                     <a href="{{ route('stock-maison.create')}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i> Ajouter une matière première</a>
-                                </div>   
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">
-                                    <thead>                                 
+                                    <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Matières premières</th>
                                             <th>Prix d'achat</th>
                                             <th>Solde</th>
                                             <th>Valeur du stock</th>
+                                            <th>Qté Utilisée par sac de 25kg </th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -64,7 +65,7 @@
                                             $tot = 0;
                                             $i = 1;
                                         @endphp
-                                        @foreach ($viewData['matiresPremieres'] as $matiresPremiere) 
+                                        @foreach ($viewData['matiresPremieres'] as $matiresPremiere)
                                             @php
                                                 $tot+=($matiresPremiere->prix * $matiresPremiere->solde)
                                             @endphp
@@ -75,20 +76,21 @@
                                                 <td> {{ $matiresPremiere->prix }} </td>
                                                 <td> {{ $matiresPremiere->solde }} ({{ $matiresPremiere->unite }})</td>
                                                 <td> {{ $matiresPremiere->prix * $matiresPremiere->solde }} Fc</td>
-                                                
+                                                <td> {{ $matiresPremiere->configuration }}{{ $matiresPremiere->unite }}</td>
+
                                                 <td>
                                                     <div class="dropdown">
                                                         <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
-                                                        
+
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                          
+
                                                             <a href="{{ route('stock-maison.edit', $matiresPremiere->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Modifier</a>
-                                                          
+
                                                           <form action="{{ route('stock-maison.destroy', $matiresPremiere->id)}}" method="post">
                                                             @csrf
                                                             <button  type="submit" class="dropdown-item has-icon"><i class="fas fa-trash text-danger"></i> Supprimer</button>
                                                           </form>
-                                                          
+
                                                         </div>
                                                     </div>
                                                 </td>

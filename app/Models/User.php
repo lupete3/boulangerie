@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -29,6 +30,16 @@ class User extends Authenticatable
     public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class, 'site_id','id');
+    }
+
+    public function inventaires(): HasMany
+    {
+        return $this->hasMany(Cloture::class);
+    }
+
+    public function syntheses(): HasMany
+    {
+        return $this->hasMany(synthese::class);
     }
 
     /**

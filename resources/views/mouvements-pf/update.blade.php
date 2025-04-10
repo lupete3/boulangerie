@@ -59,7 +59,7 @@
                             <div class="form-group">
                               <label>Choisir produit finis*</label>
                               
-                              <select name="produit_finis_id" class="form-control selectpicker" id="produit_finis_id" data-show-subtext="true" data-live-search="true" required>
+                              <select name="produit_finis_id" class="form-control select2" id="produit_finis_id" data-show-subtext="true" data-live-search="true" required>
 
 
                                 @foreach ($viewData['produits'] as $produit)

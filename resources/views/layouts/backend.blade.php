@@ -8,6 +8,8 @@
   <!-- Bootstrap Select -->
   <link rel="stylesheet" href="{{asset('assets/backend/bootstrap-select/dist/css/bootstrap.min.css ')}}">
   <link rel="stylesheet" href="{{asset('assets/backend/bootstrap-select/dist/css/bootstrap-select.min.css ')}}">
+  <link rel="stylesheet" href="{{asset('assets/backend/modules/select2/dist/css/select2.min.css ')}}">
+
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="{{asset('assets/backend/modules/bootstrap/css/bootstrap.min.css ')}}">
@@ -55,13 +57,13 @@
             <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
           </ul>
           <div class="search-element">
-            
+
             <div class="search-backdrop"></div>
-            
+
           </div>
         </form>
         <ul class="navbar-nav navbar-right">
-          
+
           <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
             <img alt="image" src="{{asset('assets/backend/img/avatar/avatar-1.png ')}}" class="rounded-circle mr-1">
             <div class="d-sm-none d-lg-inline-block">Salut, {{ Auth::user()->name }}</div></a>
@@ -71,7 +73,7 @@
                 <i class="far fa-user"></i> Profile
               </a>
               <div class="dropdown-divider"></div>
-             
+
               <!-- Authentication -->
               <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -87,7 +89,7 @@
         </ul>
       </nav>
       @if (Auth::user()->role == 'admin')
-        
+
         <div class="main-sidebar sidebar-style-2 valider">
           <aside id="sidebar-wrapper">
             <div class="sidebar-brand">
@@ -95,17 +97,17 @@
             </div>
             <ul class="sidebar-menu">
               <li class="menu-header">Tableau de Bord</li>
-              
+
               <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
                 <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a>
-              
+
               </li>
-              
+
               <li class="dropdown @if (request()->routeIs(
                 'sites.index', 'sites.create', 'sites.edit',
                 'stock-boulangerie.index', 'stock-boulangerie.create', 'stock-boulangerie.edit',
-                'mouvement-stock-pf-boulangerie.index', 
+                'mouvement-stock-pf-boulangerie.index',
                 'ventes.index', 'ventes.create', 'ventes.edit',
                 'paiements.index',
                 'paiements.detteClients',
@@ -117,7 +119,7 @@
                   <li><a class="nav-link" href="{{route('sites.index')}}">- Liste points de ventes</a></li>
                 </ul>
               </li>
-              
+
               <li class="dropdown @if (request()->routeIs(
                 'fournisseurs.index', 'fournisseurs.create', 'fournisseurs.edit',
                 'clients.index', 'clients.create', 'clients.edit',
@@ -128,7 +130,7 @@
                   <li><a class="nav-link" href="{{route('fournisseurs.index')}}">- Liste des fournisseurs</a></li>
                 </ul>
               </li>
-              
+
               <li class="dropdown @if (request()->routeIs(
                 'stock-maison.index', 'stock-maison.create', 'stock-maison.edit',
                 'achat-mp.index', 'achat-mp.create', 'achat-mp.edit',
@@ -141,7 +143,7 @@
                   <li><a class="nav-link" href="{{ route('mouvement-stock-mp.index')}}">- Sorties matières premières</a></li>
                 </ul>
               </li>
-              
+
               <li class="dropdown @if (request()->routeIs(
                 'stock-usine.index', 'stock-usine.create', 'stock-usine.edit',
                 'mouvement-stock-mp-usine.index',
@@ -152,7 +154,7 @@
                   <li><a class="nav-link" href="{{ route('mouvement-stock-mp-usine.index')}}">- Entrées matière première</a></li>
                 </ul>
               </li>
-              
+
               <li class="dropdown @if (request()->routeIs(
                 'stock-pf.index', 'stock-pf.create', 'stock-pf.edit',
                 'mouvement-stock-pf-entree.index',
@@ -165,7 +167,7 @@
                   <li><a class="nav-link" href="{{ route('mouvement-stock-pf.index')}}">- Sorties produits finis</a></li>
                 </ul>
               </li>
-              
+
               <li class="dropdown @if (request()->routeIs(
                 'production.index', 'production.create', 'production.edit',
                 )) active @endif " >
@@ -174,20 +176,20 @@
                   <li><a class="nav-link" href="{{route('production.index')}}">- Liste des productions</a></li>
                 </ul>
               </li>
-              
+
               {{-- <li class="dropdown @if (request()->routeIs(
                 'stock-boulangerie.index', 'stock-boulangerie.create', 'stock-boulangerie.edit',
-                'mouvement-stock-pf-boulangerie.index', 
+                'mouvement-stock-pf-boulangerie.index',
                 'ventes.index', 'ventes.create', 'ventes.edit',
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-home"></i> <span>Boulangerie</span></a>
                 <ul class="dropdown-menu">
                   {{-- <li><a class="nav-link" href="{{ route('stock-boulangerie.index') }}">- Liste des produits</a></li>
                   <li><a class="nav-link" href="{{ route('mouvement-stock-pf-boulangerie.index')}}">- Entrées produits </a></li>
-                  <li><a class="nav-link" href="{{ route('ventes.index')}}">- Ventes produits</a></li> 
+                  <li><a class="nav-link" href="{{ route('ventes.index')}}">- Ventes produits</a></li>
                 </ul>
               </li> --}}
-{{--               
+{{--
               <li class="dropdown @if (request()->routeIs(
                 'paiements.index',
                 'paiements.detteClients',
@@ -199,7 +201,7 @@
                   <li><a class="nav-link" href="{{route('paiements.index')}}">- Paiements clients</a></li>
                 </ul>
               </li> --}}
-              
+
               <li class="dropdown @if (request()->routeIs(
                 'depenses.index', 'depenses.create', 'depenses.edit' )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-cash"></i> <span>Dépenses</span></a>
@@ -245,6 +247,7 @@
                 'rapports.paiementsHebdo',
                 'rapports.paiementsAnnuel',
                 'rapports.paiementsDate',
+                'rapports.syntheseAll',
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-pie-graph"></i> <span>Rapports</span></a>
                 <ul class="dropdown-menu">
@@ -254,6 +257,7 @@
                   <li><a class="nav-link" href="{{ route('rapports.stockBoulangerie',['site' => 'all'])}}">- Stock Point de vente</a></li>
                   <li><a class="nav-link" href="{{route('rapports.entreeStockMpAll')}}">- Achats MP</a></li>
                   <li><a class="nav-link" href="{{route('rapports.productionAll')}}">- Fiche Productions</a></li>
+                  {{-- <li><a class="nav-link" href="{{route('rapports.syntheseAll')}}">- Fiche Synthese</a></li> --}}
                   <li><a class="nav-link" href="{{route('rapports.venteAll')}}">- Fiche Ventes</a></li>
                   <li><a class="nav-link" href="{{route('rapports.dettesAll')}}">- Fiche Dettes Clients</a></li>
                   <li><a class="nav-link" href="{{route('rapports.paiementsAll')}}">- Fiche Paiements Clients</a></li>
@@ -269,22 +273,22 @@
                 </ul>
               </li>
             </ul>
-      
+
           </aside>
         </div>
-      
+
       @endif
 
       @if (Auth::user()->role == 'geran_depot_maison')
-        
+
         <div class="main-sidebar sidebar-style-2 valider">
           <ul class="sidebar-menu">
             <li class="menu-header">Tableau de Bord</li>
-            
+
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
               <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            
+
             </li>
 
             <li class="dropdown @if (request()->routeIs(
@@ -300,9 +304,9 @@
               </ul>
             </li>
 
-            
+
             <li class="dropdown @if (request()->routeIs(
-              'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf', 
+              'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf',
               'rapports.stockBoulangerie', 'rapports.entreeStockMpAll', 'rapports.productionAll'
               )) active @endif " >
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-pie-graph"></i> <span>Rapports</span></a>
@@ -317,17 +321,17 @@
       @endif
 
       @if (Auth::user()->role == 'geran_depot_usine')
-        
+
         <div class="main-sidebar sidebar-style-2 valider">
           <ul class="sidebar-menu">
             <li class="menu-header">Tableau de Bord</li>
-            
+
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
               <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord</span></a>
-            
+
             </li>
-              
+
             <li class="dropdown @if (request()->routeIs(
               'stock-usine.index', 'stock-usine.create', 'stock-usine.edit',
               'mouvement-stock-mp-usine.index',
@@ -351,7 +355,7 @@
             </li>
 
             <li class="dropdown @if (request()->routeIs(
-              'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf', 
+              'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf',
               'rapports.stockBoulangerie', 'rapports.entreeStockMpAll', 'rapports.productionAll'
               )) active @endif " >
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-pie-graph"></i> <span>Rapports</span></a>
@@ -372,13 +376,13 @@
         <div class="main-sidebar sidebar-style-2 valider">
           <ul class="sidebar-menu">
             <li class="menu-header">Tableau de Bord</li>
-            
+
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
               <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord </span></a>
-            
+
             </li>
-              
+
             <li class="dropdown @if (request()->routeIs(
               'stock-pf.index', 'stock-pf.create', 'stock-pf.edit',
               'mouvement-stock-pf-entree.index','mouvement-stock-pf-boulangerie.index',
@@ -392,9 +396,9 @@
               </ul>
             </li>
 
-            
+
             <li class="dropdown @if (request()->routeIs(
-              'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf', 
+              'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf',
               'rapports.stockBoulangerie', 'rapports.entreeStockMpAll', 'rapports.productionAll'
               )) active @endif " >
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-pie-graph"></i> <span>Rapports</span></a>
@@ -413,35 +417,36 @@
         <div class="main-sidebar sidebar-style-2 valider">
           <ul class="sidebar-menu">
             <li class="menu-header">{{ Auth::user()->site->nom }}</li>
-            
+
             <li class=" @if (request()->routeIs('dashboard')) active @endif ">
 
               <a href="{{ route('dashboard') }}" class="nav-link "><i class="fas fa-tachometer-alt"></i><span>Tableau de Bord </span></a>
-            
+
             </li>
 
             <li class="dropdown @if (request()->routeIs(
               'stock-boulangerie.index', 'stock-boulangerie.create', 'stock-boulangerie.edit',
-              'mouvement-stock-pf-entree.index', 
+              'mouvement-stock-pf-entree.index',
               'ventes.index', 'ventes.create', 'ventes.edit',
               )) active @endif " >
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-home"></i> <span>Boulangerie</span></a>
               <ul class="dropdown-menu">
-                <li><a class="nav-link" href="{{route('stock-boulangerie.index')}}">- Liste des produits</a></li>
-                <li><a class="nav-link" href="{{ route('mouvement-stock-pf-entree.index')}}">- Entrées produits </a></li>
-                <li><a class="nav-link" href="{{ route('ventes.index')}}">- Ventes produits</a></li>
+                <li><a class="nav-link" href="{{route('stock-boulangerie.inventaire', Auth::user()->site_id)}}">- Inventaire des produits</a></li>
+                <li><a class="nav-link" href="{{route('stock-boulangerie.index', Auth::user()->site_id)}}">- Liste des produits</a></li>
+                <li><a class="nav-link" href="{{ route('mouvement-stock-pf-entree.index', Auth::user()->site_id)}}">- Entrées produits </a></li>
+                <li><a class="nav-link" href="{{ route('ventes.index', Auth::user()->site_id)}}">- Ventes produits</a></li>
               </ul>
             </li>
 
-            
+
             <li class="dropdown @if (request()->routeIs(
-              'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf', 
+              'rapports.stockMpMaison','rapports.stockMpUsine', 'rapports.stockPf',
               'rapports.stockBoulangerie', 'rapports.entreeStockMpAll', 'rapports.productionAll','rapports.venteAll'
               )) active @endif " >
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-pie-graph"></i> <span>Rapports</span></a>
               <ul class="dropdown-menu">
-                <li><a class="nav-link" href="{{ route('rapports.stockBoulangerie')}}">- Stock Boulangerie</a></li>
-                <li><a class="nav-link" href="{{route('rapports.venteAll')}}">- Fiche Ventes</a></li>
+                <li><a class="nav-link" href="{{ route('rapports.stockBoulangerie', Auth::user()->site_id)}}">- Stock Boulangerie</a></li>
+                <li><a class="nav-link" href="{{route('rapports.venteAll', Auth::user()->site_id)}}">- Fiche Ventes</a></li>
               </ul>
             </li>
 
@@ -454,10 +459,10 @@
 
       <footer class="main-footer valider">
         <div class="footer-left">
-          Copyright &copy; {{ date('Y') }} <div class="bullet"></div> <a href="pdevtuto.com" target="__blank">Boulangerie Management</a> 
+          Copyright &copy; {{ date('Y') }} <div class="bullet"></div> <a href="pdevtuto.com" target="__blank">Boulangerie Management</a>
         </div>
         <div class="footer-right">
-          
+
         </div>
       </footer>
     </div>
@@ -469,7 +474,7 @@
     }
   </style>
 
-  
+
   <!-- General JS Scripts -->
   <script src="{{asset('assets/backend/modules/jquery.min.js')}}"></script>
   <script src="{{asset('assets/backend/modules/popper.js')}}"></script>
@@ -480,7 +485,7 @@
   <script src="{{asset('assets/backend/js/stisla.js')}}"></script>
   <script src="{{asset('assets/backend/js/bundle.js')}}"></script>
 
-  
+
   <!-- JS Libraies -->
   <script src="{{asset('assets/backend/modules/simple-weather/jquery.simpleWeather.min.js')}}"></script>
   <script src="{{asset('assets/backend/modules/chart.min.js')}}"></script>
@@ -515,7 +520,9 @@
   <!-- Bootstrap Select -->
   <script src="{{asset('assets/backend/bootstrap-select/dist/js/bootstrap.min.js')}}"></script>
   <script src="{{asset('assets/backend/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
-  
+  <script src="{{asset('assets/backend/modules/select2/dist/js/select2.full.min.js ')}}"></script>
+
+
 
   <script>
     $(document).ready(function(){
@@ -528,7 +535,7 @@
     });
   </script>
 
-  
+
 
 </body>
 </html>

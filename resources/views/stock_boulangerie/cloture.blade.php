@@ -37,12 +37,11 @@
                             </h6>
                             </div>
                         @endif
+
                         <div class="card">
                             <div class="card-header">
-                                <h4>{{ $viewData['title'] }} </h4>
-                                <div class="card-header-action">
-                                    <button type="button" class="btn btn-icon icon-left btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> AJouter produit</button>
-                                </div>
+                                <h4>INVENTAIRE JOURNALIER </h4>
+
                             </div>
 
                             <div class="card-body">
@@ -52,34 +51,56 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Produit finis</th>
-                                            <th>Prix de vente</th>
                                             <th>Solde</th>
-                                            <th>Valeur du stock</th>
+                                            <th>Entrée</th>
+                                            <th>Vente</th>
+                                            <th>Prix</th>
+                                            <th>Total</th>
+                                            <th>Abimée</th>
+                                            <th>Total</th>
+                                            <th>Consommation</th>
+                                            <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php
-                                            $tot = 0;
+                                            $totVente = 0;
+                                            $totAvarie = 0;
+                                            $totConsommation = 0;
                                         @endphp
-                                        @foreach ($viewData['produits'] as $produit)
+                                        @foreach ($viewData['inventaires'] as $inventaire)
                                             @php
-                                                $tot+=($produit->stockProduitFinis->prix * $produit->solde)
+                                                $totVente+=($inventaire->prix * $inventaire->qnte_sortie);
+                                                $totAvarie+=($inventaire->prix * $inventaire->avarie);
+                                                $totConsommation+=($inventaire->prix * $inventaire->consommation);
                                             @endphp
                                             <tr>
-
-                                                <td> {{ $produit->id }} </td>
-                                                <td> {{ $produit->stockProduitFinis->designation }} </td>
-                                                <td> {{ $produit->stockProduitFinis->prix }} Fc</td>
-                                                <td> {{ $produit->solde }} </td>
-                                                <td> {{ $produit->stockProduitFinis->prix * $produit->solde }} Fc</td>
+                                                <td>{{ $inventaire->created_at }} </td>
+                                                <td>{{ $inventaire->stockProduitFinis->stockProduitFinis->designation }} </td>
+                                                <td>{{ $inventaire->solde }} </td>
+                                                <td>{{ $inventaire->qnte_entree }}</td>
+                                                <td>{{ $inventaire->qnte_sortie }}</td>
+                                                <td>{{ $inventaire->prix }} Fc</td>
+                                                <td>{{ $inventaire->qnte_sortie * $inventaire->prix }} Fc</td>
+                                                <td>{{ $inventaire->avarie }}</td>
+                                                <td>{{ $inventaire->avarie * $inventaire->prix }} Fc</td>
+                                                <td>{{ $inventaire->consommation }}</td>
+                                                <td>{{ $inventaire->consommation * $inventaire->prix }} Fc</td>
 
                                             </tr>
+
                                         @endforeach
+
                                     </tbody>
                                     <tr>
-                                        <td colspan="4"><b>Total Valeur en stock</b></td>
-                                        <td colspan=""><b>{{ $tot }} Fc</b></td>
+                                        <td colspan="6"><b>Total</b></td>
+                                        <td><b>{{ $totVente }} Fc</b></td>
+                                        <td></td>
+                                        <td><b>{{ $totAvarie }} Fc</b></td>
+                                        <td></td>
+                                        <td><b>{{ $totConsommation }} Fc</b></td>
                                     </tr>
+
                                 </table>
                                 </div>
                             </div>
@@ -103,10 +124,11 @@
             <div class="modal-body">
               <form method="post" class="row" action="{{ route('stock-boulangerie.store')}}" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group col-12 col-md-12 col-lg-12">
-                    <input type="hidden" name="site_id" value="{{ $site->id }}">
-                    <label>Choisir un produit finis*</label>
-                    <select name="produit_finis_id" class="form-control selectpicker" id="produit_finis_id" data-show-subtext="true" data-live-search="true" required>
+                <input type="hidden" name="site_id" value="{{ $site->id }}">
+                <div class=" col-12 col-md-12 col-lg-12">
+
+                    <label>Choisir un produit finis*</label><br>
+                    <select name="produit_finis_id" class="form-control col-md-12 selectpicker" id="produit_finis_id" data-show-subtext="true" data-live-search="true" required>
 
                       @foreach ($viewData['produits_finis'] as $produit)
 

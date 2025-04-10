@@ -81,6 +81,16 @@
                                                     </div>
                                                     
                                                     <div class="pricing-item">
+                                                        <div class="pricing-item-icon"><i class="fas fa-arrow-up"></i></div>
+                                                        <div class="pricing-item-label"><a href="{{ route('stock-boulangerie.cloture_admin', $site->id)}}"> Inventaire des produits</a></div>
+                                                    </div>
+                                                    
+                                                    <div class="pricing-item">
+                                                        <div class="pricing-item-icon"><i class="fas fa-arrow-up"></i></div>
+                                                        <div class="pricing-item-label"><a href="{{ route('stock-boulangerie.synthese_admin', $site->id)}}"> Synthèse inventaire</a></div>
+                                                    </div>
+                                                    
+                                                    <div class="pricing-item">
                                                         <div class="pricing-item-icon"><i class="fas fa-credit-card"></i></div>
                                                         <div class="pricing-item-label"><a href="{{ route('paiements.detteClients', $site->id)}}"> Liste de dettes clients</a></div>
                                                     </div>

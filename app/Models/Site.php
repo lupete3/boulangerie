@@ -33,4 +33,14 @@ class Site extends Model
     {
         return $this->hasMany(CommandeClient::class);
     }
+
+    public function inventaires(): HasMany
+    {
+        return $this->hasMany(Cloture::class);
+    }
+
+    public function syntheses(): HasMany
+    {
+        return $this->hasMany(synthese::class);
+    }
 }

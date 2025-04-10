@@ -8,7 +8,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -20,7 +20,7 @@
             </div>
 
             <div class="section-body ">
-            
+
               <div class="row">
                 <div class="col-md-12">
                   @if($errors->any())
@@ -39,7 +39,7 @@
                       <h6>
                         {{ Session::get('success') }}
                       </h6>
-                    </div> 
+                    </div>
                   @endif
                 </div>
                 <!-- Colonne des articles -->
@@ -52,15 +52,15 @@
                         @csrf
 
                         <div class="form-group">
-                          
-                          <select name="produit_finis_id" class="form-control selectpicker" id="produit_finis_id" data-live-search="true" required>
-                            
+
+                          <select name="produit_finis_id" class="form-control select2" id="produit_finis_id" data-live-search="true" required>
+
                             @foreach ($viewData['produitsFinis'] as $produit)
-                            
+
                               <option @selected(old('produit_finis_id', $production->stock_pf_id) == $produit->id) value="{{ $produit->id }}" >{{ $produit->designation }}</option>
 
                             @endforeach
-                                    
+
                           </select>
 
                         </div>
@@ -76,7 +76,7 @@
                           <label>Autres Charges*</label>
                           <input type="text" class="form-control" name="autres_charges" value="{{ $production->autres_charges }}" placeholder="" required="">
                         </div>
-                    
+
                         <div class="card-footer text-right">
                           <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Mettre à jour</button>
                         </div>
@@ -84,7 +84,7 @@
                     </div>
                   </div>
                   <!-- Ajoutez plus d'articles selon le même modèle -->
-                  
+
                 </div>
 
                 <!-- Colonne des catégories -->
@@ -109,7 +109,7 @@
                               <td>{{ $i++ }}</td>
                               <td>{{ $item->designation }}</td>
                               <td>{{ $item->quantite }}</td>
-                               
+
                                 <td>
                                   <form action="{{ route('production.removeFromCartEdit', $item->id ) }}" method="post">
                                     @csrf
@@ -124,11 +124,11 @@
                   </div>
                   <div class="row" style="margin-top: 50px">
                     <button  class="btn btn-success col-md-3 mt-2" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Ajouter une composition</button>
-                    
+
                   </div>
                 </div>
               </div>
-                
+
             </div>
         </section>
     </div>
@@ -148,21 +148,21 @@
               @csrf
               <div class="form-group col-12 col-md-12 col-lg-12">
                 <label>Choisir une matière prémière</label>
-                <select name="article_id" class="form-control selectpicker" id="article_id" data-show-subtext="true" data-live-search="true" required>
+                <select name="article_id" class="form-control select2" id="article_id" style="width: 100%" data-show-subtext="true" data-live-search="true" required>
 
                   @foreach ($viewData['matieresPremieres'] as $article)
 
                     <option value="{{ $article->id }}">{{ $article->stockMaison->designation }} {{ $article->stockMaison->unite }}</option>
 
                   @endforeach
-                          
+
                 </select>
-                
-              </div> 
+
+              </div>
               <div class="form-group col-12 col-md-12 col-lg-12">
                 <label for="">Quantité produite</label>
                 <input type="text" name="quantite" class="form-control" required>
-              </div>     
+              </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>

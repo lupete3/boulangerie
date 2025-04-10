@@ -57,7 +57,7 @@
                           <div class="card-body">
                             <div class="form-group">
                               <label>Choisir un point de vente*</label>
-                              <select name="site_id" class="form-control selectpicker" id="site_id" data-show-subtext="true" data-live-search="true" required>
+                              <select name="site_id" class="form-control select2" id="site_id" data-show-subtext="true" data-live-search="true" required>
 
                                 @foreach ($viewData['sites'] as $site)
 
@@ -69,7 +69,7 @@
                             </div>
                             <div class="form-group">
                               <label>Choisir un produit finis*</label>
-                              <select name="produit_finis_id" class="form-control selectpicker" id="produit_finis_id" data-show-subtext="true" data-live-search="true" required>
+                              <select name="produit_finis_id" class="form-control select2" id="produit_finis_id" data-show-subtext="true" data-live-search="true" required>
 
                                 @foreach ($viewData['produits'] as $produit)
 

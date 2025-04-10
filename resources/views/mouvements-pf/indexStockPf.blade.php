@@ -6,7 +6,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -18,7 +18,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12">
                         @if($errors->any())
@@ -37,7 +37,7 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                         <div class="card">
                             <div class="card-header">
@@ -46,7 +46,7 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">
-                                    <thead>                                 
+                                    <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Date Entrée</th>
@@ -56,19 +56,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($viewData['entrees'] as $entree) 
+                                        @foreach ($viewData['entrees'] as $entree)
                                             <tr>
-                                                
+
                                                 <td> {{ $entree->id }} </td>
                                                 <td> {{ $entree->created_at }} </td>
                                                 <td> {{ $entree->produitFinis->designation }} </td>
                                                 <td> {{ $entree->quantite }} </td>
-                                                <td> 
+                                                <td>
                                                     @foreach ($entree->compositions as $item)
-                                                        <span>({{ number_format($item->quantite,0) }} {{ $item->unite }}) {{ $item->designation }}</span><br>
-                                                    @endforeach    
+                                                        <span>({{ number_format($item->quantite,1) }} {{ $item->unite }}) {{ $item->designation }}</span><br>
+                                                    @endforeach
                                                 </td>
-                                                
+
                                             </tr>
                                         @endforeach
                                     </tbody>

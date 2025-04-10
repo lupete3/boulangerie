@@ -11,7 +11,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -31,7 +31,7 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                         @if(Session::has('error'))
                             <div class="alert alert-danger alert-dismissible" id="msg" role="alert">
@@ -39,38 +39,61 @@
                             <h6>
                                 {{ Session::get('error') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                 </div>
               </div>
-            
+
               <div class="row">
                 <!-- Colonne des articles -->
-                <div class="col-md-5">
+                <div class="col-md-6">
                   <!-- Ajoutez les articles de la catégorie sélectionnée -->
                   <div class="card">
                     <div class="card-body">
                       <form method="post" action="{{ route('ventes.addToCart')}}" enctype="multipart/form-data">
                         @csrf
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                           <input type="hidden" name="site_id" value="{{ $site->id }}">
                           <label>Choisir un produit*</label>
-                          <select name="produit_id" class="form-control selectpicker" id="produit_id" data-show-subtext="true" data-live-search="true" required>
+                          <select name="produit_id" class="form-control select2" id="produit_id" data-show-subtext="true" data-live-search="true" required>
 
                             @foreach ($viewData['produits'] as $produit)
 
                               <option value="{{ $produit->id }}">{{ $produit->stockProduitFinis->designation }} - Solde: {{ $produit->solde }}</option>
 
                             @endforeach
-                           
+
                           </select>
                         </div>
                         <div class="form-group">
                           <label>Quantité vendue*</label>
                           <input type="number" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
+                        </div> --}}
+                        <div class="table-responsive">
+                        <input type="hidden" name="site_id" value="{{ $site->id }}">
+                        <table class="table table-bordered table-sm" id="table-1">
+                            <thead>
+                              <tr>
+                                <th>Produit</th>
+                                <th>Quantité disponible</th>
+                                <th>Quantité restante</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              @foreach ($viewData['produits'] as $produit)
+                                <tr>
+                                  <td>{{ $produit->stockProduitFinis->designation }} ({{ $produit->stockProduitFinis->prix }}Fc)</td>
+                                  <td>{{ $produit->solde }}</td>
+                                  <td>
+                                    <input type="text" class="form-control" name="quantites[{{ $produit->id }}]" value="{{ $produit->solde }}" step="0.1" min="0" max="{{ $produit->solde }}" placeholder="Quantité restante">
+                                  </td>
+                                </tr>
+                              @endforeach
+                            </tbody>
+                        </table>
                         </div>
-                    
+
                         <div class="card-footer text-right">
                           <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter au panier</button>
                         </div>
@@ -78,11 +101,11 @@
                     </div>
                   </div>
                   <!-- Ajoutez plus d'articles selon le même modèle -->
-                  
+
                 </div>
 
                 <!-- Colonne des catégories -->
-                <div class="col-md-7">
+                <div class="col-md-6">
                   <div class="row">
                     <table class="table">
                       <thead>
@@ -107,7 +130,7 @@
                                 <td>{{ $item['price'] }} Fc</td>
                                 <td>{{ $item['quantity'] }}</td>
                                 <td>{{ $item['price'] * $item['quantity'] }} Fc</td>
-                               
+
                                 <td>
                                   <form action="{{ route('ventes.removeFromCart') }}" method="post">
                                     @csrf
@@ -125,15 +148,16 @@
                     </table>
                   </div>
                   <div class="row" style="margin-top: 50px">
-                    <button  class="btn btn-success col-md-3 mt-2" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-credit-card"></i> Clôturer la vente</button>
+                    <button  class="btn btn-success col-md-3 mt-2" {{ $tot > 0 ? '' : 'disabled'  }} data-toggle="modal" data-target="#exampleModal">
+                        <i class="fas fa-credit-card"></i> Clôturer la vente</button>
                     <form action="{{ route('ventes.clearCart') }}" class="col-md-3 mt-2" method="post">
                         @csrf
-                        <button class="btn btn-danger col-md-12 "><i class="fas fa-trash"> </i> Supprimer tout</button>
+                        <button class="btn btn-danger col-md-12 " {{ $tot > 0 ? '' : 'disabled'  }}><i class="fas fa-trash"> </i> Supprimer tout</button>
                     </form>
                   </div>
                 </div>
               </div>
-                
+
             </div>
         </section>
     </div>
@@ -153,22 +177,22 @@
               @csrf
               <div class="form-group col-12 col-md-12 col-lg-12">
                 <input type="hidden" name="site_id" value="{{ $site->id }}">
-                <select name="client_id" class="form-control selectpicker" id="client_id" data-live-search="true" required>
+                <select name="client_id" class="form-control select2" id="client_id" data-live-search="true" required style="width: 100%">
                   <option value="" selected disabled>Choisir un client*</option>
                   @foreach ($viewData['clients'] as $client)
 
                     <option data-tokens="{{ $client->nom }}" value="{{ $client->id }}">{{ $client->nom }}</option>
 
                   @endforeach
-                          
+
                 </select>
-                
-              </div> 
+
+              </div>
               <div class="form-group col-12 col-md-12 col-lg-12">
                 <label for="">Montant Payé*</label>
-                <input type="text" name="montant" class="form-control" required>
-              </div>     
-              
+                <input type="text" value="{{ $tot }}" name="montant" class="form-control" required>
+              </div>
+
               <div class="form-group col-12 col-md-12 col-lg-12">
                 <label>Observation</label>
                 <textarea name="observation" id="observation" class="form-control" cols="30" rows="10">{{ old('observation') }}</textarea>

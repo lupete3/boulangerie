@@ -12,10 +12,10 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header valider">
-                
+
             </div>
 
             <div class="section-body ">
@@ -34,133 +34,114 @@
                       Rapport personnalisé
                     </button>
                   </div>
-                  
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-12 col-lg-12 align-center">
-                       
-                      <div class="row" style="margin-bottom:10px;  " >
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <center>
-                                <p style="font-weight:bold; font-family:Century Gothic; font-size:1.6em;" >
-                                    {{ $viewData['title'] }} 
-                                </p>
-                            </center>        
-                        </div>
-                        
-                      </div>
 
-                      <div class="container">
-                        <div class="row" style="margin-bottom:10px;  " >
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                           
-                                <div class="container">
-                                    <div class="row spacer" style="margin-bottom:20px; " >
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <table class="table table-bordered table-striped table-sm" style="font-family:Century Gothic; font-size:0.7em;">
-                                              <thead>                                 
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Point de Vente</th>
-                                                    <th>Date Vente</th>
-                                                    <th>Client</th>
-                                                    <th>Total à payer</th>
-                                                    <th>Total payé</th>
-                                                    <th>Dette</th>
-                                                    <th>Produit</th>
-                                                    <th>Quantite Vendue</th>
-                                                    <th>Prix Vente</th>
-                                                    <th>Prix Total</th>
-                                                    <th>Reste en stock</th>
-                                                    <th>Observation</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                  @php
-                                                      $tot = 0;
-                                                      $totPaye = 0;
-                                                      $totReste = 0;
-                                                      $id = 1;
-                                                  @endphp
-          
-                                                  @forelse ($viewData['commandes'] as $commande)
-                                                      @php
-                                                          $tot = $tot + $commande->montant;
-                                                          $totPaye = $totPaye + $commande->paye;
-                                                          $totReste = $totReste + $commande->reste;
-                                                      @endphp
-                                                      @foreach ($commande->ventes as $vente)
-                                                          
-                                                          <tr>
-                                                              @if ($loop->first)
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $id++ }}</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->site->nom }}</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->created_at }}</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->client->nom }}</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->montant }} Fc</td>
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->paye }} Fc</td>
-                                                                  <td class="@if ($commande->reste > 0) text-danger @else @endif" rowspan="{{ $commande->ventes->count() }}">{{ $commande->reste }} Fc</td>
-                                                              @endif
-                                                              <td> {{ $vente->designation }} </td>
-                                                              <td> {{ $vente->quantite }} </td>
-                                                              <td> {{ $vente->prix }} Fc </td>
-                                                              <td> {{ $vente->quantite * $vente->prix }} Fc </td>
-                                                              <td> {{ $vente->reste }} </td>
-                                                              @if ($loop->first)
-                                                                  <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->observation }}</td>
-                                                              @endif
-          
-                                                          </tr>
-                                                      @endforeach
-                                                  
-                                                  @empty
-                                                    <tr>
-                                                      <td colspan="13" class="text-center" style="font-size: 20px">Aucune donnée disponible</td>
-                                                    </tr>
-                                                  @endforelse
-                                                  
-          
-                                              </tbody>
-                                              <tr>
-                                                  <td colspan="4"><b>Total</b></td>
-                                                  <td><b>{{ $tot }} Fc</b></td>
-                                                  <td><b>{{ $totPaye }} Fc</b></td>
-                                                  <td><b>{{ $totReste }} Fc</b></td>
-                                                  <td colspan="6"></td>
-                                              </tr>
-                                            </table>
-                                        </div>
-            
-                                    </div>
-                                
-                                    <div class="row spacer" style="margin-bottom: 1.3em;">
-            
-                                      <table class="container-fluid">
-                                        <p style="font-family:Century Gothic; font-size:1em; margin-left:20px; ">
-                                            Date : <?php echo date('d-m-Y'); ?>
-                                            <br>
-                                            <span>Heure : <?php echo date('H:i'); ?></span>
-                                             <br>
-                                        </p>
-                                       
-                                      </table>
-                                </div> 
-        
-                                <div class="row">
-                                  <div class="col-md-3 offset-3">
-                                    <button type="button" class="btn btn-primary print pull-right valider"><span class="fa fa-print"></span> Imprimer</button>
-                                  </div>
-                                  </div>
-                                </div>
-                                
-                            </div>
-                            
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style=""></div>   
-                        </div>
+                </div>
+                <div class="row" style="margin-bottom:-10px" >
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <center>
+                            <p style="font-weight:bold; font-family:Century Gothic; font-size:1.6em;" >
+                                {{ $viewData['title'] }}
+                            </p>
+                        </center>
                     </div>
 
+                  </div>
+
+                  <div class="row spacer" style="margin-bottom:20px; " >
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table class="table table-bordered table-striped table-sm" style="font-family:Century Gothic; font-size:0.7em;">
+                          <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Point de Vente</th>
+                                <th>Date Vente</th>
+                                <th>Client</th>
+                                <th>Total à payer</th>
+                                <th>Total payé</th>
+                                <th>Dette</th>
+                                <th>Produit</th>
+                                <th>Quantite Vendue</th>
+                                <th>Prix Vente</th>
+                                <th>Prix Total</th>
+                                <th>Reste en stock</th>
+                                <th>Observation</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              @php
+                                  $tot = 0;
+                                  $totPaye = 0;
+                                  $totReste = 0;
+                                  $id = 1;
+                              @endphp
+
+                              @forelse ($viewData['commandes'] as $commande)
+                                  @php
+                                      $tot = $tot + $commande->montant;
+                                      $totPaye = $totPaye + $commande->paye;
+                                      $totReste = $totReste + $commande->reste;
+                                  @endphp
+                                  @foreach ($commande->ventes as $vente)
+
+                                      <tr>
+                                          @if ($loop->first)
+                                              <td rowspan="{{ $commande->ventes->count() }}">{{ $id++ }}</td>
+                                              <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->site->nom }}</td>
+                                              <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->created_at }}</td>
+                                              <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->client->nom }}</td>
+                                              <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->montant }} Fc</td>
+                                              <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->paye }} Fc</td>
+                                              <td class="@if ($commande->reste > 0) text-danger @else @endif" rowspan="{{ $commande->ventes->count() }}">{{ $commande->reste }} Fc</td>
+                                          @endif
+                                          <td> {{ $vente->designation }} </td>
+                                          <td> {{ $vente->quantite }} </td>
+                                          <td> {{ $vente->prix }} Fc </td>
+                                          <td> {{ $vente->quantite * $vente->prix }} Fc </td>
+                                          <td> {{ $vente->reste }} </td>
+                                          @if ($loop->first)
+                                              <td rowspan="{{ $commande->ventes->count() }}">{{ $commande->observation }}</td>
+                                          @endif
+
+                                      </tr>
+                                  @endforeach
+
+                              @empty
+                                <tr>
+                                  <td colspan="13" class="text-center" style="font-size: 20px">Aucune donnée disponible</td>
+                                </tr>
+                              @endforelse
+
+
+                          </tbody>
+                          <tr>
+                              <td colspan="4"><b>Total</b></td>
+                              <td><b>{{ $tot }} Fc</b></td>
+                              <td><b>{{ $totPaye }} Fc</b></td>
+                              <td><b>{{ $totReste }} Fc</b></td>
+                              <td colspan="6"></td>
+                          </tr>
+                        </table>
                     </div>
                   </div>
+
+                <div class="row spacer" style="margin-bottom: 1.3em;">
+
+                  <table class="container-fluid">
+                    <p style="font-family:Century Gothic; font-size:1em; margin-left:20px; ">
+                        Date : <?php echo date('d-m-Y'); ?>
+                        <br>
+                        <span>Heure : <?php echo date('H:i'); ?></span>
+                         <br>
+                    </p>
+
+                  </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 offset-3">
+                        <button type="button" class="btn btn-primary print pull-right valider"><span class="fa fa-print"></span> Imprimer</button>
+                    </div>
+                </div>
           </div>
         </section>
     </div>
@@ -186,7 +167,7 @@
                 <label>Date fin</label>
                 <input type="date" class="form-control" name="fin" value="{{ old('fin') }}" required="">
               </div>
-           
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>

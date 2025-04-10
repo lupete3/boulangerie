@@ -52,7 +52,8 @@ class StockMaisonController extends Controller
             ],
             'unite' => 'required',
             'prix' => 'required|numeric',
-            'solde' => 'numeric'
+            'solde' => 'numeric',
+            'configuration' => 'numeric',
 
         ],[
 
@@ -60,7 +61,8 @@ class StockMaisonController extends Controller
             'designation.required' => 'Compléter le champ unité de mesure',
             'prix.required' => 'Compléter le prix d\'achat',
             'prix.numeric' => 'Le prix doit être un nombre',
-            'designation.numeric' => 'La quantité en stock doit être un nombre',
+            'solde.numeric' => 'La quantité en stock doit être un nombre',
+            'configuration.numeric' => 'La configuration doit être un nombre',
 
         ]);
 
@@ -70,17 +72,18 @@ class StockMaisonController extends Controller
         $stockMaison->unite = $request->unite;
         $stockMaison->prix = $request->prix;
         $stockMaison->solde = $request->solde;
+        $stockMaison->configuration = $request->configuration;
 
         $stockMaison->save();
 
         if($stockMaison){
-            
+
             $stockUsine = new StockUsine();
 
             $stockUsine->id_stock_maisons = $stockMaison->id;
 
             $stockUsine->save();
-    
+
         }
 
         return redirect()->back()->with('success','Matière première ajoutée avec succès');
@@ -122,7 +125,8 @@ class StockMaisonController extends Controller
             ],
             'unite' => 'required',
             'prix' => 'required|numeric',
-            'solde' => 'numeric'
+            'solde' => 'numeric',
+            'configuration' => 'numeric',
 
         ],[
 
@@ -130,7 +134,8 @@ class StockMaisonController extends Controller
             'designation.required' => 'Compléter le champ unité de mesure',
             'prix.required' => 'Compléter le prix d\'achat',
             'prix.numeric' => 'Le prix doit être un nombre',
-            'designation.numeric' => 'La quantité en stock doit être un nombre',
+            'solde.numeric' => 'La quantité en stock doit être un nombre',
+            'configuration.numeric' => 'La configuration doit être un nombre',
 
         ]);
 
@@ -139,7 +144,8 @@ class StockMaisonController extends Controller
             'unite' => $request->unite,
             'prix' => $request->prix,
             'solde' => $request->solde,
-            
+            'configuration' => $request->configuration
+
         ]);
 
         return redirect()->back()->with('success','Mise à jour effectuée avec succès');

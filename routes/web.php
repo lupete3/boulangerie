@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AchatStockMaisonController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClotureController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\ProfileController;
@@ -42,63 +43,65 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 Route::middleware(['auth', 'verified', ])->group(function () {
-  
+
     Route::get('/sites', [SiteController::class, 'index'])->name('sites.index');
     Route::post('/sites/store', [SiteController::class, 'store'])->name('sites.store');
     Route::get('/sites/create', [SiteController::class, 'create'])->name('sites.create');
     Route::get('/sites/{site}/edit', [SiteController::class, 'edit'])->name('sites.edit');
     Route::put('/sites/{site}/update', [SiteController::class, 'update'])->name('sites.update');
     Route::get('/sites/{site}/destroy', [SiteController::class, 'destroy'])->name('sites.destroy');
-  
+
     Route::get('/fournisseurs', [FournisseurController::class, 'index'])->name('fournisseurs.index');
     Route::post('/fournisseurs/store', [FournisseurController::class, 'store'])->name('fournisseurs.store');
     Route::get('/fournisseurs/create', [FournisseurController::class, 'create'])->name('fournisseurs.create');
     Route::get('/fournisseurs/{fournisseur}/edit', [FournisseurController::class, 'edit'])->name('fournisseurs.edit');
     Route::put('/fournisseurs/{fournisseur}/update', [FournisseurController::class, 'update'])->name('fournisseurs.update');
     Route::post('/fournisseurs/{fournisseur}/destroy', [FournisseurController::class, 'destroy'])->name('fournisseurs.destroy');
-  
+
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
     Route::post('/clients/store', [ClientController::class, 'store'])->name('clients.store');
     Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
     Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
     Route::put('/clients/{client}/update', [ClientController::class, 'update'])->name('clients.update');
     Route::post('/clients/{client}/destroy', [ClientController::class, 'destroy'])->name('clients.destroy');
-    
+
     Route::get('/stock-maison', [StockMaisonController::class, 'index'])->name('stock-maison.index');
     Route::post('/stock-maison/store', [StockMaisonController::class, 'store'])->name('stock-maison.store');
     Route::get('/stock-maison/create', [StockMaisonController::class, 'create'])->name('stock-maison.create');
     Route::get('/stock-maison/{stockMaison}/edit', [StockMaisonController::class, 'edit'])->name('stock-maison.edit');
     Route::put('/stock-maison/{stockMaison}/update', [StockMaisonController::class, 'update'])->name('stock-maison.update');
     Route::post('/stock-maison/{stockMaison}/destroy', [StockMaisonController::class, 'destroy'])->name('stock-maison.destroy');
-    
+
     Route::get('/stock-usine', [StockUsineController::class, 'index'])->name('stock-usine.index');
     Route::post('/stock-usine/store', [StockUsineController::class, 'store'])->name('stock-usine.store');
     Route::get('/stock-usine/create', [StockUsineController::class, 'create'])->name('stock-usine.create');
     Route::get('/stock-usine/{stockUsine}/edit', [StockUsineController::class, 'edit'])->name('stock-usine.edit');
     Route::put('/stock-usine/{stockUsine}/update', [StockUsineController::class, 'update'])->name('stock-usine.update');
     Route::post('/stock-usine/{stockUsine}/destroy', [StockUsineController::class, 'destroy'])->name('stock-usine.destroy');
-    
+
     Route::get('/stock-boulangerie/{site}', [StockBoulangerieController::class, 'index'])->name('stock-boulangerie.index');
+    Route::get('/stock-boulangerie/{site}/inventaire', [StockBoulangerieController::class, 'inventaire'])->name('stock-boulangerie.inventaire');
+    Route::get('/stock-boulangerie/{site}/cloture-admin', [StockBoulangerieController::class, 'cloture'])->name('stock-boulangerie.cloture_admin');
     Route::post('/stock-boulangerie/store', [StockBoulangerieController::class, 'store'])->name('stock-boulangerie.store');
     Route::get('/stock-boulangerie/create', [StockBoulangerieController::class, 'create'])->name('stock-boulangerie.create');
     Route::get('/stock-boulangerie/{stockBoulangerie}/edit', [StockBoulangerieController::class, 'edit'])->name('stock-boulangerie.edit');
     Route::put('/stock-boulangerie/{stockBoulangerie}/update', [StockBoulangerieController::class, 'update'])->name('stock-boulangerie.update');
     Route::post('/stock-boulangerie/{stockBoulangerie}/destroy', [StockBoulangerieController::class, 'destroy'])->name('stock-boulangerie.destroy');
-    
+
     Route::get('/stock-pf', [StockPfController::class, 'index'])->name('stock-pf.index');
     Route::post('/stock-pf/store', [StockPfController::class, 'store'])->name('stock-pf.store');
     Route::get('/stock-pf/create', [StockPfController::class, 'create'])->name('stock-pf.create');
     Route::get('/stock-pf/{stockPf}/edit', [StockPfController::class, 'edit'])->name('stock-pf.edit');
     Route::put('/stock-pf/{stockPf}/update', [StockPfController::class, 'update'])->name('stock-pf.update');
     Route::post('/stock-pf/{stockPf}/destroy', [StockPfController::class, 'destroy'])->name('stock-pf.destroy');
- 
+
     Route::get('/achat-mp', [AchatStockMaisonController::class, 'index'])->name('achat-mp.index');
     Route::post('/achat-mp/store', [AchatStockMaisonController::class, 'store'])->name('achat-mp.store');
     Route::get('/achat-mp/create', [AchatStockMaisonController::class, 'create'])->name('achat-mp.create');
     Route::get('/achat-mp/{achatStockMaison}/edit', [AchatStockMaisonController::class, 'edit'])->name('achat-mp.edit');
     Route::put('/achat-mp/{achatStockMaison}/update', [AchatStockMaisonController::class, 'update'])->name('achat-mp.update');
     Route::post('/achat-mp/{achatStockMaison}/destroy', [AchatStockMaisonController::class, 'destroy'])->name('achat-mp.destroy');
- 
+
     Route::get('/mouvement-stock-mp', [MouvementStockMpController::class, 'index'])->name('mouvement-stock-mp.index');
     Route::get('/mouvement-stock-mp-usine', [MouvementStockMpController::class, 'indexUsine'])->name('mouvement-stock-mp-usine.index');
     Route::post('/mouvement-stock-mp/store', [MouvementStockMpController::class, 'store'])->name('mouvement-stock-mp.store');
@@ -145,6 +148,12 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/dettes-create/{commandeClient}', [PaiementClientController::class, 'create'])->name('paiements.create');
     Route::post('/dettes-store', [PaiementClientController::class, 'store'])->name('paiements.store');
 
+    Route::post('/stock-boulangerie/{site}/cloture', [ClotureController::class, 'cloture'])->name('stock-boulangerie.cloture');
+    Route::get('/stock-boulangerie/{site}/cloture', [ClotureController::class, 'cloture'])->name('stock-boulangerie.cloture');
+    Route::post('/stock-boulangerie/{site}/cloture-boulangerie', [ClotureController::class, 'clotureBoulangerie'])->name('stock-boulangerie.cloture_boulangerie');
+    Route::get('/stock-boulangerie/{site}/synthese', [ClotureController::class, 'synthese'])->name('stock-boulangerie.synthese_admin');
+
+
 
     Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses.index');
     Route::post('/depenses/store', [DepenseController::class, 'store'])->name('depenses.store');
@@ -171,6 +180,13 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/rapports/ventes-hebdomadaire', [DashboardController::class, 'venteHebdo'])->name('rapports.venteHebdo');
     Route::get('/rapports/ventes-annuel', [DashboardController::class, 'venteAnnuel'])->name('rapports.venteAnnuel');
     Route::post('/rapports/ventes-personnalise', [DashboardController::class, 'venteDate'])->name('rapports.venteDate');
+
+    Route::get('/rapports/syntheses-all', [DashboardController::class, 'syntheseAll'])->name('rapports.syntheseAll');
+    Route::get('/rapports/syntheses-journalier', [DashboardController::class, 'syntheseJour'])->name('rapports.syntheseJour');
+    Route::get('/rapports/syntheses-hebdomadaire', [DashboardController::class, 'syntheseHebdo'])->name('rapports.syntheseHebdo');
+    Route::get('/rapports/syntheses-mensuel', [DashboardController::class, 'syntheseMensuel'])->name('rapports.syntheseMensuel');
+    Route::get('/rapports/syntheses-annuel', [DashboardController::class, 'syntheseAnnuel'])->name('rapports.syntheseAnnuel');
+    Route::post('/rapports/syntheses-personnalise', [DashboardController::class, 'syntheseDate'])->name('rapports.syntheseDate');
 
     Route::get('/rapports/dettes-all', [DashboardController::class, 'dettesAll'])->name('rapports.dettesAll');
     Route::get('/rapports/dettes-journalier', [DashboardController::class, 'dettesJour'])->name('rapports.dettesJour');

@@ -17,6 +17,7 @@ use App\Models\CommandeClient;
 use Illuminate\Validation\Rule;
 use App\Models\AchatStockMaison;
 use App\Models\StockBoulangerie;
+use App\Models\Synthese;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
@@ -348,6 +349,84 @@ class DashboardController extends Controller
         $viewData['productions'] = Production::whereBetween('created_at', [$dateDebut, $dateFin])->with('produitFinis')->get();
         
         return view('rapports.fiche_productions')->with('viewData',$viewData);
+    }
+
+    
+    // Fiche des entrées journalieres
+    public function syntheseJour(): View
+    {
+
+        $viewData['title'] = 'Tableau Synthèse des inventaires du '. date('d-m-Y');
+
+        $viewData['syntheses'] = Synthese::whereBetween('created_at', Carbon::today())->with('site','user')->get();
+        
+        return view('rapports.fiche_synthese')->with('viewData',$viewData);
+    }
+
+    // Fiche des entrées hebdomadaires
+    public function syntheseHebdo(): View
+    {
+
+        $viewData['title'] = 'Tableau Synthèse des inventaires de la semaine';
+         
+        $debutSemaine = Carbon::now()->startOfWeek();
+        $finSemaine = Carbon::now()->endOfWeek();
+
+        $viewData['syntheses'] = Synthese::whereBetween('created_at', [$debutSemaine, $finSemaine])->with('site','user')->get();
+        
+        return view('rapports.fiche_synthese')->with('viewData',$viewData);
+    }
+
+    // Fiche des entrées hebdomadaires
+    public function syntheseMensuel(): View
+    {
+
+        $viewData['title'] = 'Tableau Synthèse des inventaires du mois';
+         
+        $debutMois = Carbon::now()->startOfMonth();
+        $finMois = Carbon::now()->endOfMonth();
+
+        $viewData['syntheses'] = Synthese::whereBetween('created_at', [$debutMois, $finMois])->with('site','user')->get();
+        
+        return view('rapports.fiche_synthese')->with('viewData',$viewData);
+    }
+
+    // Fiche des entrées hebdomadaires
+    public function syntheseAnnuel(): View
+    {
+
+        $viewData['title'] = 'Tableau Synthèse des inventaires de l\'année';
+         
+        $debutAnnee = Carbon::now()->startOfYear();
+        $finAnnee = Carbon::now()->endOfYear();
+
+        $viewData['syntheses'] = Synthese::whereBetween('created_at', [$debutAnnee, $finAnnee])->with('site','user')->get();
+        
+        return view('rapports.fiche_synthese')->with('viewData',$viewData);
+    }
+
+    // Fiche des entrées personnalisées
+    public function syntheseDate(Request $request): View
+    {
+
+        $viewData['title'] = 'Tableau Synthèse des inventaires du '.$request->debut.' au '.$request->fin;
+         
+        $dateDebut = $request->input('debut');
+        $dateFin = $request->input('fin');
+
+        $viewData['syntheses'] = Synthese::whereBetween('created_at', [$dateDebut, $dateFin])->with('site','user')->get();
+        
+        return view('rapports.fiche_synthese')->with('viewData',$viewData);
+    }
+
+    public function syntheseAll(): View
+    {
+
+        $viewData['title'] = 'Tableau Synthèse des inventaires' ;
+
+        $viewData['syntheses'] = Synthese::with('site','user')->get();
+        
+        return view('rapports.fiche_synthese')->with('viewData',$viewData);
     }
 
 

@@ -50,7 +50,7 @@
                           <div class="card-body">
                             <div class="form-group">
                               <label>Choisir un fournisseur*</label>
-                              <select name="fournisseur_id" class="form-control selectpicker" id="fournisseur_id" data-show-subtext="true" data-live-search="true" required>
+                              <select name="fournisseur_id" class="form-control select2" id="fournisseur_id" data-show-subtext="true" data-live-search="true" required>
 
                                 @foreach ($viewData['fournisseurs'] as $fournisseur)
 
@@ -63,7 +63,7 @@
 
                             <div class="form-group">
                               <label>Choisir une matière première*</label>
-                              <select name="stock_maison_id" class="form-control selectpicker" id="stock_maison_id" data-show-subtext="true" data-live-search="true" required>
+                              <select name="stock_maison_id" class="form-control select2" id="stock_maison_id" data-show-subtext="true" data-live-search="true" required>
 
                                 @foreach ($viewData['stockMaisons'] as $stockMaison)
 

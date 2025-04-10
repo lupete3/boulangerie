@@ -16,6 +16,7 @@ return new class extends Migration
             $table->decimal('solde', 30)->default(0);
             $table->foreignId('stock_pf_id')->references('id')->on('stock_pfs')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('site_id')->references('id')->on('sites')->onUpdate('cascade')->onDelete('cascade');
+            $table->boolean('inventaire')->default(false);
             $table->timestamps();
         });
     }

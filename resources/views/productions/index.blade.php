@@ -6,7 +6,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -18,7 +18,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12">
                         @if($errors->any())
@@ -37,19 +37,19 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                         <div class="card">
                             <div class="card-header">
                                 <h4>{{ $viewData['title'] }} </h4>
                                 <div class="card-header-action">
                                     <a href="{{ route('production.create')}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i>Ajouter production</a>
-                                </div>   
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped" id="table-1">
-                                        <thead>                                 
+                                        <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Date production</th>
@@ -73,52 +73,59 @@
                                                 $sommeCharges = 0;
                                             @endphp
 
-                                            @foreach ($viewData['productions'] as $production) 
-                                                <tr>
-                                                    @php
-                                                        $total += $production->quantite * $production->produitFinis->prix;
-                                                        $totalBen = $production->quantite * $production->produitFinis->prix;
-                                                        $totCharge = $production->charge_paersonnel + $production->autres_charges;
-                                                        $designations = explode(', ', $production->designation);
-                                                    @endphp
-                                                    <td> {{ $production->id }} </td>
-                                                    <td> {{ $production->created_at }} </td>
-                                                    <td> {{ $production->produitFinis->designation }} </td>
-                                                    <td> {{ $production->quantite }} </td>
-                                                    <td> {{ $production->produitFinis->prix }} </td>
-                                                    <td> {{ $production->quantite * $production->produitFinis->prix }} Fc</td>
-                                                    <td> 
-                                                        @foreach ($production->compositions as $composition)
-                                                            @php
-                                                                $totProd += $composition->quantite * $composition->prix;  
-                                                            @endphp
-                                                            <li>({{ number_format($composition->quantite,0) }}{{ $composition->unite }}) {{ $composition->designation }}</li>
-                                                        @endforeach    
-                                                    </td>
-                                                    <td>{{ $totProd + $totCharge }} Fc</td>
-                                                    <td class="text-{{ (($totalBen - ($totProd + $totCharge)) >= 0)? 'info' : 'danger' }}">
-                                                        {{ $totalBen - ($totProd + $totCharge) }} Fc</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
-                                                            
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                              
-                                                                <a href="{{ route('production.edit', $production->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Modifier</a>
-                                                              
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    @php
-                                                        $sommeCharges = $sommeCharges + $totCharge + $totProd;
+                                            @foreach ($viewData['productions'] as $production)
+                                            <tr>
+                                                @php
+                                                    // Réinitialiser les variables pour chaque production
+                                                    $totalBen = $production->quantite * $production->produitFinis->prix; // Valeur de production
+                                                    $totProd = 0; // Coût des matières premières pour cette production
+                                                    $totCharge = $production->charge_personnel + $production->autres_charges; // Charges fixes
 
-                                                    @endphp
-                                                </tr>
+                                                    // Calculer le coût des matières premières
+                                                    foreach ($production->compositions as $composition) {
+                                                        $totProd += $composition->quantite * $composition->prix;
+                                                    }
+
+                                                    // Calculer le coût total de production
+                                                    $coutTotalProduction = $totProd + $totCharge;
+
+                                                    // Ajouter le coût total à la somme globale des charges
+                                                    $sommeCharges += $coutTotalProduction;
+                                                    $total += $totalBen;
+                                                @endphp
+
+                                                <td>{{ $production->id }}</td>
+                                                <td>{{ $production->created_at }}</td>
+                                                <td>{{ $production->produitFinis->designation }}</td>
+                                                <td>{{ $production->quantite }}</td>
+                                                <td>{{ $production->produitFinis->prix }}</td>
+                                                <td>{{ $totalBen }} Fc</td>
+                                                <td>
+                                                    @foreach ($production->compositions as $composition)
+                                                        <li>({{ number_format($composition->quantite, 1) }}{{ $composition->unite }}) {{ $composition->designation }}</li>
+                                                    @endforeach
+                                                </td>
+                                                <td>{{ $coutTotalProduction }} Fc</td>
+                                                <td class="text-{{ (($totalBen - $coutTotalProduction) >= 0) ? 'info' : 'danger' }}">
+                                                    {{ $totalBen - $coutTotalProduction }} Fc
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a href="{{ route('production.edit', $production->id) }}" class="dropdown-item has-icon">
+                                                                <i class="far fa-edit text-primary"></i> Modifier
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                             @endforeach
-                                            
+
+
                                         </tbody>
                                         <tr>
-                                            <td colspan="5"><b>Total </b></td>
+                                            <td colspan="5"><b>Total</b></td>
                                             <td><b>{{ $total }} Fc</b></td>
                                             <td></td>
                                             <td><b>{{ $sommeCharges }} Fc</b></td>
