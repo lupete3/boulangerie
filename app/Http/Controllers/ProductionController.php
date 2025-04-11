@@ -22,7 +22,7 @@ class ProductionController extends Controller
 
         $viewData['title'] = 'Liste des productions ';
 
-        $viewData['productions'] = Production::orderBy('created_at', 'DESC')->with(['produitFinis','compositions'])->get();
+        $viewData['productions'] = Production::orderBy('id', 'DESC')->with(['produitFinis','compositions'])->get();
 
         return view('productions.index')->with('viewData', $viewData);
     }

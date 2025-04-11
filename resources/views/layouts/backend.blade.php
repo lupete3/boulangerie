@@ -105,6 +105,14 @@
               </li>
 
               <li class="dropdown @if (request()->routeIs(
+                'caisses.index', 'caisses.create', 'caisses.edit' )) active @endif " >
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-cash"></i> <span>Caisse</span></a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-link" href="{{route('caisses.index')}}">- Mouvements Caisses</a></li>
+                </ul>
+              </li>
+
+              <li class="dropdown @if (request()->routeIs(
                 'sites.index', 'sites.create', 'sites.edit',
                 'stock-boulangerie.index', 'stock-boulangerie.create', 'stock-boulangerie.edit',
                 'mouvement-stock-pf-boulangerie.index',
@@ -202,14 +210,14 @@
                 </ul>
               </li> --}}
 
-              <li class="dropdown @if (request()->routeIs(
+              {{-- <li class="dropdown @if (request()->routeIs(
                 'depenses.index', 'depenses.create', 'depenses.edit' )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-cash"></i> <span>Dépenses</span></a>
                 <ul class="dropdown-menu">
                   <li><a class="nav-link" href="{{route('depenses.create')}}">- Ajouter dépense</a></li>
                   <li><a class="nav-link" href="{{route('depenses.index')}}">- Liste des dépenses</a></li>
                 </ul>
-              </li>
+              </li> --}}
 
 
               <li class="dropdown @if (request()->routeIs(
@@ -248,11 +256,14 @@
                 'rapports.paiementsAnnuel',
                 'rapports.paiementsDate',
                 'rapports.syntheseAll',
+                'rapports.synthese',
+                'rapports.livreCaisse'
                 )) active @endif " >
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="ion-pie-graph"></i> <span>Rapports</span></a>
                 <ul class="dropdown-menu">
-                  <li><a class="nav-link" href="{{ route('rapports.stockMpMaison')}}">- Stock MP Dépôt</a></li>
-                  <li><a class="nav-link" href="{{ route('rapports.stockMpUsine')}}">- Stock MP Usine</a></li>
+                    <li><a class="nav-link" href="{{ route('rapports.livreCaisse')}}">- Livre de caisse</a></li>
+                    <li><a class="nav-link" href="{{ route('rapports.stockMpMaison')}}">- Stock MP Dépôt</a></li>
+                    <li><a class="nav-link" href="{{ route('rapports.stockMpUsine')}}">- Stock MP Usine</a></li>
                   <li><a class="nav-link" href="{{ route('rapports.stockPf')}}">- Stock Produits Finis</a></li>
                   <li><a class="nav-link" href="{{ route('rapports.stockBoulangerie',['site' => 'all'])}}">- Stock Point de vente</a></li>
                   <li><a class="nav-link" href="{{route('rapports.entreeStockMpAll')}}">- Achats MP</a></li>
@@ -261,7 +272,8 @@
                   <li><a class="nav-link" href="{{route('rapports.venteAll')}}">- Fiche Ventes</a></li>
                   <li><a class="nav-link" href="{{route('rapports.dettesAll')}}">- Fiche Dettes Clients</a></li>
                   <li><a class="nav-link" href="{{route('rapports.paiementsAll')}}">- Fiche Paiements Clients</a></li>
-                  <li><a class="nav-link" href="{{route('rapports.depenseAll')}}">- Fiche Dépenses</a></li>
+                  {{-- <li><a class="nav-link" href="{{route('rapports.depenseAll')}}">- Fiche Dépenses</a></li> --}}
+                  <li><a class="nav-link" href="{{route('rapports.synthese')}}">- Rapport Synthèses</a></li>
                 </ul>
               </li>
 

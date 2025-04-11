@@ -15,6 +15,7 @@ class CommandeClient extends Model
         'montant',
         'paye',
         'reste',
+        'ecart',
         'client_id',
         'observation',
         'site_id'

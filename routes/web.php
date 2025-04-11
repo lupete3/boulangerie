@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AchatStockMaisonController;
+use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClotureController;
 use App\Http\Controllers\DashboardController;
@@ -153,7 +154,12 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::post('/stock-boulangerie/{site}/cloture-boulangerie', [ClotureController::class, 'clotureBoulangerie'])->name('stock-boulangerie.cloture_boulangerie');
     Route::get('/stock-boulangerie/{site}/synthese', [ClotureController::class, 'synthese'])->name('stock-boulangerie.synthese_admin');
 
-
+    Route::get('/caisses', [CaisseController::class, 'index'])->name('caisses.index');
+    Route::post('/caisses/store', [CaisseController::class, 'store'])->name('caisses.store');
+    Route::get('/caisses/create', [CaisseController::class, 'create'])->name('caisses.create');
+    Route::get('/caisses/{caisse}/edit', [CaisseController::class, 'edit'])->name('caisses.edit');
+    Route::put('/caisses/{caisse}/update', [CaisseController::class, 'update'])->name('caisses.update');
+    Route::delete('/caisses/{caisse}/destroy', [CaisseController::class, 'destroy'])->name('caisses.destroy');
 
     Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses.index');
     Route::post('/depenses/store', [DepenseController::class, 'store'])->name('depenses.store');
@@ -200,15 +206,18 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/rapports/paiements-annuel', [DashboardController::class, 'paiementsAnnuel'])->name('rapports.paiementsAnnuel');
     Route::post('/rapports/paiements-personnalise', [DashboardController::class, 'paiementsDate'])->name('rapports.paiementsDate');
 
-    Route::get('/rapports/depenses-all', [DashboardController::class, 'depenseAll'])->name('rapports.depenseAll');
-    Route::get('/rapports/depenses-journalier', [DashboardController::class, 'depenseJour'])->name('rapports.depenseJour');
-    Route::get('/rapports/depenses-hebdomadaire', [DashboardController::class, 'depenseHebdo'])->name('rapports.depenseHebdo');
-    Route::get('/rapports/depenses-annuel', [DashboardController::class, 'depenseAnnuel'])->name('rapports.depenseAnnuel');
-    Route::post('/rapports/depenses-personnalise', [DashboardController::class, 'depenseDate'])->name('rapports.depenseDate');
+    // Route::get('/rapports/depenses-all', [DashboardController::class, 'depenseAll'])->name('rapports.depenseAll');
+    // Route::get('/rapports/depenses-journalier', [DashboardController::class, 'depenseJour'])->name('rapports.depenseJour');
+    // Route::get('/rapports/depenses-hebdomadaire', [DashboardController::class, 'depenseHebdo'])->name('rapports.depenseHebdo');
+    // Route::get('/rapports/depenses-annuel', [DashboardController::class, 'depenseAnnuel'])->name('rapports.depenseAnnuel');
+    // Route::post('/rapports/depenses-personnalise', [DashboardController::class, 'depenseDate'])->name('rapports.depenseDate');
 
     Route::get('/rapports/stock-mp-usine', [DashboardController::class, 'stockMpUsine'])->name('rapports.stockMpUsine');
     Route::get('/rapports/stock-pf-usine', [DashboardController::class, 'stockPf'])->name('rapports.stockPf');
     Route::get('/rapports/stock-boulangerie/{site}', [DashboardController::class, 'stockBoulangerie'])->name('rapports.stockBoulangerie');
+
+    Route::get('/rapports/synthese-ventes', [DashboardController::class, 'rapportSyntheseSituation'])->name('rapports.synthese');
+    Route::get('/rapports/livre-caisse-filtrer', [DashboardController::class, 'filtrerLivreCaisse'])->name('rapports.livreCaisse');
 
     Route::get('/utilisateurs', [DashboardController::class, 'usersIndex'])->name('dashboard.usersIndex');
     Route::get('/utilisateurs/create', [DashboardController::class, 'usersCreate'])->name('dashboard.usersCreate');

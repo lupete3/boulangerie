@@ -16,11 +16,13 @@ use Illuminate\Http\Request;
 use App\Models\CommandeClient;
 use Illuminate\Validation\Rule;
 use App\Models\AchatStockMaison;
+use App\Models\Caisse;
 use App\Models\StockBoulangerie;
 use App\Models\Synthese;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -47,11 +49,11 @@ class DashboardController extends Controller
         $viewData['achats'] = AchatStockMaison::whereDate('created_at', Carbon::today())->with('stockMaison','fournisseur')->get();
 
         $viewData['ventes'] = Vente::whereDate('created_at', Carbon::today())->get();
-        
+
         $viewData['depenses'] = Depense::whereDate('created_at', Carbon::today())->get();
-        
+
         $viewData['fournisseurs'] = Fournisseur::all();
-        
+
         // // Vérifier si l'utilisateur est un administrateur
         // if (Auth::user()->role !== 'admin') {
 
@@ -61,7 +63,7 @@ class DashboardController extends Controller
         // }
 
         return view('dashboard')->with('viewData',$viewData);
-        
+
     }
 
     //Gestion des utilisateurs
@@ -71,7 +73,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des utilisateurs';
 
         $viewData['users'] = User::with('site')->get();
-        
+
         return view('users.index')->with('viewData',$viewData);
     }
 
@@ -82,7 +84,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Ajouter un utilisateur';
 
         $viewData['sites'] = Site::all();
-        
+
         return view('users.create')->with('viewData',$viewData);
     }
 
@@ -110,7 +112,7 @@ class DashboardController extends Controller
             'role' => $request->role,
             'site_id' => $request->site_id,
             'password' => Hash::make($request->password),
-            
+
         ]);
 
         // Vérifier si c'est le premier utilisateur inscrit
@@ -129,7 +131,7 @@ class DashboardController extends Controller
         $viewData['title'] = $user->name;
 
         $viewData['sites'] = Site::all();
-        
+
         return view('users.edit', compact('user'))->with('viewData',$viewData);
     }
 
@@ -168,7 +170,7 @@ class DashboardController extends Controller
     {
 
         $user->delete();
-        
+
         return redirect()->back()->with('success', 'Compte utilisateur supprimé');
     }
 
@@ -179,11 +181,11 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des matières premières disponibles en stock dépôt';
 
         $viewData['stockMpMaison'] = StockMaison::orderBy('designation', 'ASC')->get();
-        
+
         return view('rapports.fiche_stock_mp_maison')->with('viewData',$viewData);
     }
 
-   
+
     // Fiche des entrées journalieres
     public function entreeStockMpJour(): View
     {
@@ -191,7 +193,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des achats des matières premières en stock dépôt du '. date('d-m-Y');
 
         $viewData['entrees'] = AchatStockMaison::whereDate('created_at', Carbon::today())->with('fournisseur','stockMaison')->get();
-        
+
         return view('rapports.fiche_achats_mp')->with('viewData',$viewData);
     }
 
@@ -200,12 +202,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des achats matières premières en stock dépôt de la semaine';
-         
+
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
 
         $viewData['entrees'] = AchatStockMaison::whereBetween('created_at', [$debutSemaine, $finSemaine])->with('fournisseur','stockMaison')->get();
-        
+
         return view('rapports.fiche_achats_mp')->with('viewData',$viewData);
     }
 
@@ -214,12 +216,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des achats matières premières en stock dépôt de l\'année';
-         
+
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
 
         $viewData['entrees'] = AchatStockMaison::whereBetween('created_at', [$debutAnnee, $finAnnee])->with('fournisseur','stockMaison')->get();
-        
+
         return view('rapports.fiche_achats_mp')->with('viewData',$viewData);
     }
 
@@ -228,12 +230,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des achats matières premières en stock dépôt du '.$request->debut.' au '.$request->fin;
-         
+
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
 
         $viewData['entrees'] = AchatStockMaison::whereBetween('created_at', [$dateDebut, $dateFin])->with('fournisseur','stockMaison')->get();
-        
+
         return view('rapports.fiche_achats_mp')->with('viewData',$viewData);
     }
 
@@ -243,7 +245,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des achats matières premières en stock dépôt' ;
 
         $viewData['entrees'] = AchatStockMaison::with('fournisseur','stockMaison')->get();
-        
+
         return view('rapports.fiche_achats_mp')->with('viewData',$viewData);
     }
 
@@ -254,7 +256,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des matières premières disponibles en usine';
 
         $viewData['stockMpUsine'] = StockUsine::with('stockMaison')->get();
-        
+
         return view('rapports.fiche_stock_mp_usine')->with('viewData',$viewData);
     }
 
@@ -265,7 +267,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des produits finis disponibles en stock';
 
         $viewData['stockPf'] = StockPf::all();
-        
+
         return view('rapports.fiche_stock_pf')->with('viewData',$viewData);
     }
 
@@ -282,7 +284,7 @@ class DashboardController extends Controller
             $viewData['title'] = 'Liste des produits disponibles dans le point de vente '.$sites->nom;
             $viewData['stockBoulangerie'] = StockBoulangerie::where('site_id',$sites->id)->with('stockProduitFinis')->get();
         }
-        
+
         return view('rapports.fiche_stock_boulangerie')->with('viewData',$viewData);
     }
 
@@ -293,11 +295,11 @@ class DashboardController extends Controller
         $viewData['title'] = 'Historique des productions';
 
         $viewData['productions'] = Production::with('produitFinis')->get();
-        
+
         return view('rapports.fiche_productions')->with('viewData',$viewData);
     }
 
-    
+
     // Fiche des productions journalieres
     public function productionJour(): View
     {
@@ -305,7 +307,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des productions du '. date('d-m-Y');
 
         $viewData['productions'] = Production::whereDate('created_at', Carbon::today())->with('produitFinis')->get();
-        
+
         return view('rapports.fiche_productions')->with('viewData',$viewData);
     }
 
@@ -314,12 +316,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des productions de la semaine';
-         
+
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
 
         $viewData['productions'] = Production::whereBetween('created_at', [$debutSemaine, $finSemaine])->with('produitFinis')->get();
-        
+
         return view('rapports.fiche_productions')->with('viewData',$viewData);
     }
 
@@ -328,12 +330,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des productions de l\'année';
-         
+
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
 
         $viewData['productions'] = Production::whereBetween('created_at', [$debutAnnee, $finAnnee])->with('produitFinis')->get();
-        
+
         return view('rapports.fiche_productions')->with('viewData',$viewData);
     }
 
@@ -342,16 +344,16 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des productions du '.$request->debut.' au '.$request->fin;
-         
+
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
 
         $viewData['productions'] = Production::whereBetween('created_at', [$dateDebut, $dateFin])->with('produitFinis')->get();
-        
+
         return view('rapports.fiche_productions')->with('viewData',$viewData);
     }
 
-    
+
     // Fiche des entrées journalieres
     public function syntheseJour(): View
     {
@@ -359,7 +361,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Tableau Synthèse des inventaires du '. date('d-m-Y');
 
         $viewData['syntheses'] = Synthese::whereBetween('created_at', Carbon::today())->with('site','user')->get();
-        
+
         return view('rapports.fiche_synthese')->with('viewData',$viewData);
     }
 
@@ -368,12 +370,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Tableau Synthèse des inventaires de la semaine';
-         
+
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
 
         $viewData['syntheses'] = Synthese::whereBetween('created_at', [$debutSemaine, $finSemaine])->with('site','user')->get();
-        
+
         return view('rapports.fiche_synthese')->with('viewData',$viewData);
     }
 
@@ -382,12 +384,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Tableau Synthèse des inventaires du mois';
-         
+
         $debutMois = Carbon::now()->startOfMonth();
         $finMois = Carbon::now()->endOfMonth();
 
         $viewData['syntheses'] = Synthese::whereBetween('created_at', [$debutMois, $finMois])->with('site','user')->get();
-        
+
         return view('rapports.fiche_synthese')->with('viewData',$viewData);
     }
 
@@ -396,12 +398,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Tableau Synthèse des inventaires de l\'année';
-         
+
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
 
         $viewData['syntheses'] = Synthese::whereBetween('created_at', [$debutAnnee, $finAnnee])->with('site','user')->get();
-        
+
         return view('rapports.fiche_synthese')->with('viewData',$viewData);
     }
 
@@ -410,12 +412,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Tableau Synthèse des inventaires du '.$request->debut.' au '.$request->fin;
-         
+
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
 
         $viewData['syntheses'] = Synthese::whereBetween('created_at', [$dateDebut, $dateFin])->with('site','user')->get();
-        
+
         return view('rapports.fiche_synthese')->with('viewData',$viewData);
     }
 
@@ -425,7 +427,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Tableau Synthèse des inventaires' ;
 
         $viewData['syntheses'] = Synthese::with('site','user')->get();
-        
+
         return view('rapports.fiche_synthese')->with('viewData',$viewData);
     }
 
@@ -437,7 +439,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des ventes du '. date('d-m-Y');
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereDate('created_at', Carbon::today())->with('ventes')->get();
-        
+
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
 
@@ -446,12 +448,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des ventes de la semaine';
-         
+
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$debutSemaine, $finSemaine])->with('ventes')->get();
-        
+
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
 
@@ -460,12 +462,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des ventes de l\'année';
-         
+
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$debutAnnee, $finAnnee])->with('ventes')->get();
-        
+
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
 
@@ -474,12 +476,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des ventes du '.$request->debut.' au '.$request->fin;
-         
+
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$dateDebut, $dateFin])->with('ventes')->get();
-        
+
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
 
@@ -490,7 +492,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des ventes ';
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->get();
-        
+
         return view('rapports.fiche_ventes')->with('viewData',$viewData);
     }
 
@@ -502,7 +504,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des dettes du '. date('d-m-Y');
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->whereDate('created_at', Carbon::today())->with('ventes')->get();
-        
+
         return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
     }
 
@@ -511,12 +513,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des dettes de la semaine';
-         
+
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->whereBetween('created_at', [$debutSemaine, $finSemaine])->with('ventes')->get();
-        
+
         return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
     }
 
@@ -525,12 +527,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des dettes de l\'année';
-         
+
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->whereBetween('created_at', [$debutAnnee, $finAnnee])->with('ventes')->get();
-        
+
         return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
     }
 
@@ -539,12 +541,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des dettes du '.$request->debut.' au '.$request->fin;
-         
+
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->whereBetween('created_at', [$dateDebut, $dateFin])->with('ventes')->get();
-        
+
         return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
     }
 
@@ -555,7 +557,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des dettes clients ';
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->where('reste', '>', 0)->get();
-        
+
         return view('rapports.fiche_dettes_clients')->with('viewData',$viewData);
     }
 
@@ -566,7 +568,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des paiements du '. date('d-m-Y');
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereDate('created_at', Carbon::today())->with('paiements')->get();
-                
+
         return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
     }
 
@@ -575,12 +577,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des paiements de la semaine';
-         
+
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$debutSemaine, $finSemaine])->with('paiements')->get();
-        
+
         return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
     }
 
@@ -589,12 +591,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des paiements de l\'année';
-         
+
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$debutAnnee, $finAnnee])->with('paiements')->get();
-        
+
         return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
     }
 
@@ -603,12 +605,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des paiements du '.$request->debut.' au '.$request->fin;
-         
+
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->whereBetween('created_at', [$dateDebut, $dateFin])->with('paiements')->get();
-        
+
         return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
     }
 
@@ -619,7 +621,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des paiements clients ';
 
         $viewData['commandes'] = CommandeClient::orderBy('id', 'DESC')->with('paiements')->get();
-        
+
         return view('rapports.fiche_paiements_clients')->with('viewData',$viewData);
     }
 
@@ -631,7 +633,7 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des dépenses du '. date('d-m-Y');
 
         $viewData['depenses'] = Depense::whereDate('created_at', Carbon::today())->get();
-        
+
         return view('rapports.fiche_depenses')->with('viewData',$viewData);
     }
 
@@ -640,12 +642,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des dépenses de la semaine';
-         
+
         $debutSemaine = Carbon::now()->startOfWeek();
         $finSemaine = Carbon::now()->endOfWeek();
 
         $viewData['depenses'] = Depense::whereBetween('created_at', [$debutSemaine, $finSemaine])->get();
-        
+
         return view('rapports.fiche_depenses')->with('viewData',$viewData);
     }
 
@@ -654,12 +656,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des dépenses de l\'année';
-         
+
         $debutAnnee = Carbon::now()->startOfYear();
         $finAnnee = Carbon::now()->endOfYear();
 
         $viewData['depenses'] = Depense::whereBetween('created_at', [$debutAnnee, $finAnnee])->get();
-        
+
         return view('rapports.fiche_depenses')->with('viewData',$viewData);
     }
 
@@ -668,12 +670,12 @@ class DashboardController extends Controller
     {
 
         $viewData['title'] = 'Liste des dépenses du '.$request->debut.' au '.$request->fin;
-         
+
         $dateDebut = $request->input('debut');
         $dateFin = $request->input('fin');
 
         $viewData['depenses'] = Depense::whereBetween('created_at', [$dateDebut, $dateFin])->get();
-        
+
         return view('rapports.fiche_depenses')->with('viewData',$viewData);
     }
 
@@ -684,7 +686,138 @@ class DashboardController extends Controller
         $viewData['title'] = 'Liste des dépenses ';
 
         $viewData['depenses'] = Depense::all();
-        
+
         return view('rapports.fiche_depenses')->with('viewData',$viewData);
+    }
+
+    public function rapportSyntheseSituation(Request $request)
+    {
+        $viewData['title'] = 'Rapport Synthèse';
+
+        //Valeur Stock MP Depot
+        $viewData['stockMpMaison'] = StockMaison::all()->sum(function ($item) {
+            return $item->prix * $item->solde;
+        });
+
+        // Valeur Achat MP
+        $viewData['entrees'] = AchatStockMaison::whereDate('created_at', Carbon::today())
+            ->with('fournisseur', 'stockMaison')
+            ->get();
+
+        $viewData['valeurTotaleEntrees'] = $viewData['entrees']->sum(function ($entree) {
+            return $entree->prix_achat * $entree->quantite;
+        });
+
+        //Valeur Stock MP Usine
+        $viewData['stockMpUsine'] = StockUsine::with('stockMaison')
+            ->get();
+
+        $viewData['valeurTotaleUsine'] = $viewData['stockMpUsine']->sum(function ($stockusine) {
+            return $stockusine->stockMaison->prix * $stockusine->solde;
+        });
+
+        //Valeur Stock Produit Fini Usine
+        $viewData['stockPf'] = StockPf::all()->sum(function ($item) {
+            return $item->prix * $item->solde;
+        });
+
+        //Valeur Stock Points de vente
+        $viewData['stockBoulangerie'] = StockBoulangerie::with('stockProduitFinis')->get();
+
+        $viewData['valeurTotalePointVente'] = $viewData['stockBoulangerie']->sum(function ($stockProduitFinis) {
+            return $stockProduitFinis->stockProduitFinis->prix * $stockProduitFinis->solde;
+        });
+
+        //Valeur Production
+        // On récupère les productions du jour avec leurs relations
+        $productions = Production::whereDate('created_at', Carbon::today())
+            ->with(['produitFinis', 'compositions'])
+            ->get();
+
+        $totalValeurProduction = 0;
+        $totalCoutProduction = 0;
+        $totalBenefice = 0;
+
+        foreach ($productions as $production) {
+            $valeurProduction = $production->quantite * $production->produitFinis->prix;
+
+            $coutMatierePremiere = 0;
+            foreach ($production->compositions as $composition) {
+                $coutMatierePremiere += $composition->quantite * $composition->prix;
+            }
+
+            $chargesFixes = $production->charge_personnel + $production->autres_charges;
+            $coutTotal = $coutMatierePremiere + $chargesFixes;
+
+            $benefice = $valeurProduction - $coutTotal;
+
+            $totalValeurProduction += $valeurProduction;
+            $totalCoutProduction += $coutTotal;
+            $totalBenefice += $benefice;
+        }
+
+        $viewData['totalValeurProduction'] = $totalValeurProduction;
+        $viewData['totalCoutProduction'] = $totalCoutProduction;
+        $viewData['totalBenefice'] = $totalBenefice;
+
+
+        return view('rapports.fiche_synthese_situation')->with('viewData',$viewData);
+
+
+    }
+
+    public function livreCaisse()
+    {
+        $operations = Caisse::with('user')->orderBy('created_at')->get();
+
+        return view('rapports.fiche_caisse', [
+            'viewData' => [
+                'title' => 'Livre de Caisse',
+                'operations' => $operations
+            ]
+        ]);
+    }
+
+    public function filtrerLivreCaisse(Request $request)
+    {
+        $query = Caisse::with('user')->orderBy('created_at', 'asc');
+
+        $filtre = $request->filtre;
+
+        switch ($filtre) {
+            case 'jour':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+            case 'semaine':
+                $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                break;
+            case 'date':
+                $request->validate(['date_unique' => 'required|date']);
+                $query->whereDate('created_at', $request->date_unique);
+                break;
+            case 'periode':
+                $request->validate([
+                    'date_debut' => 'required|date',
+                    'date_fin' => 'required|date|after_or_equal:date_debut',
+                ]);
+                $query->whereBetween('created_at', [$request->date_debut, $request->date_fin]);
+                break;
+        }
+
+        $aujourdhui = Carbon::today();
+        $debutSemaine = Carbon::now()->startOfWeek();
+        $finSemaine = Carbon::now()->endOfWeek();
+
+        $viewData['title'] = match ($filtre) {
+            'jour' => "Livre de caisse du " . $aujourdhui->format('d/m/Y'),
+            'semaine' => "Livre de caisse de la semaine du " . $debutSemaine->format('d/m') . " au " . $finSemaine->format('d/m'),
+            'date' => "Livre de caisse du " . Carbon::parse($request->date_unique)->format('d/m/Y'),
+            'periode' => "Livre de caisse du " . Carbon::parse($request->date_debut)->format('d/m/Y') . " au " . Carbon::parse($request->date_fin)->format('d/m/Y'),
+            default => "Livre de caisse"
+        };
+
+        $viewData['operations'] = $query->get();
+
+        return view('rapports.fiche_caisse')->with('viewData', $viewData);
     }
 }

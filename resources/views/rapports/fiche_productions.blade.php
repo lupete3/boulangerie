@@ -1,4 +1,4 @@
-@extends('layouts.backend')
+@extends('layouts.print')
 
 
 @section('content')
@@ -10,25 +10,22 @@
 </style>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="container-fluid pt-4">
 
         <section class="section">
-            <div class="section-header valider">
-
-            </div>
 
             <div class="section-body ">
               <div class="row">
-                <div class="col-2 col-md-2 col-lg-2 align-center">
+                <div class="col-md-2 align-center">
                   <a href="{{ route('rapports.productionJour')}}" class="btn btn-primary  valider">Rapport Journalier</a>
                 </div>
                 <div class="col-3 col-md-3 col-lg-3 align-center">
                   <a href="{{ route('rapports.productionHebdo')}}" class="btn btn-primary  valider">Rapport Hebdomadaire</a>
                 </div>
-                <div class="col-2 col-md-2 col-lg-2 align-center">
+                <div class="col-md-2 align-center">
                   <a href="{{ route('rapports.productionAnnuel')}}" class="btn btn-primary  valider">Rapport Annuel</a>
                 </div>
-                <div class="col-2 col-md-2 col-lg-2 align-center">
+                <div class="col-md-2 align-center">
                   <button type="button" class="btn btn-primary  valider" data-toggle="modal" data-target="#exampleModal">
                     Rapport personnalisé
                   </button>
@@ -117,12 +114,11 @@
 
                                             </tbody>
                                             <tr>
-                                                <td colspan="5"><b>Total</b></td>
+                                                <td colspan="4"><b>Total</b></td>
                                                 <td><b>{{ $total }} Fc</b></td>
                                                 <td></td>
                                                 <td><b>{{ $sommeCharges }} Fc</b></td>
                                                 <td><b>{{ $total - $sommeCharges }} Fc</b></td>
-                                                <td></td>
                                             </tr>
                                         </table>
                                     </div>
@@ -144,10 +140,12 @@
                             </div>
 
                             <div class="row">
-                              <div class="col-md-3 offset-3">
-                                <button type="button" class="btn btn-primary print pull-right valider"><span class="fa fa-print"></span> Imprimer</button>
-                              </div>
-                              </div>
+                                <div class="col-md-3 offset-3">
+                                  <button type="button" class="btn btn-primary print pull-right valider"><span class="fa fa-print"></span> Imprimer</button>
+                                  <a href="{{ url()->previous() }}" class="btn btn-secondary valider">
+                                    <span class="fa fa-arrow-left"></span> Retour
+                                  </a>
+                                </div>
                             </div>
 
                         </div>

@@ -189,8 +189,19 @@
 
               </div>
               <div class="form-group col-12 col-md-12 col-lg-12">
+                <label for="">Montant à Payer*</label>
+                <input type="hidden" value="{{ $tot }}" name="montant" class="form-control" required>
+                <input type="text" value="{{ $tot }}" class="form-control" disabled required>
+              </div>
+
+              <div class="form-group col-12 col-md-12 col-lg-12">
                 <label for="">Montant Payé*</label>
-                <input type="text" value="{{ $tot }}" name="montant" class="form-control" required>
+                <input type="text" value="{{ $tot }}" name="reel" class="form-control" required>
+              </div>
+
+              <div class="form-group col-12 col-md-12 col-lg-12">
+                <label for="">Dette*</label>
+                <input type="text" value="0" name="reste" class="form-control" required>
               </div>
 
               <div class="form-group col-12 col-md-12 col-lg-12">

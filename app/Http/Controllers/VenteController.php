@@ -26,7 +26,7 @@ class VenteController extends Controller
 
         $viewData['title'] = 'Historique des ventes du point de vente '.$site->nom;
 
-        $viewData['commandes'] = CommandeClient::where('site_id', $site->id)->orderBy('id', 'DESC')->with('ventes','site')->get();
+        $viewData['commandes'] = CommandeClient::where('site_id', $site->id)->orderBy('id', 'DESC')->with('ventes','site')->paginate(10);
 
         return view('ventes.index', compact('site'))->with('viewData', $viewData);
     }
@@ -210,13 +210,17 @@ class VenteController extends Controller
         $request->validate([
 
             'montant' => 'required|numeric',
+            'reel' => 'required|numeric',
+            'reste' => 'required|numeric',
             'client_id' => 'required',
             'site_id' => 'required',
 
         ],[
 
-            'montant.required' => 'Compléter le champ montant payé',
-            'montant.numeric' => 'Entrer un nombre pour le montant',
+            'reel.required' => 'Compléter le montant réel payé',
+            'reel.numeric' => 'Entrer un nombre pour le montant réel',
+            'reste.required' => 'Compléter le montant de la dette',
+            'reste.numeric' => 'Entrer un nombre pour le montant de la dette',
             'client_id.required' => 'Choisir un client à facturer',
             'site_id.required' => 'Choisir un point de vente',
 
@@ -231,8 +235,9 @@ class VenteController extends Controller
 
         $commandeClient = CommandeClient::create([
             'montant' => $tot,
-            'paye' => $request->montant,
-            'reste' => $tot - $request->montant,
+            'paye' => $request->reel,
+            'reste' => $request->reste,
+            'ecart' => $tot - ($request->reel + $request->reste),
             'client_id' => $request->client_id,
             'observation' => $request->observation,
             'site_id' => $request->site_id,

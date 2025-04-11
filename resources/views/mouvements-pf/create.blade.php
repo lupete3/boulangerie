@@ -4,7 +4,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12 align-center">
                         @if($errors->any())
@@ -35,7 +35,7 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                         @if(Session::has('error'))
                             <div class="alert alert-danger alert-dismissible" id="msg" role="alert">
@@ -43,7 +43,7 @@
                             <h6>
                                 {{ Session::get('error') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                       <div class="card ">
                         <form method="post" action="{{ route('mouvement-stock-pf.store')}}" enctype="multipart/form-data">
@@ -52,7 +52,7 @@
                             <h4>{{$viewData['title']}}</h4>
                             <div class="card-header-action">
                                 <a href="{{ route('mouvement-stock-pf.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher les sorties matières premières</a>
-                            </div> 
+                            </div>
                           </div>
                           <div class="card-body">
                             <div class="form-group">
@@ -64,7 +64,7 @@
                                   <option value="{{ $site->id }}">{{ $site->nom }} </option>
 
                                 @endforeach
-                               
+
                               </select>
                             </div>
                             <div class="form-group">
@@ -73,16 +73,16 @@
 
                                 @foreach ($viewData['produits'] as $produit)
 
-                                  <option value="{{ $produit->id }}">{{ $produit->designation }} - Solde: {{ $produit->solde }}</option>
+                                  <option value="{{ $produit->id }}" data-quantite="{{ $produit->solde }}">{{ $produit->designation }} ({{ $produit->prix }}) - Solde: {{ $produit->solde }}</option>
 
                                 @endforeach
-                               
+
                               </select>
                             </div>
 
                             <div class="form-group">
                               <label>Quantité sortie*</label>
-                              <input type="number" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
+                              <input type="number" class="form-control" name="quantite" id="quantite" value="{{ old('quantite') }}" placeholder="" required="">
                             </div>
                           </div>
                           <div class="card-footer text-right">
@@ -97,3 +97,26 @@
     </div>
 
 @endsection
+
+<script src="{{asset('assets/backend/modules/jquery.min.js')}}"></script>
+
+<script>
+
+    $(document).ready(function() {
+        const quantiteInput = document.getElementById('quantite');
+
+        $('#produit_finis_id').change(function() {
+
+            const selectedOption = this.options[this.selectedIndex];
+            const quantite = selectedOption.getAttribute('data-quantite');
+
+            quantiteInput.val = quantite ? quantite : '';
+
+            $('#quantite').val(quantite ? quantite : '');
+
+            console.log(quantiteInput.text)
+
+
+        });
+    });
+</script>
