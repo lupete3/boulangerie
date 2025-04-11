@@ -690,49 +690,56 @@ class DashboardController extends Controller
         return view('rapports.fiche_depenses')->with('viewData',$viewData);
     }
 
+
     public function rapportSyntheseSituation(Request $request)
     {
-        $viewData['title'] = 'Rapport Synthèse';
+        // 1. Gestion du filtre
+        $filtre = $request->input('filtre');
+        $date = Carbon::today(); // Valeur par défaut
+        $dateDebut = null;
+        $dateFin = null;
 
-        //Valeur Stock MP Depot
-        $viewData['stockMpMaison'] = StockMaison::all()->sum(function ($item) {
-            return $item->prix * $item->solde;
-        });
+        if ($filtre === 'jour' || !$filtre) {
+            $dateDebut = Carbon::today(); $dateFin = Carbon::today();
+        } elseif ($filtre === 'semaine') {
+            $dateDebut = Carbon::now()->startOfWeek();
+            $dateFin = Carbon::now()->endOfWeek();
+        } elseif ($filtre === 'date') {
+            $dateDebut = Carbon::parse($request->input('date_unique'));
+            $dateFin = Carbon::parse($request->input('date_unique')); // ✅ important !
+        } elseif ($filtre === 'periode') {
+            $dateDebut = Carbon::parse($request->input('date_debut'));
+            $dateFin = Carbon::parse($request->input('date_fin'));
+        }
 
-        // Valeur Achat MP
-        $viewData['entrees'] = AchatStockMaison::whereDate('created_at', Carbon::today())
-            ->with('fournisseur', 'stockMaison')
-            ->get();
+        // 2. Valeur Stock MP Dépôt
+        $viewData['stockMpMaison'] = StockMaison::all()->sum(fn($item) => $item->prix * $item->solde);
 
-        $viewData['valeurTotaleEntrees'] = $viewData['entrees']->sum(function ($entree) {
-            return $entree->prix_achat * $entree->quantite;
-        });
+        // 3. Valeur Achat MP
+        $entreesQuery = AchatStockMaison::with('fournisseur', 'stockMaison');
+        if ($dateDebut && $dateFin) {
+            $entreesQuery->whereBetween('created_at', [$dateDebut->startOfDay(), $dateFin->endOfDay()]);
+        }
+        $viewData['entrees'] = $entreesQuery->get();
+        $viewData['valeurTotaleEntrees'] = $viewData['entrees']->sum(fn($e) => $e->prix_achat * $e->quantite);
 
-        //Valeur Stock MP Usine
-        $viewData['stockMpUsine'] = StockUsine::with('stockMaison')
-            ->get();
+        // 4. Valeur Stock MP Usine
+        $viewData['stockMpUsine'] = StockUsine::with('stockMaison')->get();
+        $viewData['valeurTotaleUsine'] = $viewData['stockMpUsine']->sum(fn($s) => $s->stockMaison->prix * $s->solde);
 
-        $viewData['valeurTotaleUsine'] = $viewData['stockMpUsine']->sum(function ($stockusine) {
-            return $stockusine->stockMaison->prix * $stockusine->solde;
-        });
+        // 5. Valeur Stock PF Usine
+        $viewData['stockPf'] = StockPf::all()->sum(fn($item) => $item->prix * $item->solde);
 
-        //Valeur Stock Produit Fini Usine
-        $viewData['stockPf'] = StockPf::all()->sum(function ($item) {
-            return $item->prix * $item->solde;
-        });
-
-        //Valeur Stock Points de vente
+        // 6. Valeur Stock Points de Vente
         $viewData['stockBoulangerie'] = StockBoulangerie::with('stockProduitFinis')->get();
+        $viewData['valeurTotalePointVente'] = $viewData['stockBoulangerie']->sum(fn($s) => $s->stockProduitFinis->prix * $s->solde);
 
-        $viewData['valeurTotalePointVente'] = $viewData['stockBoulangerie']->sum(function ($stockProduitFinis) {
-            return $stockProduitFinis->stockProduitFinis->prix * $stockProduitFinis->solde;
-        });
-
-        //Valeur Production
-        // On récupère les productions du jour avec leurs relations
-        $productions = Production::whereDate('created_at', Carbon::today())
-            ->with(['produitFinis', 'compositions'])
-            ->get();
+        // 7. Valeur Production (avec période)
+        $productionsQuery = Production::with(['produitFinis', 'compositions']);
+        if ($dateDebut && $dateFin) {
+            $productionsQuery->whereBetween('created_at', [$dateDebut->startOfDay(), $dateFin->endOfDay()]);
+        }
+        $productions = $productionsQuery->get();
 
         $totalValeurProduction = 0;
         $totalCoutProduction = 0;
@@ -741,10 +748,7 @@ class DashboardController extends Controller
         foreach ($productions as $production) {
             $valeurProduction = $production->quantite * $production->produitFinis->prix;
 
-            $coutMatierePremiere = 0;
-            foreach ($production->compositions as $composition) {
-                $coutMatierePremiere += $composition->quantite * $composition->prix;
-            }
+            $coutMatierePremiere = $production->compositions->sum(fn($comp) => $comp->quantite * $comp->prix);
 
             $chargesFixes = $production->charge_personnel + $production->autres_charges;
             $coutTotal = $coutMatierePremiere + $chargesFixes;
@@ -760,22 +764,19 @@ class DashboardController extends Controller
         $viewData['totalCoutProduction'] = $totalCoutProduction;
         $viewData['totalBenefice'] = $totalBenefice;
 
+        $aujourdhui = Carbon::today();
+        $debutSemaine = Carbon::now()->startOfWeek();
+        $finSemaine = Carbon::now()->endOfWeek();
 
-        return view('rapports.fiche_synthese_situation')->with('viewData',$viewData);
+        $viewData['title'] = match ($filtre) {
+            'jour' => "Rapport Synthèse du " . $aujourdhui->format('d/m/Y'),
+            'semaine' => "Rapport Synthèse de la semaine du " . $debutSemaine->format('d/m') . " au " . $finSemaine->format('d/m'),
+            'date' => "Rapport Synthèse du " . Carbon::parse($request->date_unique)->format('d/m/Y'),
+            'periode' => "Rapport Synthèse du " . Carbon::parse($request->date_debut)->format('d/m/Y') . " au " . Carbon::parse($request->date_fin)->format('d/m/Y'),
+            default => "Rapport Synthèse"
+        };
 
-
-    }
-
-    public function livreCaisse()
-    {
-        $operations = Caisse::with('user')->orderBy('created_at')->get();
-
-        return view('rapports.fiche_caisse', [
-            'viewData' => [
-                'title' => 'Livre de Caisse',
-                'operations' => $operations
-            ]
-        ]);
+        return view('rapports.fiche_synthese_situation')->with('viewData', $viewData);
     }
 
     public function filtrerLivreCaisse(Request $request)
