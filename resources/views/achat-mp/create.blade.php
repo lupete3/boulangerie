@@ -72,14 +72,22 @@
 
                             </div>
                             <div class="form-group">
-                              <label>Quantité Entrée*</label>
-                              <input type="number" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
-                            </div>
-                            <div class="form-group">
                               <label>Prix d'achat par <span id="unite">unite</span>*</label>
                               <input type="text" class="form-control" name="prix" id="prix" value="{{ old('prix') }}" placeholder="" required>
                             </div>
+                            <div class="form-group">
+                                <label>Quantité Achetée*</label>
+                                <input type="number" class="form-control" name="quantite" value="{{ old('quantite') }}" placeholder="" required="">
+                            </div>
+                            <div class="form-group">
+                                <label>Total à payer</label>
+                                <input type="text" class="form-control" id="total_a_payer" disabled>
+                            </div>
 
+                            <div class="form-group">
+                              <label>Montant payé*</label>
+                              <input type="number" class="form-control" name="montant_paye" id="montant_paye" value="{{ old('montant_paye') }} " step="0.01" placeholder="" required>
+                            </div>
                           </div>
                           <div class="card-footer text-right">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Enregistrer</button>
@@ -117,8 +125,18 @@
 
             console.log(uniteInput.text)
 
-
         });
+
+        function calculerTotal() {
+            let prix = parseFloat($('#prix').val()) || 0;
+            let quantite = parseFloat($('input[name="quantite"]').val()) || 0;
+            let total = prix * quantite;
+            $('#total_a_payer').val(total.toFixed(2));
+        }
+
+        // Déclenche le calcul quand on saisit ou change le prix ou la quantité
+        $('#prix').on('input', calculerTotal);
+        $('input[name="quantite"]').on('input', calculerTotal);
     });
 </script>
 

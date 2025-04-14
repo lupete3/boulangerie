@@ -407,32 +407,24 @@ class ProductionController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+
     public function removeFromCartEdit(Request $request, Composition $composition)
     {
-
         $productionId = $composition->production_id;
 
-        $productionString = Production::find($productionId)->pluck('designation')->toArray();
-        $production = Production::find($productionId);
-
-        // Rechercher le produit correspondant dans la base de données
-        $products = StockUsine::where('id', $composition->stock_usine_id)->with('stockMaison')->first();
+        $products = StockUsine::where('id', $composition->stock_usine_id)
+            ->with('stockMaison')
+            ->first();
 
         $products->solde = $products->solde + $composition->quantite;
-
         $products->save();
 
         $composition->delete();
 
-        $designationList = implode(', ',$productionString);
-
-        $production->designation = $designationList;
-
-        $production->save();
-
-        return redirect()->back()->with('success','Mise à jour effectuée avec succès !');
-
+        return redirect()->back()->with('success', 'Mise à jour effectuée avec succès !');
     }
+
 
     /**
      * Remove the specified resource from storage.

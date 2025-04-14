@@ -11,6 +11,7 @@ use App\Http\Controllers\FournisseurController;
 use App\Http\Controllers\MouvementStockMpController;
 use App\Http\Controllers\MouvementStockPfController;
 use App\Http\Controllers\PaiementClientController;
+use App\Http\Controllers\PaiementFournisseurController;
 use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\StockBoulangerieController;
@@ -160,6 +161,12 @@ Route::middleware(['auth', 'verified', ])->group(function () {
     Route::get('/caisses/{caisse}/edit', [CaisseController::class, 'edit'])->name('caisses.edit');
     Route::put('/caisses/{caisse}/update', [CaisseController::class, 'update'])->name('caisses.update');
     Route::delete('/caisses/{caisse}/destroy', [CaisseController::class, 'destroy'])->name('caisses.destroy');
+
+    Route::get('/paiements', [PaiementFournisseurController::class, 'index'])->name('paiements.index');
+    Route::post('/paiements/store', [PaiementFournisseurController::class, 'store'])->name('paiements.store');
+    Route::get('/paiements/create/{fournisseur?}', [PaiementFournisseurController::class, 'create'])->name('paiements.create');
+    Route::get('/paiements/dettes/{fournisseurId}', [PaiementFournisseurController::class, 'dettesParFournisseur']);
+
 
     Route::get('/depenses', [DepenseController::class, 'index'])->name('depenses.index');
     Route::post('/depenses/store', [DepenseController::class, 'store'])->name('depenses.store');

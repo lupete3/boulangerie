@@ -6,7 +6,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -18,7 +18,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12">
                         @if($errors->any())
@@ -37,19 +37,19 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                         <div class="card">
                             <div class="card-header">
                                 <h4>{{ $viewData['title'] }} </h4>
                                 <div class="card-header-action">
                                     <a href="{{ route('fournisseurs.create')}}" class="btn btn-icon icon-left btn-success"><i class="fas fa-plus"></i> Ajouter un fournisseur</a>
-                                </div>   
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                 <table class="table table-striped" id="table-1">
-                                    <thead>                                 
+                                    <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Nom Fournisseur</th>
@@ -59,27 +59,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($viewData['fournisseurs'] as $fournisseur) 
+                                        @foreach ($viewData['fournisseurs'] as $fournisseur)
                                             <tr>
 
                                                 <td> {{ $fournisseur->id }} </td>
                                                 <td> {{ $fournisseur->nom }} </td>
                                                 <td> {{ $fournisseur->telephone }} </td>
                                                 <td> {{ $fournisseur->email }} </td>
-                                                
+
                                                 <td>
                                                     <div class="dropdown">
                                                         <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">Action</a>
-                                                        
+
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                          
+
                                                             <a href="{{ route('fournisseurs.edit', $fournisseur->id)}}" class="dropdown-item has-icon"><i class="far fa-edit text-primary"></i> Modifier</a>
-                                                          
+                                                            @if(count($fournisseur->dettes) > 0) <a href="{{ route("paiements.create", $fournisseur->id) }}" class="dropdown-item has-icon"><i class="fas fa-check text-info"></i> Payer dette</a> @else @endif
                                                           <form action="{{ route('fournisseurs.destroy', $fournisseur->id)}}" method="post">
                                                             @csrf
                                                             <button  type="submit" class="dropdown-item has-icon"><i class="fas fa-trash text-danger"></i> Supprimer</button>
                                                           </form>
-                                                          
+
                                                         </div>
                                                     </div>
                                                 </td>

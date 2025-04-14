@@ -20,4 +20,9 @@ class Fournisseur extends Model
     {
         return $this->hasMany(AchatStockMaison::class);
     }
+
+    public function dettes()
+    {
+        return $this->hasMany(DetteFournisseur::class, 'id_fournisseur');
+    }
 }

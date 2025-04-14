@@ -534,7 +534,7 @@
   <script src="{{asset('assets/backend/bootstrap-select/dist/js/bootstrap-select.min.js')}}"></script>
   <script src="{{asset('assets/backend/modules/select2/dist/js/select2.full.min.js ')}}"></script>
 
-
+  @stack('scripts')
 
   <script>
     $(document).ready(function(){

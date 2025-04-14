@@ -4,7 +4,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        
+
         <section class="section">
             <div class="section-header">
                 <h1>{{ $viewData['title'] }}</h1>
@@ -16,7 +16,7 @@
             </div>
 
             <div class="section-body ">
-            
+
                 <div class="row">
                     <div class="col-12 col-md-12 col-lg-12 align-center">
                         @if($errors->any())
@@ -35,17 +35,17 @@
                             <h6>
                                 {{ Session::get('success') }}
                             </h6>
-                            </div> 
+                            </div>
                         @endif
                       <div class="card ">
                         <form method="post" action="{{ route('achat-mp.update',$achatStockMaison->id)}}" enctype="multipart/form-data">
-                          @method('PUT')  
+                          @method('PUT')
                           @csrf
                           <div class="card-header">
                             <h4>{{$viewData['title']}}</h4>
                             <div class="card-header-action">
                                 <a href="{{ route('achat-mp.index')}}" class="btn btn-icon icon-left btn-info"><i class="fas fa-list-alt"></i> Afficher achats matières premières</a>
-                            </div> 
+                            </div>
                           </div>
                           <div class="card-body">
                             <div class="form-group">
@@ -57,7 +57,7 @@
                                   <option @selected(old('fournisseur_id', $achatStockMaison->id_fournisseur) == $fournisseur->id) value="{{ $fournisseur->id }}" >{{ $fournisseur->nom }}</option>
 
                                 @endforeach
-                               
+
                               </select>
                             </div>
 
@@ -67,12 +67,17 @@
 
                                 @foreach ($viewData['stockMaisons'] as $stockMaison)
 
-                                  <option @selected(old('stock_maison_id', $achatStockMaison->id_stock_maisons) == $stockMaison->id) value="{{ $stockMaison->id }}" >{{ $stockMaison->designation }} ({{ $stockMaison->unite }})</option>
+                                  <option @selected(old('stock_maison_id', $achatStockMaison->id_stock_maisons) == $stockMaison->id) value="{{ $stockMaison->id }}" data-prix="{{ $stockMaison->prix }}" data-unite="{{ $stockMaison->unite }}">{{ $stockMaison->designation }} ({{ $stockMaison->unite }})</option>
 
                                 @endforeach
-                               
+
                               </select>
                             </div>
+
+                            <div class="form-group">
+                                <label>Prix d'achat par <span id="unite">{{ $stockMaison->unite }}</span>*</label>
+                                <input type="text" class="form-control" name="prix" id="prix" value="{{ $achatStockMaison->prix_achat }}" required="">
+                              </div>
 
                             <div class="form-group">
                               <label>Quantité Entrée*</label>
@@ -80,9 +85,14 @@
                             </div>
 
                             <div class="form-group">
-                              <label>Prix d'achat par ({{ $stockMaison->unite }})*</label>
-                              <input type="text" class="form-control" name="prix" value="{{ $achatStockMaison->prix_achat }}" required="">
+                                <label>Total à payer</label>
+                                <input type="text" class="form-control" id="total_a_payer" disabled>
                             </div>
+
+                            <div class="form-group">
+                                <label>Montant payé*</label>
+                                <input type="text" class="form-control" name="montant_paye" id="montant_paye" value="{{ $achatStockMaison->montant_paye }} " step="0.01" placeholder="" required>
+                              </div>
                           </div>
                           <div class="card-footer text-right">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Mettre à jour </button>
@@ -96,3 +106,43 @@
     </div>
 
 @endsection
+
+<script src="{{asset('assets/backend/modules/jquery.min.js')}}"></script>
+
+<script>
+
+    $(document).ready(function() {
+        const prixInput = document.getElementById('prix');
+        const uniteInput = document.getElementById('unite');
+
+        $('#stock_maison_id').change(function() {
+
+            const selectedOption = this.options[this.selectedIndex];
+            const prix = selectedOption.getAttribute('data-prix');
+            const unite = selectedOption.getAttribute('data-unite');
+
+
+            prixInput.value = prix ? prix : '';
+            uniteInput.value = unite ? unite : '';
+
+            $('#prix').text(prix ? prix : '');
+            $('#unite').text(unite ? unite : 'unité');
+
+            console.log(uniteInput.text)
+
+        });
+
+        function calculerTotal() {
+            let prix = parseFloat($('#prix').val()) || 0;
+            let quantite = parseFloat($('input[name="quantite"]').val()) || 0;
+            let total = prix * quantite;
+            $('#total_a_payer').val(total.toFixed(2));
+        }
+
+        // Déclenche le calcul quand on saisit ou change le prix ou la quantité
+        $('#prix').on('input', calculerTotal);
+        $('input[name="quantite"]').on('input', calculerTotal);
+
+        calculerTotal();
+    });
+</script>

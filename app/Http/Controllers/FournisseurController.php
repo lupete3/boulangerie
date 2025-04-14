@@ -21,10 +21,10 @@ class FournisseurController extends Controller
 
         $viewData['title'] = 'Liste des fournisseurs ';
 
-        $viewData['fournisseurs'] = Fournisseur::orderBy('id', 'DESC')->get();
+        $viewData['fournisseurs'] = Fournisseur::with('dettes')->orderBy('id', 'DESC')->get();
 
         return view('fournisseurs.index')->with('viewData', $viewData);
-        
+
     }
 
     /**
@@ -44,7 +44,7 @@ class FournisseurController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse 
+    public function store(Request $request): RedirectResponse
     {
 
         $request->validate([
@@ -63,7 +63,7 @@ class FournisseurController extends Controller
             'nom' => $request->nom,
             'telephone' => $request->telephone,
             'email' => $request->email,
-            
+
         ]);
 
         return redirect()->back()->with('success','Fournisseur ajouté avec succès');
@@ -113,7 +113,7 @@ class FournisseurController extends Controller
         $fournisseur->update([
             'nom' => $request->nom,
             'telephone' => $request->telephone,
-            'email' => $request->email, 
+            'email' => $request->email,
         ]);
 
         return redirect()->back()->with('success', 'Mise à jour effectuée avec succès !');

@@ -14,6 +14,7 @@ class AchatStockMaison extends Model
         'id',
         'prix_achat',
         'quantite',
+        'montant_paye',
         'id_fournisseur',
         'id_stock_maisons'
     ];
